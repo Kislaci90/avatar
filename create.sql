@@ -1,0 +1,16 @@
+create sequence event_seq start with 1 increment by 50;
+create sequence location_seq start with 1 increment by 50;
+create table event (id bigint not null, type varchar(255) check (type in ('FREE','CUP','CHAMPIONSHIP')), primary key (id));
+create table event_publication (completion_date timestamp(6) with time zone, publication_date timestamp(6) with time zone, id uuid not null, event_type varchar(255), listener_id varchar(255), serialized_event varchar(255), primary key (id));
+create table location (latitude float(53), longitude float(53), id bigint not null, name varchar(255), primary key (id));
+create table location_event (event_id bigint not null unique, location_id bigint not null);
+alter table if exists location_event add constraint FK8n48720wwpxnxpqft6sxdd5yo foreign key (event_id) references event;
+alter table if exists location_event add constraint FKlw3grdcil5qqb3ou3sa2yya7e foreign key (location_id) references location;
+create sequence event_seq start with 1 increment by 50;
+create sequence location_seq start with 1 increment by 50;
+create table event (id bigint not null, type varchar(255) check (type in ('FREE','CUP','CHAMPIONSHIP')), primary key (id));
+create table event_publication (completion_date timestamp(6) with time zone, publication_date timestamp(6) with time zone, id uuid not null, event_type varchar(255), listener_id varchar(255), serialized_event varchar(255), primary key (id));
+create table location (latitude float(53), longitude float(53), id bigint not null, name varchar(255), primary key (id));
+create table location_event (event_id bigint not null unique, location_id bigint not null);
+alter table if exists location_event add constraint FK8n48720wwpxnxpqft6sxdd5yo foreign key (event_id) references event;
+alter table if exists location_event add constraint FKlw3grdcil5qqb3ou3sa2yya7e foreign key (location_id) references location;
