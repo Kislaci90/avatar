@@ -27,6 +27,9 @@ public class Location extends BaseEntity {
     @NotBlank
     private String name;
 
+    @Embedded
+    private Address address;
+
     @Column
     @NotNull
     private Point geom;

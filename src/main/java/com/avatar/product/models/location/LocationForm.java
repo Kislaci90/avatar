@@ -16,6 +16,9 @@ public class LocationForm {
     private String name;
 
     @NotNull
+    private Address address;
+
+    @NotNull
     @Valid
     private PointForm geom;
 

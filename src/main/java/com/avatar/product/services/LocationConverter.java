@@ -27,11 +27,12 @@ public class LocationConverter implements Converter<Location, LocationView, Loca
     private FieldConverter fieldConverter;
 
     public LocationView convert(Location location) {
-        return new LocationView(location.getId(), location.getName(), pointConverter.convert(location.getGeom()), fieldConverter.convert(location.getFields()));
+        return new LocationView(location.getId(), location.getName(), location.getAddress(), pointConverter.convert(location.getGeom()), fieldConverter.convert(location.getFields()));
     }
 
     public Location convert(Location location, LocationForm locationForm) {
         location.setName(locationForm.getName());
+        location.setAddress(locationForm.getAddress());
         location.setGeom(pointConverter.convert(location.getGeom(), locationForm.getGeom()));
         locationForm.getFields().forEach(f -> location.addField(fieldConverter.convert(new Field(), f)));
         return location;

@@ -3,6 +3,7 @@ package com.avatar;
 import com.avatar.exceptions.ApiSubError;
 import com.avatar.exceptions.ApiValidationError;
 import com.avatar.product.models.field.FieldForm;
+import com.avatar.product.models.location.Address;
 import com.avatar.product.models.location.LocationForm;
 import com.avatar.product.models.location.LocationView;
 import com.avatar.product.models.location.PointForm;
@@ -86,8 +87,11 @@ class LocationControllerTest {
     @ParameterizedTest
     @MethodSource("provideLocationToSave")
     void saveLocation_ShouldBeValidated(String name, Double x, Double y, int status, List<String> fields, List<? extends ApiSubError> errors) throws Exception {
+        var address = new Address("Budapest", "Test utca", "1111");
+
         LocationForm lf = new LocationForm();
         lf.setName(name);
+        lf.setAddress(address);
         lf.setGeom(new PointForm(x,y));
         lf.setFields(fields.stream().map(f -> {
             FieldForm ff = new FieldForm();
