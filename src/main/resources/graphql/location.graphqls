@@ -21,9 +21,24 @@ type LocationView {
     id : ID!
     name: String!
     geom: PointView!
+    address: Address!
+    contact: Contact!
+    properties: [String]
 }
 
 type PointView {
     x: String!
     y: String!
+}
+
+type Address {
+    city: String!
+    addressLine: String!
+    postalCode: String!
+}
+
+type Contact {
+    contactName: String!
+    email: String!
+    phoneNumber: String!
 }

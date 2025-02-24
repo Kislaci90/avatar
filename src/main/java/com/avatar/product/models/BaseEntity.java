@@ -1,19 +1,36 @@
 package com.avatar.product.models;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
 @Getter
 @Setter
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
 
-    @CreationTimestamp
-    protected Instant createdOn;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    protected Long id;
 
-    @UpdateTimestamp
-    protected Instant lastUpdatedOn;
+    @CreatedBy
+    protected String createdBy;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    protected Instant createdDate;
+
+    @LastModifiedBy
+    protected String lastModifiedBy;
+
+    @LastModifiedDate
+    protected Instant lastModifiedDate;
 }

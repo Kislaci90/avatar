@@ -1,5 +1,7 @@
 Feature: Location CRUD
 
+  Background: Backend and Frontend are up
+
   Scenario: Create new location
     Given DB connection is up
     When api receive new location request

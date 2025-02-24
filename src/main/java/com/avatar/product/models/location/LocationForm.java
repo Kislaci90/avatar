@@ -19,6 +19,9 @@ public class LocationForm {
     private Address address;
 
     @NotNull
+    private Contact contact;
+
+    @NotNull
     @Valid
     private PointForm geom;
 

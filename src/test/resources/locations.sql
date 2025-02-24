@@ -1,2 +1,0 @@
-INSERT INTO Location (id, name, geom) VALUES (nextval('location_seq'), 'Pre Test Location', ST_GeomFromText('POINT(-27.75 114.75)', 4326));
-INSERT INTO Location (id, name, geom) VALUES (nextval('location_seq'), 'Pre Test Location 2', ST_GeomFromText('POINT(-1.75 11.75)', 4326));

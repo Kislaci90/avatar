@@ -15,11 +15,6 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = false)
 public class Field extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column
-    private Long id;
-
     @NotBlank
     private String name;
 

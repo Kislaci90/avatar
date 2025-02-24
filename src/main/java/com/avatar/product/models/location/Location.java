@@ -10,7 +10,9 @@ import lombok.Setter;
 import org.locationtech.jts.geom.Point;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -18,17 +20,20 @@ import java.util.List;
 @Setter
 public class Location extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column
-    private Long id;
-
     @Column(unique = true)
     @NotBlank
     private String name;
 
     @Embedded
     private Address address;
+
+    @Embedded
+    private Contact contact;
+
+    @ElementCollection(targetClass = LocationProperty.class)
+    @CollectionTable
+    @Enumerated(EnumType.STRING)
+    private Set<LocationProperty> properties;
 
     @Column
     @NotNull
