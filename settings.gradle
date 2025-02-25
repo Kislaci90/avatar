@@ -1,1 +1,2 @@
-rootProject.name = 'avatar'
+rootProject.name = "avatar"
+include("eva","pandora")
