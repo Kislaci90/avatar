@@ -1,0 +1,15 @@
+image:
+  repository: localhost:5000
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+selectorLabels:
+  - pandora
+
+fullname: pandora
+
+ingress:
+  enabled: false

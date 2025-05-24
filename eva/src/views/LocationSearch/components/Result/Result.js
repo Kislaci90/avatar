@@ -43,7 +43,7 @@ const GET_ALL_LOCATIONS_QUERY = gql(`
   }
 `);
 
-const properties = ['SHOWER', 'FREE PARKING', 'CHANGING ROOM', 'COVERED AT WINTER']
+const properties = ['SHOWER', 'FREE PARKING', 'CHANGING ROOM']
 
 const Result = () => {
     let offset = 3
@@ -254,9 +254,6 @@ const Result = () => {
                                             )}
                                             {item.properties.includes("FREE_PARKING") && (
                                                 <LocalParkingIcon sx={{marginLeft: 1, color: theme.palette.primary.main}}/>
-                                            )}
-                                            {item.properties.includes("COVERED") && (
-                                                <AcUnitIcon sx={{marginLeft: 1, color: theme.palette.primary.main}}/>
                                             )}
                                         </Box>
                                     </Box>

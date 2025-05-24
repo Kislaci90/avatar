@@ -8,8 +8,7 @@ VALUES (nextval('location_seq'), current_timestamp, 'Futballaréna', 'Budapest',
 INSERT INTO location_properties (location_id, properties)
 VALUES
 (currval('location_seq'), 'SHOWER'),
-(currval('location_seq'), 'CHANGING_ROOM'),
-(currval('location_seq'), 'COVERED');
+(currval('location_seq'), 'CHANGING_ROOM');
 
 INSERT INTO Location (id, created_date, name, city, address_line, postal_code, contact_name, email, phone_number, geom)
 VALUES (nextval('location_seq'), current_timestamp, 'Gold Center', 'Budapest', 'Budafoki út 113.', '1117',
@@ -18,8 +17,7 @@ INSERT INTO location_properties (location_id, properties)
 VALUES
 (currval('location_seq'), 'FREE_PARKING'),
 (currval('location_seq'), 'SHOWER'),
-(currval('location_seq'), 'CHANGING_ROOM'),
-(currval('location_seq'), 'COVERED');
+(currval('location_seq'), 'CHANGING_ROOM');
 
 INSERT INTO Location (id, created_date, name, city, address_line, postal_code, contact_name, email, phone_number, geom)
 VALUES (nextval('location_seq'), current_timestamp, 'BME Sportkozpont', 'Budapest', 'Bertalan Lajos utca 4-6.', '1111',
@@ -27,8 +25,8 @@ VALUES (nextval('location_seq'), current_timestamp, 'BME Sportkozpont', 'Budapes
 INSERT INTO location_properties (location_id, properties)
 VALUES
 (currval('location_seq'), 'FREE_PARKING'),
-(currval('location_seq'), 'CHANGING_ROOM'),
-(currval('location_seq'), 'COVERED');
+(currval('location_seq'), 'CHANGING_ROOM');
+
 
 INSERT INTO Location (id, created_date, name, city, address_line, postal_code, contact_name, email, phone_number, geom)
 VALUES (nextval('location_seq'), current_timestamp, 'Metrosport', 'Budapest', 'Csömöri utca 158.', '1162',
@@ -45,8 +43,7 @@ VALUES
 INSERT INTO location_properties (location_id, properties)
 VALUES
 (currval('location_seq'), 'FREE_PARKING'),
-(currval('location_seq'), 'CHANGING_ROOM'),
-(currval('location_seq'), 'COVERED');
+(currval('location_seq'), 'CHANGING_ROOM');
 
 INSERT INTO Location (id, created_date, name, city, address_line, postal_code, contact_name, email, phone_number, geom)
 VALUES
@@ -56,5 +53,4 @@ INSERT INTO location_properties (location_id, properties)
 VALUES
 (currval('location_seq'), 'FREE_PARKING'),
 (currval('location_seq'), 'CHANGING_ROOM'),
-(currval('location_seq'), 'COVERED'),
 (currval('location_seq'), 'SHOWER');

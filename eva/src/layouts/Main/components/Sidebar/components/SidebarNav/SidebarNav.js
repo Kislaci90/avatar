@@ -11,12 +11,7 @@ const SidebarNav = ({ pages }) => {
   const { mode } = theme.palette;
 
   const {
-    landings: landingPages,
-    secondary: secondaryPages,
-    company: companyPages,
-    account: accountPages,
-    portfolio: portfolioPages,
-    blog: blogPages,
+    locations: locationsPages,
   } = pages;
 
   return (
@@ -43,22 +38,7 @@ const SidebarNav = ({ pages }) => {
       </Box>
       <Box paddingX={2} paddingY={2}>
         <Box>
-          <NavItem title={"Landings"} items={landingPages} />
-        </Box>
-        <Box>
-          <NavItem title={"Company"} items={companyPages} />
-        </Box>
-        <Box>
-          <NavItem title={"Pages"} items={secondaryPages} />
-        </Box>
-        <Box>
-          <NavItem title={"Account"} items={accountPages} />
-        </Box>
-        <Box>
-          <NavItem title={"Blog"} items={blogPages} />
-        </Box>
-        <Box>
-          <NavItem title={"Portfolio"} items={portfolioPages} />
+          <NavItem title={"Landings"} items={locationsPages} />
         </Box>
         <Box marginTop={2}>
           <Button
