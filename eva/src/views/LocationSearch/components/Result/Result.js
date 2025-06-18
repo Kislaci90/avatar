@@ -13,7 +13,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import {gql, useQuery} from "@apollo/client";
 import ShowerIcon from '@mui/icons-material/Shower';
 import HomeIcon from '@mui/icons-material/Home';
-import AcUnitIcon from '@mui/icons-material/AcUnit';
 import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import {Chip} from "@mui/material";
 
@@ -169,7 +168,7 @@ const Result = () => {
                     <Grid item xs={12} sm={6} md={4} key={i}>
                         <Box
                             component={"a"}
-                            href={""}
+                            href={"locations/1"}
                             display={"block"}
                             width={1}
                             height={1}

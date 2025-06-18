@@ -5,8 +5,8 @@ import Page from "./components/Page";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "aos/dist/aos.css";
-import BlogSearch from "./views/LocationSearch";
 import {ApolloClient, ApolloProvider, HttpLink, InMemoryCache} from "@apollo/client";
+import Routes from "./Routes";
 
 const cache = new InMemoryCache({
     typePolicies: {
@@ -35,7 +35,7 @@ const App = () => {
       <ApolloProvider client={client}>
         <Page>
           <BrowserRouter>
-            <BlogSearch />
+            <Routes />
           </BrowserRouter>
         </Page>
       </ApolloProvider>

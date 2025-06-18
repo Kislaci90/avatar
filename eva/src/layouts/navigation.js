@@ -3,6 +3,10 @@ const pages = {
     {
       title: "Locations",
       href: "/locations",
+    },
+    {
+      title: "Locations",
+      href: "/locations/1",
     }
   ],
 };
