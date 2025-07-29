@@ -13,17 +13,19 @@ import java.util.stream.Collectors;
 public class PitchConverter implements Converter<Pitch, PitchView, PitchForm> {
 
     @Override
-    public PitchView convert(Pitch pitch) {
+    public PitchView convertToView(Pitch pitch) {
         return new PitchView(pitch.getId(), pitch.getName());
     }
 
     @Override
-    public Pitch convert(Pitch pitch, PitchForm pitchForm) {
+    public Pitch convertToEntity(Pitch pitch, PitchForm pitchForm) {
         pitch.setName(pitchForm.getName());
         return pitch;
     }
 
-    public Set<PitchView> convert(List<Pitch> pitches) {
-        return pitches.stream().map(this::convert).collect(Collectors.toSet());
+    @Override
+    public Pitch convertToNewEntity(PitchForm pitchForm) {
+        Pitch pitch = new Pitch();
+        return convertToEntity(pitch, pitchForm);
     }
 }

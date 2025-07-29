@@ -15,20 +15,16 @@ import java.util.stream.Collectors;
 @Service
 public class PitchService {
 
-    @Autowired
-    private PitchRepository pitchRepository;
+    private final PitchRepository pitchRepository;
 
-    @Autowired
-    private PitchConverter pitchConverter;
+    private final PitchConverter pitchConverter;
 
-    public PitchView save(PitchForm pitchForm) {
-        return pitchConverter.convert(pitchRepository.save(pitchConverter.convert(new Pitch(), pitchForm)));
+    public PitchService(PitchConverter pitchConverter, PitchRepository pitchRepository) {
+        this.pitchConverter = pitchConverter;
+        this.pitchRepository = pitchRepository;
     }
 
-    public Set<PitchView> saveAll(List<PitchForm> pitchForms) {
-        List<Pitch> pitches = pitchForms.stream()
-                .map(f -> pitchConverter.convert(new Pitch(), f))
-                .collect(Collectors.toList());
-        return pitchConverter.convert(pitchRepository.saveAll(pitches));
+    public PitchView save(PitchForm pitchForm) {
+        return pitchConverter.convertToView(pitchRepository.save(pitchConverter.convertToEntity(new Pitch(), pitchForm)));
     }
 }

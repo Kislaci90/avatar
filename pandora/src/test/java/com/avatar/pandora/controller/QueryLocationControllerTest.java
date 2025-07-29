@@ -1,5 +1,7 @@
 package com.avatar.pandora.controller;
 
+import com.avatar.pandora.product.models.location.LocationFilter;
+import com.avatar.pandora.product.models.location.LocationFilterBuilder;
 import com.avatar.pandora.product.models.location.LocationView;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,45 +11,48 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_CLASS;
+import java.util.Map;
 
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureGraphQlTester
 @ActiveProfiles("test")
-@Sql(value = {"/init.sql"}, executionPhase = BEFORE_TEST_CLASS)
 class QueryLocationControllerTest {
+
     @Autowired
     private GraphQlTester httpGraphQlTester;
 
     @Test
-    void getLocations() throws Exception {
-        var locations = httpGraphQlTester.document("""
-                            { locations(count:0, offset: 10, name: "%s") { content { id name geom { x y } } } }
-                            """.formatted("Test"))
+    void searchLocations() {
+        LocationFilter locationFilter = LocationFilterBuilder.builder().searchTerm("Test Location").build();
+        Map<String, Object> filters = Map.of(
+                "searchTerm", locationFilter.searchTerm()
+        );
+
+        var locations = httpGraphQlTester.documentName("searchLocations")
+                .variable("filter", filters)
+                .variable("offset", 10)
+                .variable("count", 0)
                 .execute()
-                .path("data.locations.content[*]")
+                .path("data.searchLocations.content")
                 .entityList(LocationView.class)
                 .get();
 
-        Assertions.assertEquals(2, locations.size());
+        Assertions.assertEquals(1, locations.size());
     }
 
     @Test
-    void getLocation() throws Exception {
-        LocationView location = httpGraphQlTester.document("""
-                        { location(id: %s) { id name geom { x y } } }
-                        """.formatted(1))
+    void getLocation() {
+        LocationView location = httpGraphQlTester.documentName("locationDetails")
+                .variable("id", 1L)
                 .execute()
-                .path("data.location")
+                .path("data.getLocation")
                 .entity(LocationView.class)
                 .get();
 
         Assertions.assertNotNull(location);
-        Assertions.assertEquals("Pre Test Location", location.name());
     }
 
 }

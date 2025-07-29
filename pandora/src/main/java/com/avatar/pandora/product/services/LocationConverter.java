@@ -4,7 +4,6 @@ import com.avatar.pandora.product.models.pitch.Pitch;
 import com.avatar.pandora.product.models.location.Location;
 import com.avatar.pandora.product.models.location.LocationForm;
 import com.avatar.pandora.product.models.location.LocationView;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -12,26 +11,46 @@ import java.util.stream.Collectors;
 @Service
 public class LocationConverter implements Converter<Location, LocationView, LocationForm> {
 
-    @Autowired
-    private PointConverter pointConverter;
+    private final PointConverter pointConverter;
 
-    @Autowired
-    private PitchConverter pitchConverter;
+    private final PitchConverter pitchConverter;
 
-    public LocationView convert(Location location) {
+    private final AddressConverter addressConverter;
+
+    private final ContactConverter contactConverter;
+
+    public LocationConverter(PointConverter pointConverter, PitchConverter pitchConverter, AddressConverter addressConverter, ContactConverter contactConverter) {
+        this.pointConverter = pointConverter;
+        this.pitchConverter = pitchConverter;
+        this.addressConverter = addressConverter;
+        this.contactConverter = contactConverter;
+    }
+
+    public LocationView convertToView(Location location) {
         return new LocationView(location.getId(), location.getName(), location.getAddress(),
                 location.getContact(),
-                pointConverter.convert(location.getGeom()),
-                pitchConverter.convert(location.getPitches()),
+                pointConverter.convertToView(location.getGeom()),
+                location.getPitches().stream().map(pitchConverter::convertToView).collect(Collectors.toSet()),
                 location.getProperties().stream().map(Enum::name).collect(Collectors.toSet()));
     }
 
-    public Location convert(Location location, LocationForm locationForm) {
+    public Location convertToEntity(Location location, LocationForm locationForm) {
         location.setName(locationForm.getName());
-        location.setAddress(locationForm.getAddress());
-        location.setContact(locationForm.getContact());
-        location.setGeom(pointConverter.convert(location.getGeom(), locationForm.getGeom()));
-        locationForm.getFields().forEach(f -> location.addField(pitchConverter.convert(new Pitch(), f)));
+        location.setAddress(addressConverter.convertToEntity(location.getAddress(), locationForm.getAddressForm()));
+        location.setContact(contactConverter.convertToEntity(location.getContact(), locationForm.getContactForm()));
+        location.setGeom(pointConverter.convertToEntity(location.getGeom(), locationForm.getPointForm()));
+        locationForm.getPitchForms().forEach(f -> location.addField(pitchConverter.convertToEntity(new Pitch(), f)));
+        return location;
+    }
+
+    @Override
+    public Location convertToNewEntity(LocationForm locationForm) {
+        Location location = new Location();
+        location.setName(locationForm.getName());
+        location.setAddress(addressConverter.convertToNewEntity(locationForm.getAddressForm()));
+        location.setContact(contactConverter.convertToNewEntity(locationForm.getContactForm()));
+        location.setGeom(pointConverter.convertToNewEntity(locationForm.getPointForm()));
+        locationForm.getPitchForms().forEach(f -> location.addField(pitchConverter.convertToEntity(new Pitch(), f)));
         return location;
     }
 }

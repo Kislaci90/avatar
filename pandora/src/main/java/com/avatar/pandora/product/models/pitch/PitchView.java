@@ -1,4 +1,4 @@
 package com.avatar.pandora.product.models.pitch;
 
-public record PitchView(long id, String name) {
+public record PitchView(Long id, String name) {
 }

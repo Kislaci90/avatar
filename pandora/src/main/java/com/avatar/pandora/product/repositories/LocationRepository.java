@@ -1,7 +1,7 @@
 package com.avatar.pandora.product.repositories;
 
 import com.avatar.pandora.product.models.location.Location;
-import org.jetbrains.annotations.NotNull;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LocationRepository extends
         CrudRepository<Location, Long>,
-        PagingAndSortingRepository<Location,Long> {
+        PagingAndSortingRepository<Location, Long> {
 
     @Query("SELECT l FROM Location l LEFT JOIN FETCH l.pitches fields WHERE l.id = :id")
     Location findLocationById(@Param("id") Long id);

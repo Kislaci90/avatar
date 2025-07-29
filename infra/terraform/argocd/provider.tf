@@ -16,7 +16,6 @@ terraform {
 }
 
 provider "docker" {
-
   registry_auth {
     address = "http://localhost:5000"
     auth_disabled = true

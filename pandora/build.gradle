@@ -1,27 +1,17 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.4.0'
+    id 'org.springframework.boot' version '3.5.4'
     id 'io.spring.dependency-management' version '1.1.4'
-    id 'com.netflix.dgs.codegen' version '6.0.3'
     id 'org.hibernate.orm' version '6.3.1.Final'
     id 'org.graalvm.buildtools.native' version '0.9.28'
-    id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
 group = 'com'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '23'
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-    cucumberRuntime {
-        extendsFrom testImplementation
-    }
+    sourceCompatibility = JavaVersion.VERSION_23
+    targetCompatibility = JavaVersion.VERSION_23
 }
 
 repositories {
@@ -29,7 +19,6 @@ repositories {
 }
 
 ext {
-    set('snippetsDir', file("build/generated-snippets"))
     set('springModulithVersion', "1.1.0")
 }
 
@@ -39,6 +28,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-graphql'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.modulith:spring-modulith-starter-core'
     implementation 'org.springframework.modulith:spring-modulith-starter-jpa'
     implementation 'io.micrometer:micrometer-tracing-bridge-brave'
@@ -53,6 +43,8 @@ dependencies {
     runtimeOnly 'org.springframework.modulith:spring-modulith-observability'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'io.soabase.record-builder:record-builder-processor:47'
+    compileOnly 'io.soabase.record-builder:record-builder-core:47'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.springframework:spring-webflux'
@@ -71,12 +63,5 @@ dependencyManagement {
 }
 
 test {
-    outputs.dir snippetsDir
     useJUnitPlatform()
-}
-
-generateJava {
-    schemaPaths = ["${projectDir}/src/main/resources/graphql"]
-    packageName = 'com.avatar.codegen'
-    generateClient = true
 }

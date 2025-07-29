@@ -1,0 +1,25 @@
+query locationDetails($id: Int!) {
+    getLocation(id: $id) {
+        id
+        name
+        address {
+            addressLine
+            postalCode
+            city
+        }
+        contact {
+            contactName
+            email
+            phoneNumber
+        }
+        geom {
+            x
+            y
+        }
+        properties
+        pitches {
+            id
+            name
+        }
+    }
+}

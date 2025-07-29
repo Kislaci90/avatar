@@ -1,0 +1,28 @@
+query searchLocation($count: Int!, $offset: Int!, $filter: LocationFilter!) {
+    searchLocations(count: $count, offset: $offset, filter: $filter) {
+        total
+        pageable {
+            pageNumber
+            pageSize
+        }
+        content {
+            id
+            name
+            address {
+                addressLine
+                postalCode
+                city
+            }
+            contact {
+                contactName
+                email
+                phoneNumber
+            }
+            geom {
+                x
+                y
+            }
+            properties
+        }
+    }
+}

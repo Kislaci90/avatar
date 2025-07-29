@@ -1,15 +1,14 @@
 package com.avatar.pandora.exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,7 +30,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
   protected ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
     ApiError apiError = new ApiError();
     apiError.setStatus(BAD_REQUEST);
-    apiError.setMessage(ex.getMessage());
     return buildResponseEntity(apiError);
   }
 
@@ -39,7 +37,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
   protected ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex) {
     ApiError apiError = new ApiError();
     apiError.setStatus(NOT_FOUND);
-    apiError.setMessage(ex.getMessage());
     return buildResponseEntity(apiError);
   }
 
@@ -48,15 +45,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @Override
-  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @NotNull HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     List<ApiValidationError> subErrors = ex.getBindingResult().getAllErrors().stream()
             .map(e -> ((FieldError) e))
-            .map(e -> new ApiValidationError(e.getObjectName(), e.getField(), e.getRejectedValue(), e.getDefaultMessage()))
+            .map(e -> new ApiValidationError(e.getField(), e.getRejectedValue(), e.getDefaultMessage()))
             .collect(Collectors.toList());
 
     ApiError apiError = new ApiError();
     apiError.setStatus(BAD_REQUEST);
-    apiError.setMessage(ex.getMessage());
     apiError.setSubErrors(subErrors);
     return buildResponseEntity(apiError);
   }

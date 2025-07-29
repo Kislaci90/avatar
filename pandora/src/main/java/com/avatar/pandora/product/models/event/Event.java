@@ -1,10 +1,12 @@
 package com.avatar.pandora.product.models.event;
 
 import com.avatar.pandora.product.models.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter

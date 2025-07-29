@@ -1,5 +1,6 @@
 package com.avatar.pandora.product.controllers;
 
+import com.avatar.pandora.product.models.location.LocationFilter;
 import com.avatar.pandora.product.models.location.LocationForm;
 import com.avatar.pandora.product.models.location.LocationView;
 import com.avatar.pandora.product.services.LocationService;
@@ -19,18 +20,24 @@ public class LocationController {
     private LocationService locationService;
 
     @PostMapping
-    @ResponseStatus(value = HttpStatus.CREATED)
+    @ResponseStatus(value = HttpStatus.OK)
     public LocationView save(@Valid @RequestBody LocationForm locationForm) {
         return locationService.save(locationForm);
     }
 
-    @QueryMapping
-    public Page<LocationView> locations(@Argument(name = "count") Integer count, @Argument(name = "offset") Integer offset, @Argument(name = "name") String name) {
-        return locationService.findBy(count, offset, name);
+    @PutMapping
+    @ResponseStatus(value = HttpStatus.OK)
+    public LocationView update(@Valid @RequestBody LocationForm locationForm) {
+        return locationService.update(locationForm);
     }
 
     @QueryMapping
-    public LocationView location(@Argument(name = "id") Long id) {
+    public Page<LocationView> searchLocations(@Argument(name = "count") Integer count, @Argument(name = "offset") Integer offset, @Argument(name = "filter") LocationFilter filter) {
+        return locationService.findBy(count, offset, filter);
+    }
+
+    @QueryMapping
+    public LocationView getLocation(@Argument(name = "id") Long id) {
         return locationService.getById(id);
     }
 

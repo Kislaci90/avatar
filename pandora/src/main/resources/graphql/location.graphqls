@@ -1,20 +1,21 @@
 type Query {
-    locations(count:Int, offset:Int, name: String): Page
-    location(id: Int): LocationView
+    searchLocations(count:Int, offset:Int, filter: LocationFilter): Page
+    getLocation(id: Int!): LocationView
+}
+
+input LocationFilter {
+    searchTerm: String!
 }
 
 type Page {
     content: [LocationView]
     pageable: Pageable!
-    totalElements: Int!
-    totalPage: Int!
-    last: Boolean!
+    total: Int!
 }
 
 type Pageable {
     pageNumber: Int!
     pageSize: Int!
-    offset: Int!
 }
 
 type LocationView {
@@ -24,6 +25,12 @@ type LocationView {
     address: Address!
     contact: Contact!
     properties: [String]
+    pitches: [PitchView]
+}
+
+type PitchView {
+    id: ID!
+    name: String!
 }
 
 type PointView {
