@@ -1,39 +1,25 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useQuery, gql } from '@apollo/client';
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Box,
-  CircularProgress,
-  Avatar,
-  Menu,
-  MenuItem,
-  IconButton
-} from '@mui/material';
-import { SportsSoccer, Person, ExitToApp, Search, Brightness4, Brightness7, LocationOn } from '@mui/icons-material';
-import { useTheme, Theme } from '@mui/material/styles';
-import { useThemeMode } from '../theme';
+import {Link} from 'react-router-dom';
+import {gql} from '@apollo/client';
+import {useQuery} from '@apollo/client/react';
+import {AppBar, Avatar, Box, Button, IconButton, Menu, MenuItem, Toolbar, Typography} from '@mui/material';
+import {ExitToApp, LocationOn, Person, Search} from '@mui/icons-material';
+import type {GetMeResult} from "../services/users.ts";
 
 const GET_CURRENT_USER = gql`
-  query GetCurrentUser {
-    currentUser {
-      id
-      username
-      email
-      role
+    query GetMe {
+        getMe {
+            id
+            username
+            email
+            fullName
+        }
     }
-  }
 `;
 
 const Navbar: React.FC = () => {
-  const navigate = useNavigate();
-  const { data, loading } = useQuery(GET_CURRENT_USER);
+  const { data } = useQuery<GetMeResult>(GET_CURRENT_USER);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const theme: Theme = useTheme();
-  const { mode, toggleMode } = useThemeMode();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -52,7 +38,6 @@ const Navbar: React.FC = () => {
     <AppBar position="static" color="primary">
       <Toolbar>
         <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-          <SportsSoccer sx={{ mr: 1 }} />
           <Typography
             variant="h6"
             component={Link}
@@ -61,9 +46,6 @@ const Navbar: React.FC = () => {
               textDecoration: 'none',
               color: 'inherit',
               fontWeight: 'bold',
-              '&:hover': {
-                color: '#bbf7d0'
-              }
             }}
           >
             Eva - Football Pitches
@@ -74,13 +56,8 @@ const Navbar: React.FC = () => {
           <Button
             component={Link}
             to="/pitches"
-            color="inherit"
+            sx={{color: 'white'}}
             startIcon={<Search />}
-            sx={{
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)'
-              }
-            }}
           >
             Find Pitches
           </Button>
@@ -88,34 +65,14 @@ const Navbar: React.FC = () => {
           <Button
             component={Link}
             to="/locations"
-            color="inherit"
+            sx={{color: 'white'}}
             startIcon={<LocationOn />}
-            sx={{
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)'
-              }
-            }}
           >
             Find Locations
           </Button>
 
-          {loading ? (
-            <CircularProgress size={24} color="inherit" />
-          ) : data?.currentUser ? (
+          {data?.getMe? (
             <>
-              <Button
-                component={Link}
-                to="/my-pitches"
-                color="inherit"
-                sx={{
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                  }
-                }}
-              >
-                My Pitches
-              </Button>
-              
               <IconButton
                 onClick={handleMenu}
                 color="inherit"
@@ -140,8 +97,8 @@ const Navbar: React.FC = () => {
                 }}
               >
                 <MenuItem disabled>
-                  <Typography variant="body2" color="text.secondary">
-                    Welcome, {data.currentUser.username}!
+                  <Typography variant="h5">
+                    Welcome, {data.getMe.username}!
                   </Typography>
                 </MenuItem>
                 <MenuItem onClick={handleLogout} sx={{ color: 'error.main' }}>
@@ -155,7 +112,7 @@ const Navbar: React.FC = () => {
               <Button
                 component={Link}
                 to="/login"
-                variant="outlined"
+                sx={{color: 'white'}}
                 color="primary"
               >
                 Login
@@ -163,16 +120,13 @@ const Navbar: React.FC = () => {
               <Button
                 component={Link}
                 to="/register"
-                variant="contained"
+                sx={{color: 'white'}}
                 color="primary"
               >
                 Register
               </Button>
             </>
           )}
-          <IconButton sx={{ ml: 2 }} color="inherit" onClick={toggleMode}>
-            {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
-          </IconButton>
         </Box>
       </Toolbar>
     </AppBar>

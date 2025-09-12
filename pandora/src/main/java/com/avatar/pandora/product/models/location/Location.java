@@ -10,7 +10,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.locationtech.jts.geom.Point;
-import org.springframework.data.repository.cdi.Eager;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,6 +25,11 @@ public class Location extends BaseEntity {
     @Column(unique = true)
     @NotBlank
     private String name;
+
+    @NotNull
+    private String description;
+
+    private String website;
 
     @Embedded
     private Address address;

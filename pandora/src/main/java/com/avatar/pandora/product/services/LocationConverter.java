@@ -1,9 +1,10 @@
 package com.avatar.pandora.product.services;
 
-import com.avatar.pandora.product.models.pitch.Pitch;
+import com.avatar.pandora.product.models.location.LazyLocationView;
 import com.avatar.pandora.product.models.location.Location;
 import com.avatar.pandora.product.models.location.LocationForm;
 import com.avatar.pandora.product.models.location.LocationView;
+import com.avatar.pandora.product.models.pitch.Pitch;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -27,11 +28,9 @@ public class LocationConverter implements Converter<Location, LocationView, Loca
     }
 
     public LocationView convertToView(Location location) {
-        return new LocationView(location.getId(), location.getName(), location.getAddress(),
-                location.getContact(),
-                pointConverter.convertToView(location.getGeom()),
-                location.getPitches().stream().map(pitchConverter::convertToView).collect(Collectors.toSet()),
-                location.getProperties().stream().map(Enum::name).collect(Collectors.toSet()));
+        LazyLocationView lazyLocationView = new LazyLocationView(location.getId(), location.getName(), location.getDescription(), location.getWebsite(), location.getAddress(), location.getContact(), pointConverter.convertToView(location.getGeom()), location.getProperties().stream().map(Enum::name).collect(Collectors.toSet()));
+
+        return new LocationView(lazyLocationView.id(), lazyLocationView.name(), lazyLocationView.description(), lazyLocationView.website(), lazyLocationView.address(), lazyLocationView.contact(), lazyLocationView.geom(), location.getPitches().stream().map(pitchConverter::convertToView).collect(Collectors.toSet()), lazyLocationView.properties());
     }
 
     public Location convertToEntity(Location location, LocationForm locationForm) {

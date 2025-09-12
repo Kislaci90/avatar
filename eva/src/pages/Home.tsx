@@ -1,32 +1,13 @@
 import React from 'react';
-import {
-    Avatar,
-    Box,
-    Button,
-    Card,
-    CardContent,
-    Container,
-    Grid,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    Paper,
-    Typography,
-    useTheme
-} from '@mui/material';
+import {Avatar, Box, Button, Card, CardContent, Container, Grid, Paper, Typography, useTheme} from '@mui/material';
 import {
     AccessTime,
     ArrowForward,
     AttachMoney,
-    Email,
-    EventAvailable,
-    Language,
     LocalParking,
     LocationOn,
     MeetingRoom,
     People,
-    Phone,
     Shower,
     SportsSoccer,
     Star,
@@ -125,7 +106,7 @@ const Home: React.FC = () => {
             >
                 <Container maxWidth="lg">
                     <Grid container spacing={6} alignItems="center">
-                        <Grid item xs={12} md={6}>
+                        <Grid size={{xs:12, md:6}}>
                             <Typography
                                 variant="h2"
                                 fontWeight={800}
@@ -137,7 +118,7 @@ const Home: React.FC = () => {
                                 }}
                             >
                                 Find Your Perfect
-                                <Box component="span" sx={{color: 'success.main', display: 'block'}}>
+                                <Box component="span" sx={{color: 'secondary.main', display: 'block'}}>
                                     Football Pitch
                                 </Box>
                             </Typography>
@@ -190,14 +171,14 @@ const Home: React.FC = () => {
                             </Box>
                             <Box sx={{display: 'flex', alignItems: 'center', gap: 3}}>
                                 <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-                                    <VerifiedUser color="success"/>
+                                    <VerifiedUser color="secondary"/>
                                     <Typography variant="body2" color="text.secondary">
                                         Verified Pitches
                                     </Typography>
                                 </Box>
                             </Box>
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid size={{xs:12, md:6}}>
                             <Box
                                 sx={{
                                     position: 'relative',
@@ -259,7 +240,7 @@ const Home: React.FC = () => {
                 </Box>
                 <Grid container spacing={4}>
                     {stats.map((stat, index) => (
-                        <Grid item xs={6} md={3} key={index}>
+                        <Grid size={{xs:6, md:3}} key={index}>
                             <Paper
                                 elevation={2}
                                 sx={{
@@ -301,7 +282,7 @@ const Home: React.FC = () => {
                     </Box>
                     <Grid container spacing={4}>
                         {features.map((feature, index) => (
-                            <Grid item xs={12} sm={6} md={4} key={index}>
+                            <Grid size={{xs:12, sm:6, md:4}} key={index}>
                                 <Card
                                     elevation={2}
                                     sx={{
@@ -344,7 +325,7 @@ const Home: React.FC = () => {
                 </Box>
                 <Grid container spacing={4}>
                     {pitchTypes.map((type, index) => (
-                        <Grid item xs={12} sm={6} md={3} key={index}>
+                        <Grid size={{xs:12, sm:6, md:3}} key={index}>
                             <Paper
                                 elevation={3}
                                 sx={{
@@ -388,7 +369,7 @@ const Home: React.FC = () => {
                     </Box>
                     <Grid container spacing={4}>
                         {testimonials.map((testimonial, index) => (
-                            <Grid item xs={12} md={4} key={index}>
+                            <Grid size={{xs:12}} key={index}>
                                 <Card
                                     elevation={3}
                                     sx={{
@@ -501,101 +482,7 @@ const Home: React.FC = () => {
             </Container>
 
             {/* Footer Info */}
-            <Box sx={{bgcolor: 'background.paper', py: 4, borderTop: `1px solid ${theme.palette.divider}`}}>
-                <Container maxWidth="lg">
-                    <Grid container spacing={4}>
-                        <Grid item xs={12} md={4}>
-                            <Typography variant="h6" fontWeight={600} gutterBottom>
-                                About Eva Football
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{lineHeight: 1.6}}>
-                                We're dedicated to connecting football players with the best pitches and facilities.
-                                Our platform makes it easy to find, book, and enjoy the beautiful game.
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} md={4}>
-                            <Typography variant="h6" fontWeight={600} gutterBottom>
-                                Quick Links
-                            </Typography>
-                            <List dense>
-                                <ListItem sx={{px: 0}}>
-                                    <ListItemIcon sx={{minWidth: 32}}>
-                                        <SportsSoccer fontSize="small"/>
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary={
-                                            <Button
-                                                component={RouterLink}
-                                                to="/pitches"
-                                                sx={{p: 0, textTransform: 'none', color: 'inherit'}}
-                                            >
-                                                Find Pitches
-                                            </Button>
-                                        }
-                                    />
-                                </ListItem>
-                                <ListItem sx={{px: 0}}>
-                                    <ListItemIcon sx={{minWidth: 32}}>
-                                        <LocationOn fontSize="small"/>
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary={
-                                            <Button
-                                                component={RouterLink}
-                                                to="/locations"
-                                                sx={{p: 0, textTransform: 'none', color: 'inherit'}}
-                                            >
-                                                Browse Locations
-                                            </Button>
-                                        }
-                                    />
-                                </ListItem>
-                                <ListItem sx={{px: 0}}>
-                                    <ListItemIcon sx={{minWidth: 32}}>
-                                        <EventAvailable fontSize="small"/>
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary={
-                                            <Button
-                                                component={RouterLink}
-                                                to="/register"
-                                                sx={{p: 0, textTransform: 'none', color: 'inherit'}}
-                                            >
-                                                Join Now
-                                            </Button>
-                                        }
-                                    />
-                                </ListItem>
-                            </List>
-                        </Grid>
-                        <Grid item xs={12} md={4}>
-                            <Typography variant="h6" fontWeight={600} gutterBottom>
-                                Contact & Support
-                            </Typography>
-                            <Box sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
-                                <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-                                    <Email fontSize="small" color="action"/>
-                                    <Typography variant="body2" color="text.secondary">
-                                        support@evafootball.com
-                                    </Typography>
-                                </Box>
-                                <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-                                    <Phone fontSize="small" color="action"/>
-                                    <Typography variant="body2" color="text.secondary">
-                                        +1 (555) 123-4567
-                                    </Typography>
-                                </Box>
-                                <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-                                    <Language fontSize="small" color="action"/>
-                                    <Typography variant="body2" color="text.secondary">
-                                        www.evafootball.com
-                                    </Typography>
-                                </Box>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </Container>
-            </Box>
+
         </Box>
     );
 };

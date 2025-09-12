@@ -9,7 +9,7 @@ import io.soabase.recordbuilder.core.RecordBuilder;
 import java.util.Set;
 
 @RecordBuilder
-public record LocationView(Long id, String name, Address address, Contact contact, PointView geom,
+public record LocationView(Long id, String name, String description, String website, Address address, Contact contact, PointView geom,
                            Set<PitchView> pitches,
                            Set<String> properties) {
 }

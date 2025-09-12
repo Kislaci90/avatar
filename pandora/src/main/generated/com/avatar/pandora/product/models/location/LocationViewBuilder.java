@@ -19,6 +19,10 @@ public class LocationViewBuilder {
 
     private String name;
 
+    private String description;
+
+    private String website;
+
     private Address address;
 
     private Contact contact;
@@ -34,10 +38,13 @@ public class LocationViewBuilder {
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    private LocationViewBuilder(Long id, String name, Address address, Contact contact,
-            PointView geom, Set<PitchView> pitches, Set<String> properties) {
+    private LocationViewBuilder(Long id, String name, String description, String website,
+            Address address, Contact contact, PointView geom, Set<PitchView> pitches,
+            Set<String> properties) {
         this.id = id;
         this.name = name;
+        this.description = description;
+        this.website = website;
         this.address = address;
         this.contact = contact;
         this.geom = geom;
@@ -49,9 +56,10 @@ public class LocationViewBuilder {
      * Static constructor/builder. Can be used instead of new LocationView(...)
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    public static LocationView LocationView(Long id, String name, Address address, Contact contact,
-            PointView geom, Set<PitchView> pitches, Set<String> properties) {
-        return new LocationView(id, name, address, contact, geom, pitches, properties);
+    public static LocationView LocationView(Long id, String name, String description,
+            String website, Address address, Contact contact, PointView geom,
+            Set<PitchView> pitches, Set<String> properties) {
+        return new LocationView(id, name, description, website, address, contact, geom, pitches, properties);
     }
 
     /**
@@ -67,7 +75,7 @@ public class LocationViewBuilder {
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     public static LocationViewBuilder builder(LocationView from) {
-        return new LocationViewBuilder(from.id(), from.name(), from.address(), from.contact(), from.geom(), from.pitches(), from.properties());
+        return new LocationViewBuilder(from.id(), from.name(), from.description(), from.website(), from.address(), from.contact(), from.geom(), from.pitches(), from.properties());
     }
 
     /**
@@ -85,6 +93,8 @@ public class LocationViewBuilder {
     public static Stream<Map.Entry<String, Object>> stream(LocationView record) {
         return Stream.of(new AbstractMap.SimpleImmutableEntry<>("id", record.id()),
                  new AbstractMap.SimpleImmutableEntry<>("name", record.name()),
+                 new AbstractMap.SimpleImmutableEntry<>("description", record.description()),
+                 new AbstractMap.SimpleImmutableEntry<>("website", record.website()),
                  new AbstractMap.SimpleImmutableEntry<>("address", record.address()),
                  new AbstractMap.SimpleImmutableEntry<>("contact", record.contact()),
                  new AbstractMap.SimpleImmutableEntry<>("geom", record.geom()),
@@ -97,19 +107,19 @@ public class LocationViewBuilder {
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     public LocationView build() {
-        return new LocationView(id, name, address, contact, geom, pitches, properties);
+        return new LocationView(id, name, description, website, address, contact, geom, pitches, properties);
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     @Override
     public String toString() {
-        return "LocationViewBuilder[id=" + id + ", name=" + name + ", address=" + address + ", contact=" + contact + ", geom=" + geom + ", pitches=" + pitches + ", properties=" + properties + "]";
+        return "LocationViewBuilder[id=" + id + ", name=" + name + ", description=" + description + ", website=" + website + ", address=" + address + ", contact=" + contact + ", geom=" + geom + ", pitches=" + pitches + ", properties=" + properties + "]";
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, address, contact, geom, pitches, properties);
+        return Objects.hash(id, name, description, website, address, contact, geom, pitches, properties);
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
@@ -118,6 +128,8 @@ public class LocationViewBuilder {
         return (this == o) || ((o instanceof LocationViewBuilder r)
                 && Objects.equals(id, r.id)
                 && Objects.equals(name, r.name)
+                && Objects.equals(description, r.description)
+                && Objects.equals(website, r.website)
                 && Objects.equals(address, r.address)
                 && Objects.equals(contact, r.contact)
                 && Objects.equals(geom, r.geom)
@@ -157,6 +169,40 @@ public class LocationViewBuilder {
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     public String name() {
         return name;
+    }
+
+    /**
+     * Set a new value for the {@code description} record component in the builder
+     */
+    @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+    public LocationViewBuilder description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    /**
+     * Return the current value for the {@code description} record component in the builder
+     */
+    @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+    public String description() {
+        return description;
+    }
+
+    /**
+     * Set a new value for the {@code website} record component in the builder
+     */
+    @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+    public LocationViewBuilder website(String website) {
+        this.website = website;
+        return this;
+    }
+
+    /**
+     * Return the current value for the {@code website} record component in the builder
+     */
+    @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+    public String website() {
+        return website;
     }
 
     /**
@@ -262,6 +308,18 @@ public class LocationViewBuilder {
         String name();
 
         /**
+         * Return the current value for the {@code description} record component in the builder
+         */
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        String description();
+
+        /**
+         * Return the current value for the {@code website} record component in the builder
+         */
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        String website();
+
+        /**
          * Return the current value for the {@code address} record component in the builder
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
@@ -296,7 +354,7 @@ public class LocationViewBuilder {
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default LocationViewBuilder with() {
-            return new LocationViewBuilder(id(), name(), address(), contact(), geom(), pitches(), properties());
+            return new LocationViewBuilder(id(), name(), description(), website(), address(), contact(), geom(), pitches(), properties());
         }
 
         /**
@@ -314,7 +372,7 @@ public class LocationViewBuilder {
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default LocationView withId(Long id) {
-            return new LocationView(id, name(), address(), contact(), geom(), pitches(), properties());
+            return new LocationView(id, name(), description(), website(), address(), contact(), geom(), pitches(), properties());
         }
 
         /**
@@ -322,7 +380,23 @@ public class LocationViewBuilder {
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default LocationView withName(String name) {
-            return new LocationView(id(), name, address(), contact(), geom(), pitches(), properties());
+            return new LocationView(id(), name, description(), website(), address(), contact(), geom(), pitches(), properties());
+        }
+
+        /**
+         * Return a new instance of {@code LocationView} with a new value for {@code description}
+         */
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        default LocationView withDescription(String description) {
+            return new LocationView(id(), name(), description, website(), address(), contact(), geom(), pitches(), properties());
+        }
+
+        /**
+         * Return a new instance of {@code LocationView} with a new value for {@code website}
+         */
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        default LocationView withWebsite(String website) {
+            return new LocationView(id(), name(), description(), website, address(), contact(), geom(), pitches(), properties());
         }
 
         /**
@@ -330,7 +404,7 @@ public class LocationViewBuilder {
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default LocationView withAddress(Address address) {
-            return new LocationView(id(), name(), address, contact(), geom(), pitches(), properties());
+            return new LocationView(id(), name(), description(), website(), address, contact(), geom(), pitches(), properties());
         }
 
         /**
@@ -338,7 +412,7 @@ public class LocationViewBuilder {
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default LocationView withContact(Contact contact) {
-            return new LocationView(id(), name(), address(), contact, geom(), pitches(), properties());
+            return new LocationView(id(), name(), description(), website(), address(), contact, geom(), pitches(), properties());
         }
 
         /**
@@ -346,7 +420,7 @@ public class LocationViewBuilder {
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default LocationView withGeom(PointView geom) {
-            return new LocationView(id(), name(), address(), contact(), geom, pitches(), properties());
+            return new LocationView(id(), name(), description(), website(), address(), contact(), geom, pitches(), properties());
         }
 
         /**
@@ -354,7 +428,7 @@ public class LocationViewBuilder {
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default LocationView withPitches(Set<PitchView> pitches) {
-            return new LocationView(id(), name(), address(), contact(), geom(), pitches, properties());
+            return new LocationView(id(), name(), description(), website(), address(), contact(), geom(), pitches, properties());
         }
 
         /**
@@ -362,7 +436,7 @@ public class LocationViewBuilder {
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default LocationView withProperties(Set<String> properties) {
-            return new LocationView(id(), name(), address(), contact(), geom(), pitches(), properties);
+            return new LocationView(id(), name(), description(), website(), address(), contact(), geom(), pitches(), properties);
         }
     }
 
@@ -385,6 +459,18 @@ public class LocationViewBuilder {
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         public String name() {
             return from.name();
+        }
+
+        @Override
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        public String description() {
+            return from.description();
+        }
+
+        @Override
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        public String website() {
+            return from.website();
         }
 
         @Override

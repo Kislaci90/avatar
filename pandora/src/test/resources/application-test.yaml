@@ -10,8 +10,7 @@ spring:
     password: admin
   sql:
     init:
-      data-locations: classpath:init.sql
-      mode: always
+      mode: never
   jpa:
     hibernate:
       ddl-auto: create-drop

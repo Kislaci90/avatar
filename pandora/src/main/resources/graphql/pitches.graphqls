@@ -1,0 +1,42 @@
+extend type Query {
+    getPitch(id: Int!): PitchView
+    searchPitches(count:Int, offset:Int, filter: PitchFilter, sort: PitchSort): PitchPage
+}
+
+type PitchPage {
+    content: [PitchView]
+    pageable: Pageable!
+    total: Int!
+}
+
+
+input PitchFilter {
+    searchTerm: String,
+    surfaceType: String,
+    pitchType: String
+}
+
+input PitchSort {
+    field: String,
+    direction: String!
+}
+
+type LazyLocationView {
+    id : ID!
+    name: String!
+    description: String!
+    website: String
+    geom: PointView!
+    address: Address!
+    contact: Contact!
+    properties: [String]
+}
+
+type PitchView {
+    id: ID!
+    name: String!
+    pitchType: String!
+    surfaceType: String!
+    properties: [String]
+    location: LazyLocationView!
+}

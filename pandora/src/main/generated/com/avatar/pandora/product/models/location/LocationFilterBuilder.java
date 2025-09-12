@@ -2,8 +2,10 @@
 package com.avatar.pandora.product.models.location;
 
 import java.util.AbstractMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import javax.annotation.processing.Generated;
@@ -12,21 +14,24 @@ import javax.annotation.processing.Generated;
 public class LocationFilterBuilder {
     private String searchTerm;
 
+    private List<Properties> properties;
+
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     private LocationFilterBuilder() {
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    private LocationFilterBuilder(String searchTerm) {
+    private LocationFilterBuilder(String searchTerm, List<Properties> properties) {
         this.searchTerm = searchTerm;
+        this.properties = properties;
     }
 
     /**
      * Static constructor/builder. Can be used instead of new LocationFilter(...)
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    public static LocationFilter LocationFilter(String searchTerm) {
-        return new LocationFilter(searchTerm);
+    public static LocationFilter LocationFilter(String searchTerm, List<Properties> properties) {
+        return new LocationFilter(searchTerm, properties);
     }
 
     /**
@@ -42,7 +47,7 @@ public class LocationFilterBuilder {
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     public static LocationFilterBuilder builder(LocationFilter from) {
-        return new LocationFilterBuilder(from.searchTerm());
+        return new LocationFilterBuilder(from.searchTerm(), from.properties());
     }
 
     /**
@@ -58,7 +63,8 @@ public class LocationFilterBuilder {
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     public static Stream<Map.Entry<String, Object>> stream(LocationFilter record) {
-        return Stream.of(new AbstractMap.SimpleImmutableEntry<>("searchTerm", record.searchTerm()));
+        return Stream.of(new AbstractMap.SimpleImmutableEntry<>("searchTerm", record.searchTerm()),
+                 new AbstractMap.SimpleImmutableEntry<>("properties", record.properties()));
     }
 
     /**
@@ -66,26 +72,27 @@ public class LocationFilterBuilder {
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     public LocationFilter build() {
-        return new LocationFilter(searchTerm);
+        return new LocationFilter(searchTerm, properties);
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     @Override
     public String toString() {
-        return "LocationFilterBuilder[searchTerm=" + searchTerm + "]";
+        return "LocationFilterBuilder[searchTerm=" + searchTerm + ", properties=" + properties + "]";
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     @Override
     public int hashCode() {
-        return Objects.hash(searchTerm);
+        return Objects.hash(searchTerm, properties);
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     @Override
     public boolean equals(Object o) {
         return (this == o) || ((o instanceof LocationFilterBuilder r)
-                && Objects.equals(searchTerm, r.searchTerm));
+                && Objects.equals(searchTerm, r.searchTerm)
+                && Objects.equals(properties, r.properties));
     }
 
     /**
@@ -106,6 +113,23 @@ public class LocationFilterBuilder {
     }
 
     /**
+     * Set a new value for the {@code properties} record component in the builder
+     */
+    @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+    public LocationFilterBuilder properties(List<Properties> properties) {
+        this.properties = properties;
+        return this;
+    }
+
+    /**
+     * Return the current value for the {@code properties} record component in the builder
+     */
+    @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+    public List<Properties> properties() {
+        return properties;
+    }
+
+    /**
      * Add withers to {@code LocationFilter}
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
@@ -117,11 +141,17 @@ public class LocationFilterBuilder {
         String searchTerm();
 
         /**
+         * Return the current value for the {@code properties} record component in the builder
+         */
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        List<Properties> properties();
+
+        /**
          * Return a new record builder using the current values
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default LocationFilterBuilder with() {
-            return new LocationFilterBuilder(searchTerm());
+            return new LocationFilterBuilder(searchTerm(), properties());
         }
 
         /**
@@ -139,7 +169,15 @@ public class LocationFilterBuilder {
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default LocationFilter withSearchTerm(String searchTerm) {
-            return new LocationFilter(searchTerm);
+            return new LocationFilter(searchTerm, properties());
+        }
+
+        /**
+         * Return a new instance of {@code LocationFilter} with a new value for {@code properties}
+         */
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        default LocationFilter withProperties(List<Properties> properties) {
+            return new LocationFilter(searchTerm(), properties);
         }
     }
 
@@ -156,6 +194,12 @@ public class LocationFilterBuilder {
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         public String searchTerm() {
             return from.searchTerm();
+        }
+
+        @Override
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        public List<Properties> properties() {
+            return from.properties();
         }
     }
 }

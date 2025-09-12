@@ -1,5 +1,5 @@
 package com.avatar.pandora.product.models.location;
 
 public enum LocationProperty {
-    FREE_PARKING, SHOWER, CHANGING_ROOM
+    FREE_PARKING, SHOWER, CHANGING_ROOM, CAFE, EQUIPMENT_RENTAL
 }

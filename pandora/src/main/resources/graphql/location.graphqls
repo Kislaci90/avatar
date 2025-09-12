@@ -1,13 +1,19 @@
 type Query {
-    searchLocations(count:Int, offset:Int, filter: LocationFilter): Page
+    searchLocations(count:Int, offset:Int, filter: LocationFilter, sort: SortQuery): LocationPage
     getLocation(id: Int!): LocationView
 }
 
 input LocationFilter {
-    searchTerm: String!
+    searchTerm: String,
+    properties: [String],
 }
 
-type Page {
+input SortQuery {
+    field: String,
+    direction: String!
+}
+
+type LocationPage {
     content: [LocationView]
     pageable: Pageable!
     total: Int!
@@ -21,16 +27,13 @@ type Pageable {
 type LocationView {
     id : ID!
     name: String!
+    description: String!
+    website: String
     geom: PointView!
     address: Address!
     contact: Contact!
     properties: [String]
     pitches: [PitchView]
-}
-
-type PitchView {
-    id: ID!
-    name: String!
 }
 
 type PointView {

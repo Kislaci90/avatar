@@ -20,6 +20,9 @@ query locationDetails($id: Int!) {
         pitches {
             id
             name
+            surfaceType
+            pitchType
+            properties
         }
     }
 }

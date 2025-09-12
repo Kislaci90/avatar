@@ -5,16 +5,18 @@ import com.avatar.pandora.product.models.pitch.PitchForm;
 import com.avatar.pandora.product.models.pitch.PitchView;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 @Service
 public class PitchConverter implements Converter<Pitch, PitchView, PitchForm> {
 
+    private final LazyLocationConverter lazyLocationConverter;
+
+    public PitchConverter(LazyLocationConverter lazyLocationConverter) {
+        this.lazyLocationConverter = lazyLocationConverter;
+    }
+
     @Override
     public PitchView convertToView(Pitch pitch) {
-        return new PitchView(pitch.getId(), pitch.getName());
+        return new PitchView(pitch.getId(), pitch.getName(), pitch.getType(), pitch.getSurfaceType(), pitch.getProperties(), lazyLocationConverter.convertToView(pitch.getLocation()));
     }
 
     @Override

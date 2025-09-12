@@ -3,6 +3,7 @@ package com.avatar.pandora.product.controllers;
 import com.avatar.pandora.product.models.location.LocationFilter;
 import com.avatar.pandora.product.models.location.LocationForm;
 import com.avatar.pandora.product.models.location.LocationView;
+import com.avatar.pandora.product.models.location.SortQuery;
 import com.avatar.pandora.product.services.LocationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/location")
 public class LocationController {
 
+    private final LocationService locationService;
+
     @Autowired
-    private LocationService locationService;
+    public LocationController(LocationService locationService) {
+        this.locationService = locationService;
+    }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.OK)
@@ -32,8 +37,8 @@ public class LocationController {
     }
 
     @QueryMapping
-    public Page<LocationView> searchLocations(@Argument(name = "count") Integer count, @Argument(name = "offset") Integer offset, @Argument(name = "filter") LocationFilter filter) {
-        return locationService.findBy(count, offset, filter);
+    public Page<LocationView> searchLocations(@Argument(name = "count") Integer count, @Argument(name = "offset") Integer offset, @Argument(name = "filter") LocationFilter filter, @Argument(name = "sort") SortQuery sort) {
+        return locationService.findBy(count, offset, filter, sort);
     }
 
     @QueryMapping

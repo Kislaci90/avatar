@@ -1,5 +1,5 @@
-query searchLocation($count: Int!, $offset: Int!, $filter: LocationFilter!) {
-    searchLocations(count: $count, offset: $offset, filter: $filter) {
+query searchLocation($count: Int!, $offset: Int!, $filter: LocationFilter!, $sort: SortQuery) {
+    searchLocations(count: $count, offset: $offset, filter: $filter, sort:  $sort) {
         total
         pageable {
             pageNumber
@@ -8,6 +8,8 @@ query searchLocation($count: Int!, $offset: Int!, $filter: LocationFilter!) {
         content {
             id
             name
+            description
+            website
             address {
                 addressLine
                 postalCode
@@ -23,6 +25,13 @@ query searchLocation($count: Int!, $offset: Int!, $filter: LocationFilter!) {
                 y
             }
             properties
+            pitches {
+                id
+                name
+                pitchType
+                surfaceType
+                properties
+            }
         }
     }
 }

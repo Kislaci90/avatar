@@ -1,18 +1,14 @@
 package com.avatar.pandora.product.services;
 
-import com.avatar.pandora.product.models.location.Location;
 import com.avatar.pandora.product.models.location.LocationFilter;
 import com.avatar.pandora.product.models.location.LocationForm;
 import com.avatar.pandora.product.models.location.LocationView;
+import com.avatar.pandora.product.models.location.SortQuery;
 import com.avatar.pandora.product.repositories.LocationRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 public class LocationService {
@@ -26,8 +22,8 @@ public class LocationService {
         this.locationConverter = locationConverter;
     }
 
-    public Page<LocationView> findBy(Integer count, Integer offset, LocationFilter filter) {
-        return locationRepository.findByName(PageRequest.of(count, offset), filter.searchTerm()).map(locationConverter::convertToView);
+    public Page<LocationView> findBy(Integer count, Integer offset, LocationFilter filter, SortQuery sort) {
+        return locationRepository.findAll(PageRequest.of(count, offset, sort.getSort())).map(locationConverter::convertToView);
     }
 
     public LocationView getById(Long id) {

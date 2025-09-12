@@ -1,0 +1,20 @@
+query searchPitches($count: Int!, $offset: Int!, $filter: PitchFilter!, $sort: PitchSort) {
+    searchPitches(count: $count, offset: $offset, filter: $filter, sort:  $sort) {
+        total
+        pageable {
+            pageNumber
+            pageSize
+        }
+        content {
+            id
+            name
+            properties
+            pitchType
+            surfaceType
+            location {
+                id
+                name
+            }
+        }
+    }
+}

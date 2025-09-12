@@ -1,0 +1,22 @@
+query locationDetails($id: Int!) {
+    getPitch(id: $id) {
+        id
+        name
+        surfaceType
+        pitchType
+        properties
+        location {
+            name
+            address {
+                addressLine
+                postalCode
+                city
+            }
+            contact {
+                contactName
+                email
+                phoneNumber
+            }
+        }
+    }
+}
