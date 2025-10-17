@@ -42,11 +42,13 @@ const SEARCH_PITCHES = gql`
             content {
                 id
                 name
+                properties
                 pitchType
                 surfaceType
                 location {
                     id
                     name
+                    properties
                     address {
                         addressLine
                         city

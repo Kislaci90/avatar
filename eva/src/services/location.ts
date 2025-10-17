@@ -23,6 +23,17 @@ export type LocationView = {
     pitches: [PitchView]
 }
 
+export type LazyLocationView = {
+    id : number,
+    name: string,
+    description: string,
+    website: string,
+    geom: PointView,
+    address: Address,
+    contact: Contact,
+    properties: [string],
+}
+
 export type PointView = {
     x: string
     y: string
@@ -42,9 +53,10 @@ export type Address = {
 
 export type PitchView = {
     id: number,
+    description: string,
     name: string,
     pitchType: string,
     surfaceType: string,
     properties: [string],
-    location: LocationView,
+    location: LazyLocationView,
 }

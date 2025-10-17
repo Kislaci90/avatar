@@ -13,7 +13,7 @@ public class PointConverter implements Converter<Point, PointView, PointForm>{
 
     @Override
     public PointView convertToView(Point geom) {
-        return new PointView(geom.getX(), geom.getY());
+        return new PointView(geom.getY(), geom.getX());
     }
 
     @Override

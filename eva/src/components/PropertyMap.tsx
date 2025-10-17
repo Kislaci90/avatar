@@ -17,6 +17,6 @@ export const locationPropertyIconMap: Record<string, JSX.Element> = {
 };
 
 export const pitchPropertyIconMap: Record<string, JSX.Element> = {
-    LIGHTING: <HighlightIcon sx={{color: theme.palette.secondary.main}} />,
-    COVERED: <FestivalIcon  sx={{color: theme.palette.secondary.main}}/>,
+    LIGHTING: <HighlightIcon sx={{color: theme.palette.info.main}} />,
+    COVERED: <FestivalIcon  sx={{color: theme.palette.info.main}}/>,
 };

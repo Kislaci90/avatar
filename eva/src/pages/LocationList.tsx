@@ -76,7 +76,7 @@ const LocationList: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [locations, setLocations] = useState<any[]>([]);
-    const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
+    const [, setUserLocation] = useState<UserLocation | null>(null);
     const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
 
     // Get user's location on component mount
@@ -209,4 +209,4 @@ const LocationList: React.FC = () => {
     );
 };
 
-export default LocationList; 
+export default LocationList;

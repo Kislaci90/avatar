@@ -1,6 +1,5 @@
-import {Box, Button, CardContent, Chip, Divider, Stack, Typography, useTheme} from "@mui/material";
-import {Directions, LocationOn} from "@mui/icons-material";
-import {getDirectionsUrl} from "../../services/distance";
+import {Box, CardContent, Chip, Divider, Stack, Tooltip, Typography, useTheme} from "@mui/material";
+import {LocationOn} from "@mui/icons-material";
 import {type LocationView} from "../../services/location.ts";
 import {locationPropertyIconMap} from "../PropertyMap.tsx";
 
@@ -28,6 +27,17 @@ export function LocationCardContent({location}: Readonly<LocationCardContentProp
 
             <Divider sx={{mb: 3}}/>
 
+            {/* Address and Location Info */}
+            <Box sx={{mb: 3}}>
+                <Typography
+                    variant="h5"
+                    sx={{mb: 1}}
+                >
+                    <LocationOn sx={{fontSize: 20, color: theme.palette.primary.main}}/>
+                    {location.address.addressLine}
+                </Typography>
+            </Box>
+
             {/* Description */}
             <Typography
                 variant="body2"
@@ -36,40 +46,19 @@ export function LocationCardContent({location}: Readonly<LocationCardContentProp
                 {location.description || 'A fantastic football location with multiple pitches and excellent facilities.'}
             </Typography>
 
-            {/* Address and Location Info */}
-            <Box sx={{mb: 3}}>
-                <Typography
-                    variant="body2"
-                    sx={{mb: 1}}
-                >
-                    <LocationOn sx={{fontSize: 14, color: theme.palette.primary.main}}/>
-                    {location.address.addressLine}
-                </Typography>
-
-                {/* Directions Button */}
-                <Button
-                    variant="outlined"
-                    size="medium"
-                    startIcon={<Directions/>}
-                    sx={{
-                        color: theme.palette.info.main,
-                        '&:hover': {
-                            bgcolor: 'white'
-                        }
-                    }}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        window.open(getDirectionsUrl(location), '_blank');
-                    }}
-                >
-                    Get Directions
-                </Button>
-            </Box>
-
             <Box>
                 <Stack direction="row" spacing={2}>
                     {location.properties.map((property: string) => (
-                        <Chip size="medium" icon={locationPropertyIconMap[property]} key={property}/>
+                        <Tooltip title={property} key={property} placement="top">
+                            <Chip size="medium"
+                                  icon={locationPropertyIconMap[property]}
+                                  sx={{
+                                      '& .MuiChip-label': {
+                                          padding: 0.8,
+                                      },
+                                  }}
+                                  />
+                        </Tooltip>
                     ))}
                 </Stack>
             </Box>
