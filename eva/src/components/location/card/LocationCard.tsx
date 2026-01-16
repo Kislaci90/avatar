@@ -1,17 +1,17 @@
 import {Card, useTheme} from "@mui/material";
-import {useNavigate} from 'react-router-dom';
-import {LocationCardContent} from "./LocationCardContent";
-import type {LocationView} from "../../services/location.ts";
+import {LocationCardContent} from "./LocationCardContent.tsx";
+import type {LocationView} from "../../../services/location.ts";
 import {LocationCardImage} from "./LocationCardImage.tsx";
 import {LocationCardButtons} from "./LocationCardButtons.tsx";
+import type {UserLocation} from "../../../services/distance.ts";
 
 interface LocationCardProps {
     location: LocationView,
+    userLocation: UserLocation | null
 }
 
-export function LocationCard({location}: Readonly<LocationCardProps>) {
+export function LocationCard({location, userLocation}: Readonly<LocationCardProps>) {
     const theme = useTheme()
-    const navigate = useNavigate();
 
     return (
         <Card
@@ -20,27 +20,20 @@ export function LocationCard({location}: Readonly<LocationCardProps>) {
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                border: `1px solid ${theme.palette.divider}`,
-                borderRadius: 4,
+                border: `2px solid ${theme.palette.divider}`,
+                borderRadius: 2,
                 overflow: 'hidden',
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                cursor: 'pointer',
                 position: 'relative',
                 '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: '0 5px 10px rgba(0, 0, 0, 0.3)',
-                    borderColor: theme.palette.secondary.main,
+                    borderColor: theme.palette.primary.main,
                     '& .card-image': {
                         transform: 'scale(1.05)',
-                    },
-                    '& .card-overlay': {
-                        opacity: 1,
                     }
                 }
             }}
-            onClick={() => navigate(`/locations/${location.id}`)}
         >
-            <LocationCardImage location={location}/>
+            <LocationCardImage location={location} userLocation={userLocation}/>
 
             <LocationCardContent location={location}/>
 

@@ -1,5 +1,4 @@
 import { createTheme } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
 
 const theme = createTheme({
     palette: {
@@ -8,124 +7,70 @@ const theme = createTheme({
             main: '#5a7539',
             contrastText: '#ffffff',
         },
+        secondary: {
+            main: '#FF7043',
+            contrastText: '#ffffff',
+        },
         info: {
             main: '#477572',
             contrastText: '#ffffff',
         },
         warning: {
-            main: '#f9a825',
-            contrastText: '#ffffff',
+            main: '#FFA726',
+            contrastText: '#000000',
         },
         error: {
-            main: '#740006',
+            main: '#E53935',
             contrastText: '#ffffff',
         },
         success: {
             main: '#cdeda3',
             contrastText: '#ffffff',
         },
-        secondary: {
-            main: '#667157',
-            contrastText: '#ffffff',
-        },
         background: {
-            default: '#f9faef',
+            default: '#F5F5F5',
             paper: '#ffffff',
+        },
+        text: {
+            primary: '#212121',
+            secondary: '#616161',
         },
     },
     typography: {
-        fontFamily: `'Montserrat', sans-serif`,
-
-        h1: {
-            fontSize: '3rem',
-            fontWeight: 700,
-            color: '#5a7539',
-        },
-        h2: {
-            fontSize: '2.5rem',
-            fontWeight: 600,
-            color: '#667157',
-        },
-        h3: {
-            fontSize: '2rem',
-            fontWeight: 600,
-            color: '#2f312a',
-        },
-        h4: {
-            fontSize: '1.5rem',
-            fontWeight: 500,
-            color: '#2f312a',
-        },
-        h5: {
-            fontSize: '1.25rem',
-            fontWeight: 500,
-            color: '#2f312a',
-        },
-        h6: {
-            fontSize: '1rem',
-            fontWeight: 500,
-            color: '#2f312a',
-        },
-        subtitle1: {
-            fontSize: '1rem',
-            fontWeight: 500,
-            color: '#2f312a',
-        },
-        subtitle2: {
-            fontSize: '0.9rem',
-            fontWeight: 400,
-            color: '#2f312a',
-        },
-        body1: {
-            fontSize: '1rem',
-            fontWeight: 400,
-            color: '#2f312a',
-        },
-        body2: {
-            fontSize: '0.9rem',
-            fontWeight: 400,
-            color: grey[700],
-        },
-        button: {
-            textTransform: 'none',
-            fontWeight: 600,
-            color: '#ffffff',
-        },
-        caption: {
-            fontSize: '0.8rem',
-            color: grey[600],
-        },
+        fontFamily: 'Poppins, Arial, sans-serif',
+        h1: { fontWeight: 800, textTransform: 'uppercase' },
+        h2: { fontWeight: 700 },
+        h3: { fontWeight: 600 },
+        body1: { fontSize: '1rem', fontFamily: 'Inter, sans-serif' },
+        body2: { fontSize: '0.9rem', color: '#555555' },
+        button: { textTransform: 'none', fontWeight: 600 },
+    },
+    shape: {
+        borderRadius: 12, // slightly rounded for cards/chips
     },
     components: {
-        MuiButton: {
+        MuiPaper: {
             styleOverrides: {
                 root: {
-                    borderRadius: 12,
-                    paddingLeft: 20,
-                    paddingRight: 20,
+                    border: '1px solid rgba(0,0,0,0.1)',
+                    boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
                 },
             },
         },
         MuiChip: {
             styleOverrides: {
                 root: {
-                    borderRadius: 10,
+                    borderRadius: 12,
                     fontWeight: 500,
+                    textTransform: 'capitalize',
                 },
             },
         },
-        MuiPaper: {
+        MuiButton: {
             styleOverrides: {
                 root: {
-                    borderRadius: 12,
-                },
-            },
-        },
-        MuiDialog: {
-            styleOverrides: {
-                paper: {
-                    borderRadius: 16,
-                    padding: 16,
+                    borderRadius: 8,
+                    textTransform: 'none',
                 },
             },
         },

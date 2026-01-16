@@ -94,11 +94,11 @@ const Home: React.FC = () => {
     ];
 
     return (
-        <Box sx={{minHeight: '100vh', bgcolor: 'background.default'}}>
+        <Box sx={{minHeight: '100vh'}}>
             {/* Hero Section */}
             <Box
                 sx={{
-                    background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.secondary.main}15 100%)`,
+                    background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.primary.main}15 100%)`,
                     py: 12,
                     position: 'relative',
                     overflow: 'hidden'

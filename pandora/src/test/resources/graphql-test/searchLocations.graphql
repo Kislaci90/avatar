@@ -1,4 +1,4 @@
-query searchLocation($count: Int!, $offset: Int!, $filter: LocationFilter!, $sort: SortQuery) {
+query searchLocation($count: Int!, $offset: Int!, $filter: LocationFilter!, $sort: String) {
     searchLocations(count: $count, offset: $offset, filter: $filter, sort:  $sort) {
         total
         pageable {

@@ -1,17 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import React from 'react';
+import {useParams} from 'react-router-dom';
 import {gql} from '@apollo/client';
 import {useQuery} from "@apollo/client/react";
-import {Alert, Box, Button, CircularProgress, Container, Paper, Tab, Tabs,} from '@mui/material';
-import {ArrowBack, ContactPhone, Info, Map, SportsSoccer,} from '@mui/icons-material';
-import type {GetLocationResult} from "../services/location.ts";
-import {type UserLocation} from "../services/distance.ts";
-import {TabPanel} from "../components/TabPanel.tsx";
-import {LocationOverviewTabPanel} from "../components/location/detail/LocationOverviewTabPanel.tsx";
-import {LocationPitchesTabPanel} from "../components/location/detail/LocationPitchesTabPanel.tsx";
-import {LocationContactTabPanel} from "../components/location/detail/LocationContactTabPanel.tsx";
-import {LocationMapTabPanel} from "../components/location/detail/LocationMapTabPanel.tsx";
-import {LocationDetailHeader} from "../components/location/detail/LocationDetailHeader.tsx";
+import {
+    Alert,
+    Box,
+    CircularProgress,
+    Container,
+    Grid,
+    List,
+    ListItem,
+    ListItemIcon,
+    ListItemText,
+    Typography,
+} from '@mui/material';
+import type {GetLocationResult, PitchView} from "../services/location.ts";
+import theme from "../theme/theme.ts";
+import {Email, Favorite, Home, LocationOn, Person, Phone, SportsSoccer} from "@mui/icons-material";
+import {locationPropertyIconMap} from "../components/PropertyMap.tsx";
+import {LocationDetailPitchCard} from "../components/location/detail/LocationDetailPitchCard.tsx";
+import {LocationDetailSendMessage} from "../components/location/detail/LocationDetailSendMessage.tsx";
 
 const GET_LOCATION_DETAIL = gql`
     query GetLocation($id: Int!) {
@@ -39,6 +47,7 @@ const GET_LOCATION_DETAIL = gql`
                 id
                 name
                 surfaceType
+                description
                 pitchType
                 properties
                 location {
@@ -47,7 +56,7 @@ const GET_LOCATION_DETAIL = gql`
                         addressLine
                         postalCode
                         city
-                    } 
+                    }
                     properties
                 }
             }
@@ -57,40 +66,12 @@ const GET_LOCATION_DETAIL = gql`
 
 const LocationDetail: React.FC = () => {
     const {id} = useParams<{ id: string }>();
-    const navigate = useNavigate();
-    const [tabValue, setTabValue] = useState(0);
-    const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
 
     const numericId = id ? parseInt(id, 10) : null;
 
     const {loading, error, data} = useQuery<GetLocationResult>(GET_LOCATION_DETAIL, {
         variables: {id: numericId},
     });
-
-    useEffect(() => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    setUserLocation({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
-                    });
-                },
-                (error) => {
-                    console.log('Location permission denied or error:', error);
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 300000 // 5 minutes
-                }
-            );
-        }
-    }, []);
-
-    const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-        setTabValue(newValue);
-    };
 
     if (loading) {
         return (
@@ -120,66 +101,170 @@ const LocationDetail: React.FC = () => {
         );
     }
 
-    const location = data.getLocation;
+    let location = data.getLocation;
 
     return (
-        <Box sx={{bgcolor: 'background.default', minHeight: '100vh', py: 4}}>
+        <Box sx={{minHeight: '100vh'}}>
+            <Box sx={{
+                pb: 1,
+                borderBottom: `1px solid ${theme.palette.divider}`,
+                backgroundImage: `url('/location_stock.png')`,
+                objectFit: "fill",
+                border: `1px solid ${theme.palette.divider}`,
+                opacity: 0.85,
+                filter: "saturate(0.9) contrast(0.9)",
+                height: "400px",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+            }}>
+            </Box>
             <Container maxWidth="lg">
-                {/* Back Button */}
-                <Button
-                    startIcon={<ArrowBack/>}
-                    onClick={() => navigate(-1)}
-                    sx={{mb: 3}}
-                >
-                    Back to Search
-                </Button>
+                <Grid container spacing={2}>
+                    <Grid size={{xs: 6, md: 8}}>
+                        <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 6}}>
+                            <Typography variant="h4" component="h1">
+                                {location.name}
+                            </Typography>
+                            <Favorite color="secondary"></Favorite>
+                        </Box>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'left',
+                            mt: 6,
+                            borderTop: `1px solid ${theme.palette.divider}`,
+                            pt: 2
+                        }}>
+                            <Typography variant="h5" component="h1">
+                                Overview
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <Grid container spacing={2}>
+                                <Grid size={{xs: 6, md: 4}}>
+                                    <List>
+                                        <ListItem>
+                                            <ListItemIcon>
+                                                <Person/>
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={location.contact.contactName}
+                                                secondary="Contact Name"
+                                            />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemIcon>
+                                                <Email/>
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={location.contact.email}
+                                                secondary="Contact Email"
+                                            />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemIcon>
+                                                <Phone/>
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={location.contact.phoneNumber}
+                                                secondary="Contact Phonenumber"
+                                            />
+                                        </ListItem>
+                                    </List>
+                                </Grid>
+                                <Grid size={{xs: 6, md: 4}}>
+                                    <List>
+                                        <ListItem>
+                                            <ListItemIcon>
+                                                <LocationOn/>
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={location.address.addressLine}
+                                                secondary="Address"
+                                            />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemIcon>
+                                                <Home/>
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={location.website}
+                                                secondary="Website"
+                                            />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemIcon>
+                                                <SportsSoccer/>
+                                            </ListItemIcon>
+                                            <ListItemText
+                                                primary={location.pitches.length}
+                                                secondary="No. Pitches"
+                                            />
+                                        </ListItem>
+                                    </List>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'left',
+                            mt: 6,
+                            borderTop: `1px solid ${theme.palette.divider}`,
+                            pt: 2
+                        }}>
+                            <Typography variant="h5" component="h1">
+                                Description
+                            </Typography>
+                        </Box>
+                        <Box sx={{display: 'flex', justifyContent: 'left', mt: 2}}>
+                            <Typography variant="body1" component="p">
+                                {location.description}
+                            </Typography>
+                        </Box>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'left',
+                            mt: 6,
+                            borderTop: `1px solid ${theme.palette.divider}`,
+                            pt: 2
+                        }}>
+                            <Typography variant="h5" component="h1">
+                                Facilities & Amenities
+                            </Typography>
+                        </Box>
+                        <Box>
+                            <List dense>
+                                {location.properties.map((property) => (
+                                    <ListItem key={property}>
+                                        <ListItemIcon>
+                                            {locationPropertyIconMap[property]}
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={property}
+                                            secondary="Description for property"
+                                        />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Box>
+                    </Grid>
+                    <Grid size={{xs: 6, md: 4}}>
+                        <LocationDetailSendMessage />
+                    </Grid>
+                </Grid>
+                {location.pitches.length > 0 && (
+                    <Typography variant="h5" component="h1" sx={{pt: 5}}>
+                        Pitches
+                    </Typography>
+                )}
+                <Typography variant="h5" component="h1" sx={{pt: 5}}>
+                    Pitches
+                </Typography>
+                {location.pitches.map((pitch: PitchView) => (
+                    <Box sx={{my: 3}} key={pitch.id}>
+                        <LocationDetailPitchCard pitch={pitch} />
+                    </Box>))}
 
-                {/* Header Section */}
-                <Paper elevation={3} sx={{borderRadius: 3, overflow: 'hidden', mb: 4}}>
-                    <LocationDetailHeader location={location} userLocation={userLocation}/>
-                </Paper>
-
-                {/* Tabs */}
-                <Paper elevation={2} sx={{borderRadius: 3, mb: 4}}>
-                    <Tabs
-                        value={tabValue}
-                        onChange={handleTabChange}
-                        variant="fullWidth"
-                        sx={{
-                            borderBottom: 1,
-                            borderColor: 'divider',
-                            '& .MuiTab-root': {
-                                fontWeight: 600,
-                                fontSize: '1rem',
-                                py: 2
-                            }
-                        }}
-                    >
-                        <Tab icon={<Info/>} label="Overview"/>
-                        <Tab icon={<SportsSoccer/>} label="Pitches"/>
-                        <Tab icon={<ContactPhone/>} label="Contact"/>
-                        <Tab icon={<Map/>} label="Location"/>
-                    </Tabs>
-
-                    <TabPanel value={tabValue} index={0}>
-                        <LocationOverviewTabPanel location={location} userLocation={userLocation}/>
-                    </TabPanel>
-
-                    {/* Pitches Tab */}
-                    <TabPanel value={tabValue} index={1}>
-                        <LocationPitchesTabPanel location={location}/>
-                    </TabPanel>
-
-                    {/* Contact Tab */}
-                    <TabPanel value={tabValue} index={2}>
-                        <LocationContactTabPanel location={location}/>
-                    </TabPanel>
-
-                    {/* Location Tab */}
-                    <TabPanel value={tabValue} index={3}>
-                        <LocationMapTabPanel location={location} userLocation={userLocation}/>
-                    </TabPanel>
-                </Paper>
             </Container>
         </Box>
     );

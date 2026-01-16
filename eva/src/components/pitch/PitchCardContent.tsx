@@ -1,4 +1,3 @@
-import {LocationOn} from "@mui/icons-material";
 import {Box, CardContent, Chip, Divider, Stack, Tooltip, Typography} from "@mui/material";
 import {locationPropertyIconMap, pitchPropertyIconMap} from "../PropertyMap.tsx";
 import type {PitchView} from "../../services/location.ts";
@@ -11,51 +10,35 @@ export function PitchCardContent({pitch}: Readonly<PitchCardContentProps>) {
     return (
         <CardContent sx={{flexGrow: 1, p: 3}}>
             {/* Title and Type */}
-            <Box sx={{mb: 2}}>
-                <Typography
-                    variant="h5"
-                    color="text.primary"
-                    sx={{
-                        mb: 1,
-                        lineHeight: 1.2,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden'
-                    }}
+            <Box sx={{justifyContent: "left", alignItems: "center", display: "flex"}}>
+                <Typography sx={{mb: 1}}
+                            variant="h6"
                 >
-                    <LocationOn color="primary"/> {pitch.location.name} / {pitch.name}
+                    {pitch.name}
                 </Typography>
-                <Divider/>
-
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1,
-                    flexWrap: 'wrap'
-                }}>
-                </Box>
             </Box>
 
+            <Box sx={{justifyContent: "left", alignItems: "center", display: "flex"}}>
+                <Typography variant="body1" sx={{mb: 1}}>
+                    {pitch.location.name}
+                </Typography>
+            </Box>
+
+            <Divider sx={{mb: 3}}/>
+
             {/* Description */}
-            <Typography
-                variant="body2"
-                sx={{
-                    color: 'text.secondary',
-                    mb: 2,
-                    lineHeight: 1.5,
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    fontSize: '0.875rem'
-                }}
-            >
-                {pitch.description} Lorem Ipsum Description for Pitches, because I was lazy to implement the
-                description
-            </Typography>
+            <Box sx={{mb: 3, justifyContent: "left", alignItems: "center", display: "flex"}}>
+                <Typography
+                    variant="body2"
+                    sx={{
+                        color: 'text.secondary',
+                        mb: 2
+                    }}
+                >
+                    {pitch.description} Lorem Ipsum Description for Pitches, because I was lazy to implement the
+                    description
+                </Typography>
+            </Box>
 
             <Box>
                 <Stack direction="row" spacing={2}>

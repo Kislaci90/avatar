@@ -2,10 +2,9 @@
 package com.avatar.pandora.product.models.location;
 
 import java.util.AbstractMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import javax.annotation.processing.Generated;
@@ -14,24 +13,29 @@ import javax.annotation.processing.Generated;
 public class LocationFilterBuilder {
     private String searchTerm;
 
-    private List<Properties> properties;
+    private Set<String> locationProperties;
+
+    private Set<String> cities;
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     private LocationFilterBuilder() {
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    private LocationFilterBuilder(String searchTerm, List<Properties> properties) {
+    private LocationFilterBuilder(String searchTerm, Set<String> locationProperties,
+            Set<String> cities) {
         this.searchTerm = searchTerm;
-        this.properties = properties;
+        this.locationProperties = locationProperties;
+        this.cities = cities;
     }
 
     /**
      * Static constructor/builder. Can be used instead of new LocationFilter(...)
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    public static LocationFilter LocationFilter(String searchTerm, List<Properties> properties) {
-        return new LocationFilter(searchTerm, properties);
+    public static LocationFilter LocationFilter(String searchTerm, Set<String> locationProperties,
+            Set<String> cities) {
+        return new LocationFilter(searchTerm, locationProperties, cities);
     }
 
     /**
@@ -47,7 +51,7 @@ public class LocationFilterBuilder {
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     public static LocationFilterBuilder builder(LocationFilter from) {
-        return new LocationFilterBuilder(from.searchTerm(), from.properties());
+        return new LocationFilterBuilder(from.searchTerm(), from.locationProperties(), from.cities());
     }
 
     /**
@@ -64,7 +68,8 @@ public class LocationFilterBuilder {
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     public static Stream<Map.Entry<String, Object>> stream(LocationFilter record) {
         return Stream.of(new AbstractMap.SimpleImmutableEntry<>("searchTerm", record.searchTerm()),
-                 new AbstractMap.SimpleImmutableEntry<>("properties", record.properties()));
+                 new AbstractMap.SimpleImmutableEntry<>("locationProperties", record.locationProperties()),
+                 new AbstractMap.SimpleImmutableEntry<>("cities", record.cities()));
     }
 
     /**
@@ -72,19 +77,19 @@ public class LocationFilterBuilder {
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     public LocationFilter build() {
-        return new LocationFilter(searchTerm, properties);
+        return new LocationFilter(searchTerm, locationProperties, cities);
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     @Override
     public String toString() {
-        return "LocationFilterBuilder[searchTerm=" + searchTerm + ", properties=" + properties + "]";
+        return "LocationFilterBuilder[searchTerm=" + searchTerm + ", locationProperties=" + locationProperties + ", cities=" + cities + "]";
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     @Override
     public int hashCode() {
-        return Objects.hash(searchTerm, properties);
+        return Objects.hash(searchTerm, locationProperties, cities);
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
@@ -92,7 +97,8 @@ public class LocationFilterBuilder {
     public boolean equals(Object o) {
         return (this == o) || ((o instanceof LocationFilterBuilder r)
                 && Objects.equals(searchTerm, r.searchTerm)
-                && Objects.equals(properties, r.properties));
+                && Objects.equals(locationProperties, r.locationProperties)
+                && Objects.equals(cities, r.cities));
     }
 
     /**
@@ -113,20 +119,37 @@ public class LocationFilterBuilder {
     }
 
     /**
-     * Set a new value for the {@code properties} record component in the builder
+     * Set a new value for the {@code locationProperties} record component in the builder
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    public LocationFilterBuilder properties(List<Properties> properties) {
-        this.properties = properties;
+    public LocationFilterBuilder locationProperties(Set<String> locationProperties) {
+        this.locationProperties = locationProperties;
         return this;
     }
 
     /**
-     * Return the current value for the {@code properties} record component in the builder
+     * Return the current value for the {@code locationProperties} record component in the builder
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    public List<Properties> properties() {
-        return properties;
+    public Set<String> locationProperties() {
+        return locationProperties;
+    }
+
+    /**
+     * Set a new value for the {@code cities} record component in the builder
+     */
+    @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+    public LocationFilterBuilder cities(Set<String> cities) {
+        this.cities = cities;
+        return this;
+    }
+
+    /**
+     * Return the current value for the {@code cities} record component in the builder
+     */
+    @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+    public Set<String> cities() {
+        return cities;
     }
 
     /**
@@ -141,17 +164,23 @@ public class LocationFilterBuilder {
         String searchTerm();
 
         /**
-         * Return the current value for the {@code properties} record component in the builder
+         * Return the current value for the {@code locationProperties} record component in the builder
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-        List<Properties> properties();
+        Set<String> locationProperties();
+
+        /**
+         * Return the current value for the {@code cities} record component in the builder
+         */
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        Set<String> cities();
 
         /**
          * Return a new record builder using the current values
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default LocationFilterBuilder with() {
-            return new LocationFilterBuilder(searchTerm(), properties());
+            return new LocationFilterBuilder(searchTerm(), locationProperties(), cities());
         }
 
         /**
@@ -169,15 +198,23 @@ public class LocationFilterBuilder {
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default LocationFilter withSearchTerm(String searchTerm) {
-            return new LocationFilter(searchTerm, properties());
+            return new LocationFilter(searchTerm, locationProperties(), cities());
         }
 
         /**
-         * Return a new instance of {@code LocationFilter} with a new value for {@code properties}
+         * Return a new instance of {@code LocationFilter} with a new value for {@code locationProperties}
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-        default LocationFilter withProperties(List<Properties> properties) {
-            return new LocationFilter(searchTerm(), properties);
+        default LocationFilter withLocationProperties(Set<String> locationProperties) {
+            return new LocationFilter(searchTerm(), locationProperties, cities());
+        }
+
+        /**
+         * Return a new instance of {@code LocationFilter} with a new value for {@code cities}
+         */
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        default LocationFilter withCities(Set<String> cities) {
+            return new LocationFilter(searchTerm(), locationProperties(), cities);
         }
     }
 
@@ -198,8 +235,14 @@ public class LocationFilterBuilder {
 
         @Override
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-        public List<Properties> properties() {
-            return from.properties();
+        public Set<String> locationProperties() {
+            return from.locationProperties();
+        }
+
+        @Override
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        public Set<String> cities() {
+            return from.cities();
         }
     }
 }

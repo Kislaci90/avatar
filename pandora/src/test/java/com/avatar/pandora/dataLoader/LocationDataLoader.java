@@ -4,6 +4,7 @@ import com.avatar.pandora.product.models.address.Address;
 import com.avatar.pandora.product.models.contact.Contact;
 import com.avatar.pandora.product.models.location.Location;
 import com.avatar.pandora.product.models.location.LocationProperty;
+import com.avatar.pandora.product.models.location.LocationView;
 import com.avatar.pandora.product.models.pitch.Pitch;
 import com.avatar.pandora.product.models.pitch.PitchProperty;
 import com.avatar.pandora.product.models.pitch.PitchSurfaceType;
@@ -34,16 +35,26 @@ public class LocationDataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) {
         var faker = new Faker();
-        var address = new Address(faker.address().city(), faker.address().streetAddress(), faker.address().zipCode());
+        var address = new Address("Budapest", faker.address().streetAddress(), faker.address().zipCode());
         var contact = new Contact(faker.name().fullName(), faker.phoneNumber().phoneNumber(), faker.internet().emailAddress());
         GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
-        Point point = geometryFactory.createPoint(new Coordinate(Double.parseDouble(faker.address().longitude()), Double.parseDouble(faker.address().latitude())));
+        var point = geometryFactory.createPoint(new Coordinate(Double.parseDouble(faker.address().longitude()), Double.parseDouble(faker.address().latitude())));
 
+        addFirstLocation(faker, address, contact, point);
+
+        contact = new Contact(faker.name().fullName(), faker.phoneNumber().phoneNumber(), faker.internet().emailAddress());
+        address = new Address("Eger", faker.address().streetAddress(), faker.address().zipCode());
+        point = geometryFactory.createPoint(new Coordinate(Double.parseDouble(faker.address().longitude()), Double.parseDouble(faker.address().latitude())));
+        addSecondLocation(faker, address, contact, point);
+
+    }
+
+    private void addFirstLocation(Faker faker, Address address, Contact contact, Point point) {
         Location location = new Location();
         location.setId(1L);
         location.setWebsite(faker.internet().url());
         location.setDescription(faker.lorem().paragraph(1));
-        location.setName("Test Location");
+        location.setName("First Test Location");
         location.setAddress(address);
         location.setContact(contact);
         location.setGeom(point);
@@ -69,4 +80,24 @@ public class LocationDataLoader implements CommandLineRunner {
 
         pitchRepository.saveAll(Set.of(pitch, pitch2));
     }
+
+    private void addSecondLocation(Faker faker, Address address, Contact contact, Point point) {
+        Location location = new Location();
+        location.setId(2L);
+        location.setWebsite(faker.internet().url());
+        location.setDescription(faker.lorem().paragraph(1));
+        location.setName("Second Test Location");
+        location.setAddress(address);
+        location.setContact(contact);
+        location.setGeom(point);
+        location.setProperties(Set.of(LocationProperty.SHOWER, LocationProperty.CHANGING_ROOM, LocationProperty.FREE_PARKING, LocationProperty.CAFE));
+
+        locationRepository.save(location);
+    }
+
+    public static class TestLocations {
+        public static LocationView firstLocation;
+        public static LocationView secondLocation;
+    }
+
 }

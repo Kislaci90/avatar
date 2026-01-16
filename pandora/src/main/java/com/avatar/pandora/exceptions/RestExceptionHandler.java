@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -49,7 +50,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     List<ApiValidationError> subErrors = ex.getBindingResult().getAllErrors().stream()
             .map(e -> ((FieldError) e))
             .map(e -> new ApiValidationError(e.getField(), e.getRejectedValue(), e.getDefaultMessage()))
-            .collect(Collectors.toList());
+            .toList();
 
     ApiError apiError = new ApiError();
     apiError.setStatus(BAD_REQUEST);

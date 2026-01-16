@@ -1,14 +1,15 @@
 package com.avatar.pandora.product.services;
 
-import com.avatar.pandora.product.models.location.LocationFilter;
-import com.avatar.pandora.product.models.location.LocationForm;
-import com.avatar.pandora.product.models.location.LocationView;
-import com.avatar.pandora.product.models.location.SortQuery;
+import com.avatar.pandora.product.models.location.*;
 import com.avatar.pandora.product.repositories.LocationRepository;
+import jakarta.servlet.Filter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LocationService {
@@ -22,8 +23,17 @@ public class LocationService {
         this.locationConverter = locationConverter;
     }
 
-    public Page<LocationView> findBy(Integer count, Integer offset, LocationFilter filter, SortQuery sort) {
-        return locationRepository.findAll(PageRequest.of(count, offset, sort.getSort())).map(locationConverter::convertToView);
+    public Page<LocationView> findBy(Integer count, Integer offset, LocationFilter filter, String sort) {
+        LocationSort locationSort = LocationSort.valueOf(Optional.ofNullable(sort).orElse(LocationSort.DISTANCE_ASC.name()));
+        PageRequest pageRequest = PageRequest.of(count, offset, locationSort.getDirection(), locationSort.getField());
+
+        return locationRepository.searchByLocationFiler(pageRequest,
+                filter.searchTerm(),
+                filter.cities(),
+                filter.cities().isEmpty(),
+                filter.locationProperties().stream().map(LocationProperty::valueOf).collect(Collectors.toSet()),
+                filter.locationProperties().isEmpty(),
+                filter.locationProperties().size()).map(locationConverter::convertToView);
     }
 
     public LocationView getById(Long id) {

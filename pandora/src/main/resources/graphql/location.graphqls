@@ -1,16 +1,12 @@
 type Query {
-    searchLocations(count:Int, offset:Int, filter: LocationFilter, sort: SortQuery): LocationPage
+    searchLocations(count:Int, offset:Int, filter: LocationFilter, sort: String): LocationPage
     getLocation(id: Int!): LocationView
 }
 
 input LocationFilter {
     searchTerm: String,
-    properties: [String],
-}
-
-input SortQuery {
-    field: String,
-    direction: String!
+    locationProperties: [String],
+    cities: [String]
 }
 
 type LocationPage {

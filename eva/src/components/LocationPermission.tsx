@@ -3,7 +3,7 @@ import type {UserLocation} from "../services/distance.ts";
 
 interface LocationPermissionProps {
     setUserLocation: (value: (((prevState: (UserLocation | null)) => (UserLocation | null)) | UserLocation | null)) => void,
-    setLocationPermission: (value: (((prevState: ("granted" | "denied" | "prompt")) => ("granted" | "denied" | "prompt")) | "granted" | "denied" | "prompt")) => void
+    setLocationPermission: (value: (((prevState: ("granted" | "denied" | "prompt")) => ("granted" | "denied" | "prompt")) | "granted" | "denied" | "prompt")) => void,
 }
 
 export function LocationPermission({

@@ -1,20 +1,21 @@
 import React, {useEffect, useState} from 'react';
-import { gql } from '@apollo/client';
+import {gql} from '@apollo/client';
 import {useQuery} from "@apollo/client/react";
 import {Alert, Box, CircularProgress, Container, Grid, Typography} from '@mui/material';
 import {LoadMoreButton} from "../components/location/LoadMoreButton";
-import {LocationCard} from "../components/location/LocationCard";
+import {LocationCard} from "../components/location/card/LocationCard.tsx";
 import type {UserLocation} from "../services/distance";
-import {LocationSearchHeader} from "../components/LocationSearchHeader.tsx";
+import {LocationSearchHeader} from "../components/location/LocationSearchHeader.tsx";
 import type {SearchLocationResult} from "../services/location.ts";
 import {LocationPermission} from "../components/LocationPermission.tsx";
+import theme from "../theme/theme.ts";
 
 const SEARCH_LOCATIONS = gql`
     query SearchLocations(
         $filter: LocationFilter!,
         $count:Int!,
         $offset:Int!,
-        $sort:SortQuery!,
+        $sort:String,
     ) {
         searchLocations(
             filter: $filter,
@@ -59,27 +60,43 @@ const SEARCH_LOCATIONS = gql`
     }
 `;
 
-export type Filters = {
+export type LocationFilter = {
     searchTerm: string;
-    properties: string[];
+    locationProperties: string[];
+    cities: string[];
 };
 
 const LocationList: React.FC = () => {
-    const [filters, setFilters] = useState<Filters>({
+    const [filters, setFilters] = useState<LocationFilter>({
         searchTerm: '',
-        properties: [""],
+        locationProperties: [],
+        cities: [],
     });
-    const [sort] = useState({
-        field: 'name',
-        direction: 'ASC'
-    });
+    const [sort, setSort] = useState<string>();
     const [currentPage, setCurrentPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [locations, setLocations] = useState<any[]>([]);
-    const [, setUserLocation] = useState<UserLocation | null>(null);
+    const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
     const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
 
-    // Get user's location on component mount
+    const handleFilterChange = <K extends keyof LocationFilter>(
+        field: K,
+        value: LocationFilter[K]
+    ) => {
+        setFilters(prev => ({...prev, [field]: value}));
+    };
+
+    const clearFilters = () => {
+        setFilters({
+            searchTerm: '',
+            locationProperties: [],
+            cities: [],
+        });
+        setCurrentPage(0);
+        setHasMore(true);
+    };
+
+
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -107,7 +124,7 @@ const LocationList: React.FC = () => {
         variables: {
             filter: filters,
             count: 0,
-            offset: currentPage * 12,
+            offset: currentPage * 6,
             sort: sort
         }
     });
@@ -116,7 +133,7 @@ const LocationList: React.FC = () => {
         if (data?.searchLocations) {
             console.log(data?.searchLocations.content);
             setLocations(data.searchLocations.content);
-            setHasMore(data.searchLocations.content.length >= 12);
+            setHasMore(data.searchLocations.content.length >= 6);
         }
     }, [data]);
 
@@ -125,8 +142,8 @@ const LocationList: React.FC = () => {
         setHasMore(true);
         refetch({
             filters: filters,
-            count: 12, // Number of items per page
-            offset: currentPage * 12,
+            count: 6, // Number of items per page
+            offset: currentPage * 6,
             sort: sort
         });
     };
@@ -135,7 +152,7 @@ const LocationList: React.FC = () => {
         const nextPage = currentPage + 1;
         setCurrentPage(nextPage);
 
-        const itemsPerPage = 12;
+        const itemsPerPage = 6;
         const totalItems = locations.length;
         const displayedItems = (nextPage + 1) * itemsPerPage;
 
@@ -143,14 +160,24 @@ const LocationList: React.FC = () => {
     };
 
     return (
-        <Box sx={{bgcolor: 'background.default', minHeight: '100vh', py: 6}}>
-            <Container maxWidth="lg">
-                {locationPermission === 'denied' && (
-                    <LocationPermission setLocationPermission={setLocationPermission} setUserLocation={setUserLocation} />
-                )}
+        <Box sx={{minHeight: '100vh'}}>
+            <Box sx={{
+                pyb: 1,
+                borderBottom: `1px solid ${theme.palette.divider}`,
+                background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.primary.main}15 100%)`
+            }}>
+                <Container maxWidth="lg">
+                    {locationPermission === 'denied' && (
+                        <LocationPermission setLocationPermission={setLocationPermission}
+                                            setUserLocation={setUserLocation}/>
+                    )}
 
-                <LocationSearchHeader filters={filters} setFilters={setFilters} handleSearch={handleSearch}/>
-
+                    <LocationSearchHeader filters={filters} clearFilters={clearFilters}
+                                          handleSearch={handleSearch} setSort={setSort}
+                                          handleFilterChange={handleFilterChange}/>
+                </Container>
+            </Box>
+            <Container maxWidth="lg" sx={{py: 4}}>
                 {loading && (
                     <Box textAlign="center" py={6}>
                         <CircularProgress/>
@@ -167,21 +194,12 @@ const LocationList: React.FC = () => {
                     </Alert>
                 )}
 
-                {/* Results Count and Stats */}
-                {locations.length > 0 && (
-                    <Box sx={{mb: 4}}>
-                        <Typography variant="h5" fontWeight={700} color="primary.main">
-                            Search Results
-                        </Typography>
-                    </Box>
-                )}
-
                 {locations.length > 0 && (
                     <Box sx={{mb: 6}}>
                         <Grid container spacing={3}>
                             {locations.map((location: any) => (
-                                <Grid size={{xs:12, sm:6, lg:4}} key={location.id}>
-                                    <LocationCard location={location}/>
+                                <Grid size={{xs: 12, sm: 6, lg: 4}} key={location.id}>
+                                    <LocationCard location={location} userLocation={userLocation}/>
                                 </Grid>
                             ))}
                         </Grid>

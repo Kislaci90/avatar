@@ -9,7 +9,7 @@ const PitchSvg: React.FC<PitchSvgProps> = ({ backgroundColor }) => {
             viewBox="0 0 600 400"
             xmlns="http://www.w3.org/2000/svg"
             width="100%"
-            height="auto"
+            height="100%"
         >
             {/* Background */}
             <rect width="600" height="400" fill={backgroundColor} />

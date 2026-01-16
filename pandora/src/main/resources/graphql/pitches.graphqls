@@ -35,6 +35,7 @@ type LazyLocationView {
 type PitchView {
     id: ID!
     name: String!
+    description: String!
     pitchType: String!
     surfaceType: String!
     properties: [String]

@@ -17,12 +17,12 @@ export type GetPitchResult = {
 
 export function getSurfaceTypeColor (surfaceType: string){
     const colors: { [key: string]: string } = {
-        GRASS: '#7ba05b',
-        ARTIFICIAL_GRASS: '#4d8055',
-        CONCRETE: '#b0b0b0',
-        ASPHALT: '#4a4a4a',
-        TURF: '#88b06a',
-        HARDCOURT: '#a16d5d',
+        GRASS: '#5c7d45',            // darker green
+        ARTIFICIAL_GRASS: '#3d6543', // muted green
+        CONCRETE: '#8c8c8c',         // softer gray
+        ASPHALT: '#333333',          // darker gray
+        TURF: '#6c8f57',             // soft green
+        HARDCOURT: '#885c50',        // muted brown/red
     };
     return colors[surfaceType] || theme.palette.grey[500];
 }

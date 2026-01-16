@@ -1,5 +1,5 @@
 import {Box, Card, CardMedia, Typography} from "@mui/material";
-import theme from "../../theme/theme";
+import theme from "../../theme/theme.ts";
 import {LocationOn} from "@mui/icons-material";
 import {useNavigate} from 'react-router-dom';
 import {getSurfaceTypeColor} from "../../services/pitches.ts";
@@ -29,8 +29,6 @@ export function PitchCard({pitch}: Readonly<PitchCardProps>) {
                 cursor: 'pointer',
                 position: 'relative',
                 '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: '0 5px 10px rgba(0, 0, 0, 0.3)',
                     borderColor: theme.palette.primary.main,
                     '& .card-image': {
                         transform: 'scale(1.05)',
@@ -64,7 +62,7 @@ export function PitchCard({pitch}: Readonly<PitchCardProps>) {
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        background: `linear-gradient(135deg, ${theme.palette.primary.main}dd 0%, ${theme.palette.primary.main}bb 100%)`,
+                        background: `linear-gradient(135deg, ${theme.palette.primary.main}dd 0%, ${theme.palette.primary.main}bb 50%)`,
                         opacity: 0,
                         transition: 'opacity 0.3s ease',
                         display: 'flex',
@@ -76,25 +74,6 @@ export function PitchCard({pitch}: Readonly<PitchCardProps>) {
                     <Typography variant="h6" fontWeight={700} color="white">
                         View Details
                     </Typography>
-                </Box>
-
-                {/* Price Badge */}
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: 12,
-                        right: 12,
-                        backgroundColor: theme.palette.secondary.main,
-                        color: 'white',
-                        px: 2,
-                        py: 1,
-                        borderRadius: 3,
-                        fontWeight: 700,
-                        fontSize: '1rem',
-                        boxShadow: `0 4px 12px ${theme.palette.primary.main}4d`,
-                    }}
-                >
-                    2000Ft/Hour
                 </Box>
 
                 {/* Location Info */}

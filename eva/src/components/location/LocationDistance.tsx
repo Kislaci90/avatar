@@ -4,21 +4,31 @@ import {calculateDistance, formatDistance, type UserLocation} from "../../servic
 import type {PointView} from "../../services/location.ts";
 
 interface LocationDistanceProps {
-    userLocation: UserLocation,
+    userLocation: UserLocation | null,
     geom: PointView
 }
 
 export function LocationDistance({userLocation, geom}: Readonly<LocationDistanceProps>) {
     return (
-        <Chip
-            icon={<GpsFixed sx={{color: "white"}}/>}
-            color="info"
-            label={formatDistance(calculateDistance(
-                userLocation.latitude,
-                userLocation.longitude,
-                parseInt(geom.x),
-                parseInt(geom.y)
-            ))}
-        />
+        <>
+            {userLocation != null &&
+                <Chip
+                    icon={<GpsFixed sx={{color: "white"}}/>}
+                    color="info"
+                    variant="outlined"
+                    size="small"
+                    label={formatDistance(calculateDistance(
+                        userLocation.latitude,
+                        userLocation.longitude,
+                        parseInt(geom.x),
+                        parseInt(geom.y)
+                    ))}
+                    sx={{
+                        backgroundColor: 'white',
+                        fontWeight: 700,
+                    }}
+                />
+            }
+        </>
     );
 }

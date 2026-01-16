@@ -16,7 +16,7 @@ public class PitchConverter implements Converter<Pitch, PitchView, PitchForm> {
 
     @Override
     public PitchView convertToView(Pitch pitch) {
-        return new PitchView(pitch.getId(), pitch.getName(), pitch.getType(), pitch.getSurfaceType(), pitch.getProperties(), lazyLocationConverter.convertToView(pitch.getLocation()));
+        return new PitchView(pitch.getId(), pitch.getName(), pitch.getDescription(), pitch.getType(), pitch.getSurfaceType(), pitch.getProperties(), lazyLocationConverter.convertToView(pitch.getLocation()));
     }
 
     @Override

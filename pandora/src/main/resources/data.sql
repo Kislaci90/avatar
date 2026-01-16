@@ -146,23 +146,23 @@ VALUES (10, 'CAFE'),
        (10, 'SHOWER');
 
 -- 1. pitch
-INSERT INTO pitch (id, name, location_id, surface_type, type, created_date)
-VALUES (1, 'Center Court', 1, 'ARTIFICIAL_GRASS', 'FIVE_A_SIDE', CURRENT_TIMESTAMP);
+INSERT INTO pitch (id, name, location_id, description, surface_type, type, created_date)
+VALUES (1, 'Center Court', 1, 'Description of this pitch','ARTIFICIAL_GRASS', 'FIVE_A_SIDE', CURRENT_TIMESTAMP);
 
 INSERT INTO pitch_properties (pitch_id, properties)
 VALUES (1, 'LIGHTING'),
        (1, 'COVERED');
 
 -- 2. pitch
-INSERT INTO pitch (id, name, location_id, surface_type, type, created_date)
-VALUES (2, 'Street Pitch', 1, 'CONCRETE', 'SEVEN_A_SIDE', CURRENT_TIMESTAMP);
+INSERT INTO pitch (id, name, location_id, description, surface_type, type, created_date)
+VALUES (2, 'Street Pitch', 1, 'Description of this pitch', 'CONCRETE', 'SEVEN_A_SIDE', CURRENT_TIMESTAMP);
 
 INSERT INTO pitch_properties (pitch_id, properties)
 VALUES (2, 'COVERED');
 
 -- 3. pitch
-INSERT INTO pitch (id, name, location_id, surface_type, type, created_date)
-VALUES (3, 'Rooftop Arena', 1, 'TURF', 'FULL_SIZE', CURRENT_TIMESTAMP);
+INSERT INTO pitch (id, name, location_id, description, surface_type, type, created_date)
+VALUES (3, 'Rooftop Arena', 1, 'Description of this pitch', 'TURF', 'FULL_SIZE', CURRENT_TIMESTAMP);
 
 INSERT INTO pitch_properties (pitch_id, properties)
 VALUES (3, 'COVERED'),

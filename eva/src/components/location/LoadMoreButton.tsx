@@ -20,11 +20,6 @@ export function LoadMoreButton({loading, onClick}: Readonly<LoadMoreButtonProps>
                 fontWeight: 600,
                 textTransform: 'none',
                 borderWidth: 2,
-                '&:hover': {
-                    borderWidth: 2,
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)',
-                }
             }}
         >
             {loading ? (

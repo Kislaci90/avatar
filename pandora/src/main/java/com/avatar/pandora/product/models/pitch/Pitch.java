@@ -5,6 +5,7 @@ import com.avatar.pandora.product.models.location.Location;
 import com.avatar.pandora.product.models.location.LocationProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,9 @@ public class Pitch extends BaseEntity {
 
     @ManyToOne
     private Location location;
+
+    @NotNull
+    private String description;
 
     @ElementCollection(targetClass = PitchProperty.class, fetch = FetchType.EAGER)
     @CollectionTable

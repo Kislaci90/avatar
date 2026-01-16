@@ -6,7 +6,7 @@ import {Link as RouterLink} from 'react-router-dom';
 
 export function Footer() {
     return (
-        <Box sx={{bgcolor: 'background.paper', py: 4, borderTop: `1px solid ${theme.palette.divider}`}}>
+        <Box sx={{background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.primary.main}15 100%)`, py: 4, borderTop: `1px solid ${theme.palette.divider}`}}>
             <Container maxWidth="lg">
                 <Grid container spacing={4}>
                     <Grid size={{xs: 6}}>
