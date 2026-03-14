@@ -13,14 +13,14 @@ import javax.annotation.processing.Generated;
 public class PitchFilterBuilder {
     private String searchTerm;
 
-    private Set<PitchProperty> properties;
+    private Set<String> properties;
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     private PitchFilterBuilder() {
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    private PitchFilterBuilder(String searchTerm, Set<PitchProperty> properties) {
+    private PitchFilterBuilder(String searchTerm, Set<String> properties) {
         this.searchTerm = searchTerm;
         this.properties = properties;
     }
@@ -29,7 +29,7 @@ public class PitchFilterBuilder {
      * Static constructor/builder. Can be used instead of new PitchFilter(...)
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    public static PitchFilter PitchFilter(String searchTerm, Set<PitchProperty> properties) {
+    public static PitchFilter PitchFilter(String searchTerm, Set<String> properties) {
         return new PitchFilter(searchTerm, properties);
     }
 
@@ -115,7 +115,7 @@ public class PitchFilterBuilder {
      * Set a new value for the {@code properties} record component in the builder
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    public PitchFilterBuilder properties(Set<PitchProperty> properties) {
+    public PitchFilterBuilder properties(Set<String> properties) {
         this.properties = properties;
         return this;
     }
@@ -124,7 +124,7 @@ public class PitchFilterBuilder {
      * Return the current value for the {@code properties} record component in the builder
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    public Set<PitchProperty> properties() {
+    public Set<String> properties() {
         return properties;
     }
 
@@ -143,7 +143,7 @@ public class PitchFilterBuilder {
          * Return the current value for the {@code properties} record component in the builder
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-        Set<PitchProperty> properties();
+        Set<String> properties();
 
         /**
          * Return a new record builder using the current values
@@ -175,7 +175,7 @@ public class PitchFilterBuilder {
          * Return a new instance of {@code PitchFilter} with a new value for {@code properties}
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-        default PitchFilter withProperties(Set<PitchProperty> properties) {
+        default PitchFilter withProperties(Set<String> properties) {
             return new PitchFilter(searchTerm(), properties);
         }
     }
@@ -197,7 +197,7 @@ public class PitchFilterBuilder {
 
         @Override
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-        public Set<PitchProperty> properties() {
+        public Set<String> properties() {
             return from.properties();
         }
     }

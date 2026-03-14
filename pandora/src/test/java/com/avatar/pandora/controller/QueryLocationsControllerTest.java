@@ -1,7 +1,6 @@
 package com.avatar.pandora.controller;
 
 import com.avatar.pandora.product.models.location.*;
-import graphql.com.google.common.collect.Sets;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -47,23 +46,60 @@ class QueryLocationsControllerTest {
                 .get();
 
         Assertions.assertEquals(expected, locations.size());
+        if(locations.isEmpty()) return;
+        
+        // Validate search term in all results
         if(!searchTerm.isBlank()) {
-            Assertions.assertTrue(locations.getFirst().name().contains(searchTerm));
+            Assertions.assertTrue(locations.stream().allMatch(loc -> loc.name().contains(searchTerm)),
+                    "Not all locations contain search term: " + searchTerm);
         }
+        
+        // Validate cities in all results
         if(!cities.isEmpty()) {
-            Assertions.assertTrue(cities.contains(locations.getFirst().address().getCity()));
+            Assertions.assertTrue(locations.stream().allMatch(loc -> cities.contains(loc.address().getCity())),
+                    "Not all locations are in the filtered cities");
         }
+        
+        // Validate that ALL locations contain ALL filtered properties
         if(!locationProperties.isEmpty()) {
-            Assertions.assertFalse(Sets.intersection(locationProperties, locations.getFirst().properties()).isEmpty());
+            Assertions.assertTrue(locations.stream().allMatch(loc -> 
+                    loc.properties().containsAll(locationProperties)),
+                    "Not all locations contain all the filtered properties");
         }
     }
 
     private static Stream<Arguments> provideLocationFilters() {
         return Stream.of(
+                // Basic search by term
                 Arguments.of("First", Set.of(), Set.of(), 1),
+                // Search by non-existent term
+                Arguments.of("NonExistent", Set.of(), Set.of(), 0),
+                // Filter by city
                 Arguments.of("", Set.of("Budapest"), Set.of(), 1),
+                // Filter by non-existent city
+                Arguments.of("", Set.of("NonExistentCity"), Set.of(), 0),
+                // Filter by multiple cities
+                Arguments.of("", Set.of("Budapest", "Eger"), Set.of(), 2),
+                // Filter by single property
+                Arguments.of("", Set.of(), Set.of(LocationProperty.CAFE.name()), 1),
+                // Filter by multiple properties (AND logic)
                 Arguments.of("", Set.of(), Set.of(LocationProperty.CAFE.name(), LocationProperty.CHANGING_ROOM.name()), 1),
-                Arguments.of("", Set.of(), Set.of(LocationProperty.CHANGING_ROOM.name()), 2)
+                // Filter by another property
+                Arguments.of("", Set.of(), Set.of(LocationProperty.CHANGING_ROOM.name()), 2),
+                // Filter by all available properties
+                Arguments.of("", Set.of(), Set.of(LocationProperty.SHOWER.name(), LocationProperty.FREE_PARKING.name(), LocationProperty.CAFE.name(), LocationProperty.CHANGING_ROOM.name(), LocationProperty.EQUIPMENT_RENTAL.name()), 0),
+                // Combine search term with city filter
+                Arguments.of("First", Set.of("Budapest"), Set.of(), 1),
+                // Combine search term with property filter
+                Arguments.of("First", Set.of(), Set.of(LocationProperty.CHANGING_ROOM.name()), 1),
+                // Combine city filter with property filter
+                Arguments.of("", Set.of("Budapest"), Set.of(LocationProperty.CAFE.name()), 0),
+                // Combine all filters
+                Arguments.of("First", Set.of("Budapest"), Set.of(LocationProperty.CHANGING_ROOM.name()), 1),
+                // Empty string search (should act like no filter)
+                Arguments.of("", Set.of(), Set.of(), 2),
+                // Search term with lowercase (testing case sensitivity)
+                Arguments.of("sport", Set.of(), Set.of(), 0)
         );
     }
 

@@ -2,7 +2,6 @@ package com.avatar.pandora.product.services;
 
 import com.avatar.pandora.product.models.location.*;
 import com.avatar.pandora.product.repositories.LocationRepository;
-import jakarta.servlet.Filter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class LocationService {
         this.locationConverter = locationConverter;
     }
 
-    public Page<LocationView> findBy(Integer count, Integer offset, LocationFilter filter, String sort) {
+    public Page<LocationView> searchLocations(Integer count, Integer offset, LocationFilter filter, String sort) {
         LocationSort locationSort = LocationSort.valueOf(Optional.ofNullable(sort).orElse(LocationSort.DISTANCE_ASC.name()));
         PageRequest pageRequest = PageRequest.of(count, offset, locationSort.getDirection(), locationSort.getField());
 

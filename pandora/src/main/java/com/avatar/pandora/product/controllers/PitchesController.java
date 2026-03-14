@@ -22,7 +22,7 @@ public class PitchesController {
 
     @QueryMapping
     public Page<PitchView> searchPitches(@Argument(name = "count") Integer count, @Argument(name = "offset") Integer offset, @Argument(name = "filter") PitchFilter filter, @Argument(name = "sort") PitchSort sort) {
-        return pitchService.findBy(count, offset, filter, sort);
+        return pitchService.searchPitches(count, offset, filter, sort);
     }
 
     @QueryMapping

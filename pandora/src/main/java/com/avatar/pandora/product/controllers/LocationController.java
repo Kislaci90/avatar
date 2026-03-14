@@ -37,7 +37,7 @@ public class LocationController {
 
     @QueryMapping
     public Page<LocationView> searchLocations(@Argument(name = "count") Integer count, @Argument(name = "offset") Integer offset, @Argument(name = "filter") LocationFilter filter, @Argument(name = "sort") String sort) {
-        return locationService.findBy(count, offset, filter, sort);
+        return locationService.searchLocations(count, offset, filter, sort);
     }
 
     @QueryMapping

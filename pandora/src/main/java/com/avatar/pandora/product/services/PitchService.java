@@ -6,6 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 
 @Service
 public class PitchService {
@@ -23,8 +26,14 @@ public class PitchService {
         return pitchConverter.convertToView(pitchRepository.save(pitchConverter.convertToEntity(new Pitch(), pitchForm)));
     }
 
-    public Page<PitchView> findBy(Integer count, Integer offset, PitchFilter filter, PitchSort sort) {
-        return pitchRepository.findAll(PageRequest.of(count, offset, sort.getSort())).map(pitchConverter::convertToView);
+    public Page<PitchView> searchPitches(Integer count, Integer offset, PitchFilter filter, PitchSort sort) {
+        PageRequest pageable = PageRequest.of(count, offset, sort.getSort());
+        Set<PitchProperty> properties = filter.properties().stream().map(PitchProperty::valueOf).collect(Collectors.toSet());
+        return pitchRepository.searchByPitchFiler(pageable,
+                filter.searchTerm(),
+                properties,
+                properties.isEmpty(),
+                properties.size()).map(pitchConverter::convertToView);
     }
 
     public PitchView getById(Long id) {
