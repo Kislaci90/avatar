@@ -1,4 +1,4 @@
-import type {LocationView} from "./location.ts";
+import type {LazyLocationView, LocationView} from "./location.ts";
 
 export type UserLocation = {
     latitude: number;
@@ -34,19 +34,19 @@ export function getDirectionsUrl(location: any): string {
     return `https://www.google.com/maps/search/${encodeURIComponent(location.address)}`;
 }
 
-export function getGoogleMap(location: LocationView, zoom: number, size: string) {
-    let markerColor = "0x5a7539"
+export function getGoogleMap(location: LocationView | LazyLocationView, zoom: number, size: string) {
+    let markerColor = "0xFF6D00"
     return `https://maps.googleapis.com/maps/api/staticmap?center=${location.geom.x},${location.geom.y}&zoom=${zoom}&size=${size}&markers=color:${markerColor}%7C${location.geom.x},${location.geom.y}&style=feature:poi|visibility:off&style=feature:transit|visibility:off&key=${import.meta.env.VITE_GOOGLE_MAP_API_KEY}`
 }
 
-export function getMediumGoogleMap(location: LocationView) {
+export function getMediumGoogleMap(location: LocationView | LazyLocationView) {
     let zoom = 13
     let size = "400x300"
 
     return getGoogleMap(location, zoom, size);
 }
 
-export function getLargeGoogleMap(location: LocationView) {
+export function getLargeGoogleMap(location: LocationView | LazyLocationView) {
     let zoom = 11
     let size = "640x640"
 

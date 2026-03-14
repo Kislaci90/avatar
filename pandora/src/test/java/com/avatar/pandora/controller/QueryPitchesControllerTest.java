@@ -1,10 +1,12 @@
 package com.avatar.pandora.controller;
 
+import com.avatar.pandora.product.models.location.LocationProperty;
 import com.avatar.pandora.product.models.pitch.PitchFilter;
 import com.avatar.pandora.product.models.pitch.PitchFilterBuilder;
 import com.avatar.pandora.product.models.pitch.PitchView;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,6 +15,8 @@ import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 
 @SpringBootTest
@@ -39,6 +43,15 @@ class QueryPitchesControllerTest {
                 .get();
 
         Assertions.assertEquals(1, locations.size());
+    }
+
+    private static Stream<Arguments> provideLocationFilters() {
+        return Stream.of(
+                Arguments.of("First", Set.of(), Set.of(), 1),
+                Arguments.of("", Set.of("Budapest"), Set.of(), 1),
+                Arguments.of("", Set.of(), Set.of(LocationProperty.CAFE.name(), LocationProperty.CHANGING_ROOM.name()), 1),
+                Arguments.of("", Set.of(), Set.of(LocationProperty.CHANGING_ROOM.name()), 2)
+        );
     }
 
     @Test

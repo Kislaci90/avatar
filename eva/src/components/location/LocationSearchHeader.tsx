@@ -17,7 +17,7 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import {ArrowDownward, ArrowUpward, Clear, Search, Tune} from "@mui/icons-material";
+import {ArrowDownward, ArrowUpward, Search, Tune} from "@mui/icons-material";
 import type {LocationFilter} from "../../pages/LocationList.tsx";
 import {useState} from "react";
 import {locationPropertyIconMap} from "../PropertyMap.tsx";
@@ -63,7 +63,6 @@ const locationProperties = [
 export function LocationSearchHeader({
                                          filters,
                                          handleSearch,
-                                         clearFilters,
                                          handleFilterChange,
                                          setSort
                                      }: Readonly<SearchHeaderProps>) {
@@ -84,7 +83,7 @@ export function LocationSearchHeader({
             background: 'transparent',
             boxShadow: 'none',
         }}>
-            <Box display="flex" alignItems="center" justifyContent="center" mb={3} sx={{ borderBottom: 1 }}>
+            <Box display="flex" alignItems="center" justifyContent="center" mb={3} sx={{borderBottom: 1}}>
                 <Typography variant="h4" fontWeight={700} color="primary.main">
                     Find Your Football Locations
                 </Typography>
@@ -119,29 +118,15 @@ export function LocationSearchHeader({
                 >
                     Search
                 </Button>
-            </Box>
-
-            <Box display="flex" alignItems="center" justifyContent="right">
-                <Box display="flex" gap={1}>
-                    <Button
-                        variant="contained"
-                        startIcon={<Tune/>}
-                        onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                        sx={{borderRadius: 2}}
-                    >
-                        Filters {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
-                    </Button>
-                    {getActiveFiltersCount() > 0 && (
-                        <Button
-                            variant="text"
-                            startIcon={<Clear/>}
-                            onClick={clearFilters}
-                            sx={{borderRadius: 2}}
-                        >
-                            Clear
-                        </Button>
-                    )}
-                </Box>
+                <Button
+                    variant="outlined"
+                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                    sx={{
+                        borderRadius: 2,
+                    }}
+                >
+                    <Tune/>
+                </Button>
             </Box>
 
             {/* Active Filters Display */}
@@ -170,8 +155,8 @@ export function LocationSearchHeader({
             <Collapse in={showAdvancedFilters}>
                 <Divider sx={{my: 3}}/>
                 <Box sx={{flexGrow: 1}}>
-                    <Grid container spacing={2}>
-                        <Grid size={{xs: 6}}>
+                    <Grid container spacing={4}>
+                        <Grid size={{xs: 4}}>
                             <FormControl fullWidth sx={{mb: 2}}>
                                 <InputLabel id="cities-multiple-checkbox-label">Cities</InputLabel>
                                 <Select
@@ -183,7 +168,7 @@ export function LocationSearchHeader({
                                     input={<OutlinedInput label="Cities"/>}
                                     renderValue={(selected) => selected.join(', ')}
                                     MenuProps={MenuProps}
-                                    sx={{backgroundColor: 'white'}}
+                                    sx={{borderRadius: 2, backgroundColor: 'white'}}
                                 >
                                     {cities.map((city) => (
                                         <MenuItem key={city.value} value={city.value}>
@@ -193,7 +178,8 @@ export function LocationSearchHeader({
                                     ))}
                                 </Select>
                             </FormControl>
-
+                        </Grid>
+                        <Grid size={{xs: 4}}>
                             <FormControl fullWidth>
                                 <InputLabel id="location-properties-multiple-checkbox-label">Location
                                     Property</InputLabel>
@@ -206,7 +192,7 @@ export function LocationSearchHeader({
                                     input={<OutlinedInput label="Location Porperties"/>}
                                     renderValue={(selected) => selected.join(', ')}
                                     MenuProps={MenuProps}
-                                    sx={{backgroundColor: 'white'}}
+                                    sx={{borderRadius: 2, backgroundColor: 'white'}}
                                 >
                                     {locationProperties.map((property) => (
                                         <MenuItem key={property.value} value={property.value}>
@@ -220,7 +206,7 @@ export function LocationSearchHeader({
 
                         </Grid>
 
-                        <Grid size={{xs: 6}}>
+                        <Grid size={{xs: 4}}>
                             <FormControl fullWidth>
                                 <InputLabel id="sort-multiple-checkbox-label">Location Sort</InputLabel>
                                 <Select
@@ -228,7 +214,7 @@ export function LocationSearchHeader({
                                     id="sort-multiple-checkbox"
                                     onChange={e => setSort(String(e.target.value))}
                                     input={<OutlinedInput label="Location sorting"/>}
-                                    sx={{backgroundColor: 'white'}}
+                                    sx={{borderRadius: 2, backgroundColor: 'white'}}
                                 >
                                     {locationSort.map((sort) => (
                                         <MenuItem key={sort.value} value={sort.value}>

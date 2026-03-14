@@ -1,6 +1,6 @@
 import {Box, Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import type {PitchView} from "../../services/location.ts";
+import type {PitchView} from "../../../services/location.ts";
 
 interface PitchCardButtonsProps {
     pitch: PitchView
@@ -14,7 +14,8 @@ export function PitchCardButtons({pitch}: Readonly<PitchCardButtonsProps>) {
             <Box sx={{display: 'flex', gap: 1.5}}>
                 <Button
                     variant="contained"
-                    size="medium"
+                    size="large"
+                    fullWidth
                     sx={{
                         flex: 1,
                         fontWeight: 600,

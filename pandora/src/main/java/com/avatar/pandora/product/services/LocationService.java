@@ -53,4 +53,11 @@ public class LocationService {
         return locationConverter.convertToView(locationRepository.save(location));
     }
 
+    public Long countLocations() {
+        return locationRepository.count();
+    }
+
+    public Long countCities() {
+        return locationRepository.countDistinctCities();
+    }
 }

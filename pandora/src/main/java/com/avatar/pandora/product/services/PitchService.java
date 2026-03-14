@@ -30,4 +30,8 @@ public class PitchService {
     public PitchView getById(Long id) {
         return pitchConverter.convertToView(pitchRepository.getPitchById(id));
     }
+
+    public Long countPitches() {
+        return pitchRepository.count();
+    }
 }

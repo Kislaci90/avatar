@@ -4,15 +4,15 @@ const theme = createTheme({
     palette: {
         mode: 'light',
         primary: {
-            main: '#5a7539',
+            main: '#121212',
             contrastText: '#ffffff',
         },
         secondary: {
-            main: '#FF7043',
-            contrastText: '#ffffff',
+            main: '#FF6D00',
+            contrastText: '#000000',
         },
         info: {
-            main: '#477572',
+            main: '#2979FF',
             contrastText: '#ffffff',
         },
         warning: {
@@ -24,7 +24,7 @@ const theme = createTheme({
             contrastText: '#ffffff',
         },
         success: {
-            main: '#cdeda3',
+            main: '#00C853',
             contrastText: '#ffffff',
         },
         background: {
@@ -32,8 +32,8 @@ const theme = createTheme({
             paper: '#ffffff',
         },
         text: {
-            primary: '#212121',
-            secondary: '#616161',
+            primary: '#121212',
+            secondary: '#555555',
         },
     },
     typography: {
@@ -46,7 +46,7 @@ const theme = createTheme({
         button: { textTransform: 'none', fontWeight: 600 },
     },
     shape: {
-        borderRadius: 12, // slightly rounded for cards/chips
+        borderRadius: 12,
     },
     components: {
         MuiPaper: {
@@ -82,4 +82,5 @@ const theme = createTheme({
         },
     },
 });
+
 export default theme;

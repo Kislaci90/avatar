@@ -1,4 +1,4 @@
-import {Box, Card, CardContent, CardMedia, Chip, Tooltip, Typography} from "@mui/material";
+import {Box, Card, CardContent, CardMedia, Chip, Stack, Tooltip, Typography} from "@mui/material";
 import {getPitchTypeColor, getSurfaceTypeColor} from "../../../services/pitches.ts";
 import {pitchPropertyIconMap} from "../../PropertyMap.tsx";
 import type {PitchView} from "../../../services/location.ts";
@@ -17,8 +17,6 @@ export function LocationDetailPitchCard({pitch}: Readonly<LocationDetailPitchCar
                     height: 200,
                     width: 150,
                     objectFit: "cover",
-                    opacity: 0.85,
-                    filter: "saturate(0.9) contrast(0.9)",
                 }}
                 alt={pitch.name}
             />
@@ -58,6 +56,8 @@ export function LocationDetailPitchCard({pitch}: Readonly<LocationDetailPitchCar
                 </Typography>
 
                 <Box sx={{mt: "auto"}}>
+                    <Stack direction="row" spacing={1} useFlexGap
+                           sx={{flexWrap: 'wrap', justifyContent: "flex-start"}}>
                     {pitch.properties.map((property: string) => (
                         <Tooltip title={property} key={property} placement="top">
                             <Chip
@@ -66,13 +66,14 @@ export function LocationDetailPitchCard({pitch}: Readonly<LocationDetailPitchCar
                                 label={property}
                                 sx={{
                                     mr: 1, my: 1, border: "none", '& .MuiChip-icon': {
-                                        color: 'secondary.main',
+                                        color: 'primary.main',
                                     },
                                 }}
                                 icon={pitchPropertyIconMap[property]}
                             />
                         </Tooltip>
                     ))}
+                    </Stack>
                 </Box>
             </CardContent>
         </Card>

@@ -4,9 +4,11 @@ import {useQuery} from "@apollo/client/react";
 import {Alert, Box, CircularProgress, Container, Grid, Typography} from '@mui/material';
 import type {PitchView} from "../services/location.ts";
 import type {SearchPitchesResult} from "../services/pitches.ts";
-import {PitchCard} from "../components/pitch/PitchCard.tsx";
+import {PitchCard} from "../components/pitch/card/PitchCard.tsx";
 import {LoadMoreButton} from "../components/location/LoadMoreButton.tsx";
 import {PitchSearchHeader} from "../components/pitch/PitchSearchHeader.tsx";
+import theme from "../theme/theme.ts";
+import type {UserLocation} from "../services/distance.ts";
 
 const SEARCH_PITCHES = gql`
     query searchPitches(
@@ -36,6 +38,10 @@ const SEARCH_PITCHES = gql`
                         city
                         postalCode
                     }
+                    geom {
+                        x
+                        y
+                    }
                 }
             }
         }
@@ -55,6 +61,7 @@ const PitchList: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [pitches, setPitches] = useState<PitchView[]>([]);
+    const [userLocation] = useState<UserLocation | null>(null);
 
     const {loading, error, data, refetch, fetchMore} = useQuery<SearchPitchesResult>(SEARCH_PITCHES, {
         variables: {
@@ -126,11 +133,19 @@ const PitchList: React.FC = () => {
     };
 
     return (
-        <Box sx={{bgcolor: 'background.default', minHeight: '100vh', py: 6}}>
-            <Container maxWidth="lg">
+        <Box sx={{minHeight: '100vh'}}>
+            <Box sx={{
+                pyb: 1,
+                borderBottom: `1px solid ${theme.palette.divider}`,
+                background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.primary.main}15 100%)`
+            }}>
+                <Container maxWidth="lg">
+                    <PitchSearchHeader filters={filters} clearFilters={clearFilters} handleSearch={handleSearch}
+                                       handleFilterChange={handleFilterChange}/>
+                </Container>
+            </Box>
 
-                <PitchSearchHeader filters={filters} clearFilters={clearFilters} handleSearch={handleSearch}
-                                   handleFilterChange={handleFilterChange}/>
+            <Container maxWidth="lg" sx={{py: 4}}>
 
                 {/* Results Section */}
                 {loading && (
@@ -155,7 +170,7 @@ const PitchList: React.FC = () => {
                         <Grid container spacing={3}>
                             {pitches.map((pitch: any, index: number) => (
                                 <Grid size={{xs: 12, sm: 6, lg: 4}} key={index}>
-                                    <PitchCard pitch={pitch}/>
+                                    <PitchCard pitch={pitch} userLocation={userLocation}/>
                                 </Grid>
                             ))}
                         </Grid>

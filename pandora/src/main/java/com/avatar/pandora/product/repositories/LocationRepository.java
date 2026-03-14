@@ -42,4 +42,8 @@ public interface LocationRepository extends
                                          Boolean locationPropertiesIsEmpty,
                                          Integer locationPropertySize);
 
+    @Query("""
+       SELECT COUNT(DISTINCT l.address.city) FROM Location l
+       """)
+    Long countDistinctCities();
 }

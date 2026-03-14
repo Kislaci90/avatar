@@ -1,0 +1,10 @@
+extend type Query {
+    getHomeStat: HomeStatView!
+}
+
+type HomeStatView {
+    totalLocations: Int!
+    totalPitches: Int!
+    totalCities: Int!
+    totalUsers: Int!
+}

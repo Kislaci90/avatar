@@ -65,6 +65,7 @@ public class LocationDataLoader implements CommandLineRunner {
         Pitch pitch = new Pitch();
         pitch.setId(1L);
         pitch.setLocation(location);
+        pitch.setDescription(faker.lorem().paragraph(1));
         pitch.setType(PitchType.FULL_SIZE);
         pitch.setSurfaceType(PitchSurfaceType.TURF);
         pitch.setProperties(Set.of(PitchProperty.COVERED, PitchProperty.LIGHTING));
@@ -73,6 +74,7 @@ public class LocationDataLoader implements CommandLineRunner {
         Pitch pitch2 = new Pitch();
         pitch2.setId(2L);
         pitch2.setLocation(location);
+        pitch2.setDescription(faker.lorem().paragraph(1));
         pitch2.setType(PitchType.FULL_SIZE);
         pitch2.setSurfaceType(PitchSurfaceType.TURF);
         pitch2.setProperties(Set.of(PitchProperty.COVERED, PitchProperty.LIGHTING));

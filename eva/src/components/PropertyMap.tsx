@@ -9,14 +9,14 @@ import FestivalIcon  from '@mui/icons-material/Festival';
 import theme from "../theme/theme.ts";
 
 export const locationPropertyIconMap: Record<string, JSX.Element> = {
-    FREE_PARKING: <LocalParkingIcon sx={{color: theme.palette.secondary.main}} />,
-    SHOWER: <ShowerIcon sx={{color: theme.palette.secondary.main}}/>,
-    CHANGING_ROOM: <CheckroomIcon sx={{color: theme.palette.secondary.main}}/>,
-    CAFE: <LocalCafeIcon sx={{color: theme.palette.secondary.main}}/>,
-    EQUIPMENT_RENTAL: <SportsSoccerIcon sx={{color: theme.palette.secondary.main}}/>,
+    FREE_PARKING: <LocalParkingIcon sx={{color: theme.palette.primary.main}} />,
+    SHOWER: <ShowerIcon sx={{color: theme.palette.primary.main}}/>,
+    CHANGING_ROOM: <CheckroomIcon sx={{color: theme.palette.primary.main}}/>,
+    CAFE: <LocalCafeIcon sx={{color: theme.palette.primary.main}}/>,
+    EQUIPMENT_RENTAL: <SportsSoccerIcon sx={{color: theme.palette.primary.main}}/>,
 };
 
 export const pitchPropertyIconMap: Record<string, JSX.Element> = {
-    LIGHTING: <HighlightIcon sx={{color: theme.palette.secondary.main}} />,
-    COVERED: <FestivalIcon  sx={{color: theme.palette.secondary.main}}/>,
+    LIGHTING: <HighlightIcon sx={{color: theme.palette.primary.main}} />,
+    COVERED: <FestivalIcon  sx={{color: theme.palette.primary.main}}/>,
 };

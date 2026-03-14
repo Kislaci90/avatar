@@ -1,15 +1,16 @@
 import {Box, CardMedia, Chip, useTheme} from "@mui/material";
-import type {LocationView} from "../../../services/location.ts";
-import {getMediumGoogleMap, type UserLocation} from "../../../services/distance.ts";
 import {Favorite, LocationOn} from "@mui/icons-material";
+import type {PitchView} from "../../../services/location.ts";
+import {LocationDistance} from "../../location/LocationDistance.tsx";
+import {type UserLocation} from "../../../services/distance.ts";
 
 
-interface LocationCardImageProps {
-    location: LocationView,
+interface PitchCardImageProps {
+    pitch: PitchView,
     userLocation: UserLocation | null
 }
 
-export function LocationCardImage({location}: Readonly<LocationCardImageProps>) {
+export function PitchCardImage({pitch, userLocation}: Readonly<PitchCardImageProps>) {
     const theme = useTheme()
 
     return (
@@ -17,8 +18,8 @@ export function LocationCardImage({location}: Readonly<LocationCardImageProps>) 
             <CardMedia
                 component="img"
                 height="300"
-                image={getMediumGoogleMap(location)}
-                alt={location.name}
+                image={`/pitches/${pitch.surfaceType.toLowerCase()}.png`}
+                alt={pitch.name}
                 className="card-image"
                 sx={{
                     objectFit: 'cover',
@@ -52,7 +53,7 @@ export function LocationCardImage({location}: Readonly<LocationCardImageProps>) 
                 borderRadius: 1,
                 backdropFilter: "blur(2px)",
             }}>
-                <Chip label={location.address.addressLine}
+                <Chip label={pitch.location.address.addressLine}
                       variant="outlined"
                       color="primary"
                       size="small"
@@ -72,6 +73,7 @@ export function LocationCardImage({location}: Readonly<LocationCardImageProps>) 
                 borderRadius: 1,
                 backdropFilter: "blur(2px)",
             }}>
+                <LocationDistance userLocation={userLocation} geom={pitch.location.geom}></LocationDistance>
             </Box>
 
             <Box sx={{

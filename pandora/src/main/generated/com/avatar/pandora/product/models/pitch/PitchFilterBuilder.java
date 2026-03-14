@@ -4,6 +4,7 @@ package com.avatar.pandora.product.models.pitch;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import javax.annotation.processing.Generated;
@@ -12,21 +13,24 @@ import javax.annotation.processing.Generated;
 public class PitchFilterBuilder {
     private String searchTerm;
 
+    private Set<PitchProperty> properties;
+
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     private PitchFilterBuilder() {
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    private PitchFilterBuilder(String searchTerm) {
+    private PitchFilterBuilder(String searchTerm, Set<PitchProperty> properties) {
         this.searchTerm = searchTerm;
+        this.properties = properties;
     }
 
     /**
      * Static constructor/builder. Can be used instead of new PitchFilter(...)
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
-    public static PitchFilter PitchFilter(String searchTerm) {
-        return new PitchFilter(searchTerm);
+    public static PitchFilter PitchFilter(String searchTerm, Set<PitchProperty> properties) {
+        return new PitchFilter(searchTerm, properties);
     }
 
     /**
@@ -42,7 +46,7 @@ public class PitchFilterBuilder {
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     public static PitchFilterBuilder builder(PitchFilter from) {
-        return new PitchFilterBuilder(from.searchTerm());
+        return new PitchFilterBuilder(from.searchTerm(), from.properties());
     }
 
     /**
@@ -58,7 +62,8 @@ public class PitchFilterBuilder {
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     public static Stream<Map.Entry<String, Object>> stream(PitchFilter record) {
-        return Stream.of(new AbstractMap.SimpleImmutableEntry<>("searchTerm", record.searchTerm()));
+        return Stream.of(new AbstractMap.SimpleImmutableEntry<>("searchTerm", record.searchTerm()),
+                 new AbstractMap.SimpleImmutableEntry<>("properties", record.properties()));
     }
 
     /**
@@ -66,26 +71,27 @@ public class PitchFilterBuilder {
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     public PitchFilter build() {
-        return new PitchFilter(searchTerm);
+        return new PitchFilter(searchTerm, properties);
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     @Override
     public String toString() {
-        return "PitchFilterBuilder[searchTerm=" + searchTerm + "]";
+        return "PitchFilterBuilder[searchTerm=" + searchTerm + ", properties=" + properties + "]";
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     @Override
     public int hashCode() {
-        return Objects.hash(searchTerm);
+        return Objects.hash(searchTerm, properties);
     }
 
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
     @Override
     public boolean equals(Object o) {
         return (this == o) || ((o instanceof PitchFilterBuilder r)
-                && Objects.equals(searchTerm, r.searchTerm));
+                && Objects.equals(searchTerm, r.searchTerm)
+                && Objects.equals(properties, r.properties));
     }
 
     /**
@@ -106,6 +112,23 @@ public class PitchFilterBuilder {
     }
 
     /**
+     * Set a new value for the {@code properties} record component in the builder
+     */
+    @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+    public PitchFilterBuilder properties(Set<PitchProperty> properties) {
+        this.properties = properties;
+        return this;
+    }
+
+    /**
+     * Return the current value for the {@code properties} record component in the builder
+     */
+    @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+    public Set<PitchProperty> properties() {
+        return properties;
+    }
+
+    /**
      * Add withers to {@code PitchFilter}
      */
     @Generated("io.soabase.recordbuilder.core.RecordBuilder")
@@ -117,11 +140,17 @@ public class PitchFilterBuilder {
         String searchTerm();
 
         /**
+         * Return the current value for the {@code properties} record component in the builder
+         */
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        Set<PitchProperty> properties();
+
+        /**
          * Return a new record builder using the current values
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default PitchFilterBuilder with() {
-            return new PitchFilterBuilder(searchTerm());
+            return new PitchFilterBuilder(searchTerm(), properties());
         }
 
         /**
@@ -139,7 +168,15 @@ public class PitchFilterBuilder {
          */
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         default PitchFilter withSearchTerm(String searchTerm) {
-            return new PitchFilter(searchTerm);
+            return new PitchFilter(searchTerm, properties());
+        }
+
+        /**
+         * Return a new instance of {@code PitchFilter} with a new value for {@code properties}
+         */
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        default PitchFilter withProperties(Set<PitchProperty> properties) {
+            return new PitchFilter(searchTerm(), properties);
         }
     }
 
@@ -156,6 +193,12 @@ public class PitchFilterBuilder {
         @Generated("io.soabase.recordbuilder.core.RecordBuilder")
         public String searchTerm() {
             return from.searchTerm();
+        }
+
+        @Override
+        @Generated("io.soabase.recordbuilder.core.RecordBuilder")
+        public Set<PitchProperty> properties() {
+            return from.properties();
         }
     }
 }

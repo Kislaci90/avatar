@@ -1,17 +1,20 @@
 import {
     Box,
-    Button, Chip,
-    Collapse, Divider,
+    Button,
+    Chip,
+    Collapse,
+    Divider,
     FormControl,
     Grid,
-    InputAdornment, InputLabel,
+    InputAdornment,
+    InputLabel,
     MenuItem,
     Paper,
     Select,
     TextField,
     Typography
 } from "@mui/material";
-import {Clear, Search, SportsSoccer, Tune} from "@mui/icons-material";
+import {Search, SportsSoccer, Tune} from "@mui/icons-material";
 import {useState} from "react";
 
 interface PitchSearchHeaderProps {
@@ -23,7 +26,6 @@ interface PitchSearchHeaderProps {
 
 export function PitchSearchHeader({
                                       filters,
-                                      clearFilters,
                                       handleSearch,
                                       handleFilterChange
                                   }: Readonly<PitchSearchHeaderProps>) {
@@ -54,31 +56,18 @@ export function PitchSearchHeader({
     };
 
     return (
-        <Paper elevation={3} sx={{p: 4, mb: 6, borderRadius: 3}}>
-            <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
+        <Paper sx={{
+            p: 4,
+            borderRadius: 3,
+            border: "none",
+            background: 'transparent',
+            boxShadow: 'none',
+        }}>
+
+            <Box display="flex" alignItems="center" justifyContent="center" mb={3} sx={{borderBottom: 1}}>
                 <Typography variant="h4" fontWeight={700} color="primary.main">
-                    Find Your Perfect Pitch
+                    Find Your Pitches Locations
                 </Typography>
-                <Box display="flex" gap={1}>
-                    <Button
-                        variant="outlined"
-                        startIcon={<Tune/>}
-                        onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                        sx={{borderRadius: 2}}
-                    >
-                        Filters {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
-                    </Button>
-                    {getActiveFiltersCount() > 0 && (
-                        <Button
-                            variant="text"
-                            startIcon={<Clear/>}
-                            onClick={clearFilters}
-                            sx={{borderRadius: 2}}
-                        >
-                            Clear
-                        </Button>
-                    )}
-                </Box>
             </Box>
 
             {/* Main Search Bar */}
@@ -95,7 +84,7 @@ export function PitchSearchHeader({
                                     <Search sx={{color: 'primary.main'}}/>
                                 </InputAdornment>
                             ),
-                            sx: {borderRadius: 2}
+                            sx: {borderRadius: 2, backgroundColor: 'white'},
                         }
                     }}
                 />
@@ -104,10 +93,20 @@ export function PitchSearchHeader({
                     size="large"
                     onClick={handleSearch}
                     sx={{
-                        px: 4
+                        px: 4,
+                        borderRadius: 2,
                     }}
                 >
                     Search
+                </Button>
+                <Button
+                    variant="outlined"
+                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                    sx={{
+                        borderRadius: 2,
+                    }}
+                >
+                    <Tune/>
                 </Button>
             </Box>
 
@@ -146,13 +145,14 @@ export function PitchSearchHeader({
                 <Divider sx={{my: 3}}/>
                 <Grid container spacing={4}>
                     {/* Pitch Type */}
-                    <Grid size={{xs: 12}}>
+                    <Grid size={{xs: 4}}>
                         <FormControl fullWidth>
                             <InputLabel>Pitch Type</InputLabel>
                             <Select
                                 value={filters.pitchType}
                                 onChange={e => handleFilterChange('pitchType', e.target.value)}
                                 label="Pitch Type"
+                                sx={{borderRadius: 2, backgroundColor: 'white'}}
                             >
                                 <MenuItem value="">All Types</MenuItem>
                                 {pitchTypes.map(type => (
@@ -168,13 +168,14 @@ export function PitchSearchHeader({
                     </Grid>
 
                     {/* Surface Type */}
-                    <Grid size={{xs: 12}}>
+                    <Grid size={{xs: 4}}>
                         <FormControl fullWidth>
                             <InputLabel>Surface Type</InputLabel>
                             <Select
                                 value={filters.surfaceType}
                                 onChange={e => handleFilterChange('surfaceType', e.target.value)}
                                 label="Surface Type"
+                                sx={{borderRadius: 2, backgroundColor: 'white'}}
                             >
                                 <MenuItem value="">All Surfaces</MenuItem>
                                 {surfaceTypes.map(surface => (

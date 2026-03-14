@@ -111,8 +111,6 @@ const LocationDetail: React.FC = () => {
                 backgroundImage: `url('/location_stock.png')`,
                 objectFit: "fill",
                 border: `1px solid ${theme.palette.divider}`,
-                opacity: 0.85,
-                filter: "saturate(0.9) contrast(0.9)",
                 height: "400px",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
@@ -257,9 +255,6 @@ const LocationDetail: React.FC = () => {
                         Pitches
                     </Typography>
                 )}
-                <Typography variant="h5" component="h1" sx={{pt: 5}}>
-                    Pitches
-                </Typography>
                 {location.pitches.map((pitch: PitchView) => (
                     <Box sx={{my: 3}} key={pitch.id}>
                         <LocationDetailPitchCard pitch={pitch} />

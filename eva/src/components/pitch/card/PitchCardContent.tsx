@@ -1,13 +1,13 @@
 import {Box, CardContent, Chip, Divider, Link, Stack, Tooltip, Typography} from "@mui/material";
-import {type LocationView} from "../../../services/location.ts";
-import {locationPropertyIconMap} from "../../PropertyMap.tsx";
+import {pitchPropertyIconMap} from "../../PropertyMap.tsx";
+import type {PitchView} from "../../../services/location.ts";
 import {useNavigate} from "react-router-dom";
 
-interface LocationCardContentProps {
-    location: LocationView
+interface PitchCardContentProps {
+    pitch: PitchView
 }
 
-export function LocationCardContent({location}: Readonly<LocationCardContentProps>) {
+export function PitchCardContent({pitch}: Readonly<PitchCardContentProps>) {
     const navigate = useNavigate()
 
     return (
@@ -20,20 +20,21 @@ export function LocationCardContent({location}: Readonly<LocationCardContentProp
                         mb: 1,
                     }}
                 >
-                    {location.name}
+                    {pitch.name}
                 </Typography>
             </Box>
 
             <Box sx={{justifyContent: "space-between", alignItems: "center", display: "flex"}}>
                 <Typography variant="body1" sx={{mb: 1}}>
                     <Link component="button" underline="none" onClick={() => {
-                        navigate(`/locations/${location.id}`)
-                    }}>{location.address.city}</Link>
+                        navigate(`/pitches/${pitch.id}`)
+                    }}>{pitch.location.address.city}</Link>
                 </Typography>
-                <Box>
-                    <Chip sx={{border: "none"}} size="small" color="primary" variant="outlined"
-                          label={`${location.pitches?.length || 0} Pitches`}/>
-                </Box>
+                <Typography variant="body1" sx={{mb: 1}}>
+                    <Link component="button" underline="none" onClick={() => {
+                        navigate(`/locations/${pitch.location.id}`)
+                    }}>{pitch.location.name}</Link>
+                </Typography>
             </Box>
 
             <Divider sx={{mb: 3}}/>
@@ -46,15 +47,14 @@ export function LocationCardContent({location}: Readonly<LocationCardContentProp
                         color: 'text.secondary'
                     }}
                 >
-                    {location.description || 'A fantastic football location with multiple pitches and excellent facilities.'}
+                    {pitch.description || 'A fantastic football location with multiple pitches and excellent facilities.'}
                 </Typography>
             </Box>
 
             <Box>
-                <Stack direction="row" spacing={1}
-                       useFlexGap
+                <Stack direction="row" spacing={1} useFlexGap
                        sx={{flexWrap: 'wrap', justifyContent: "flex-start"}}>
-                    {location.properties.map((property: string) => (
+                    {pitch.properties.map((property: string) => (
                         <Tooltip title={property} key={property} placement="top">
                             <Chip size="small"
                                   variant="outlined"
@@ -66,12 +66,13 @@ export function LocationCardContent({location}: Readonly<LocationCardContentProp
                                       },
                                       border: "none"
                                   }}
-                                  icon={locationPropertyIconMap[property]}
+                                  icon={pitchPropertyIconMap[property]}
                             />
                         </Tooltip>
                     ))}
                 </Stack>
             </Box>
+
         </CardContent>
     );
 }

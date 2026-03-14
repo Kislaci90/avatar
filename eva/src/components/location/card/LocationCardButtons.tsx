@@ -10,8 +10,8 @@ export function LocationCardButtons({location}: Readonly<LocationCardButtonsProp
     const navigate = useNavigate();
 
     return (
-        <Box sx={{p: 3, pt: 0, display: 'flex', justifyContent: "right", alignItems: 'center'}}>
-            <Box>
+        <Box sx={{p: 3, pt: 0}}>
+            <Box sx={{display: 'flex', gap: 1.5}}>
                 <Button
                     variant="contained"
                     size="large"

@@ -1,189 +1,95 @@
-truncate location_properties cascade;
-truncate pitch_properties cascade;
-truncate location cascade;
-truncate pitch cascade;
-truncate users cascade;
+-- random magyar város lista
+WITH cities AS (
+    SELECT unnest(ARRAY[
+        'Budapest','Szeged','Debrecen','Győr','Pécs','Kecskemét',
+        'Miskolc','Székesfehérvár','Nyíregyháza','Szolnok',
+        'Tatabánya','Zalaegerszeg','Kaposvár','Békéscsaba',
+        'Sopron','Eger','Dunaújváros','Veszprém'
+        ]) AS city
+)
 
-INSERT INTO location (id, name, description, website,
-                      city, address_line, postal_code,
-                      contact_name, email, phone_number,
-                      geom, created_date)
-VALUES (1,
-        'Budapest Park',
-        'Open air location for events and sports.',
-        'https://budapestpark.hu',
-        'Budapest',
-        'Soroksári út 60.',
-        '1095',
-        'Kiss Gábor',
-        'gabor.kiss@example.com',
-        '+36 30 123 4567',
-        ST_SetSRID(ST_MakePoint(19.0724, 47.4751), 4326),
-        CURRENT_TIMESTAMP);
+INSERT INTO location (
+    id,
+    name,
+    description,
+    website,
+    city,
+    address_line,
+    postal_code,
+    contact_name,
+    email,
+    phone_number,
+    geom,
+    created_date
+)
+SELECT
+    100 + gs,
+    'Sport Center ' || gs,
+    'Test location description ' || gs,
+    'https://sport' || gs || '.hu',
+    (SELECT city FROM cities ORDER BY random() LIMIT 1),
+    'Sport utca ' || gs,
+    (1000 + gs)::text,
+    'Contact ' || gs,
+    'contact' || gs || '@example.com',
+    '+36 30 ' || (1000000 + gs),
+    ST_SetSRID(
+            ST_MakePoint(
+                    16 + random()*6,
+                    46 + random()*3
+            ),
+            4326
+    ),
+    CURRENT_TIMESTAMP
+FROM generate_series(1,100) gs;
 
 INSERT INTO location_properties (location_id, properties)
-VALUES (1, 'SHOWER'),
-       (1, 'FREE_PARKING');
+SELECT
+    l.id,
+    p.property
+FROM location l
+         JOIN (
+    SELECT unnest(ARRAY[
+        'SHOWER',
+        'FREE_PARKING',
+        'CAFE',
+        'CHANGING_ROOM',
+        'EQUIPMENT_RENTAL'
+        ]) property
+) p ON random() < 0.4
+WHERE l.id >= 100;
 
--- 2
-INSERT INTO location (id, name, description, website,
-                      city, address_line, postal_code,
-                      contact_name, email, phone_number,
-                      geom, created_date)
-VALUES (2, 'Városligeti Sportcentrum', 'Központi elhelyezkedés, jól megközelíthető.', 'https://varosligetisport.hu',
-        'Budapest', 'Olof Palme sétány 5.', '1146', 'Szabó Dóra', 'dora.szabo@example.com', '+36 20 234 5678',
-        ST_SetSRID(ST_MakePoint(19.0831, 47.5146), 4326), CURRENT_TIMESTAMP);
-
-INSERT INTO location_properties
-VALUES (2, 'CAFE'),
-       (2, 'EQUIPMENT_RENTAL'),
-       (2, 'SHOWER'),
-       (2, 'FREE_PARKING'),
-       (2, 'CHANGING_ROOM');
-
--- 3
-INSERT INTO location (id, name, description, website,
-                      city, address_line, postal_code,
-                      contact_name, email, phone_number,
-                      geom, created_date)
-VALUES (3, 'Szegedi Fociaréna', 'Modern műfüves pályák, lelátóval.', 'https://szegedfoci.hu', 'Szeged',
-        'Felső Tisza-part 15.', '6723', 'Nagy Péter', 'peter.nagy@example.com', '+36 70 345 6789',
-        ST_SetSRID(ST_MakePoint(20.1601, 46.253), 4326), CURRENT_TIMESTAMP);
-
-INSERT INTO location_properties
-VALUES (3, 'SHOWER'),
-       (3, 'CHANGING_ROOM');
-
--- 4
-INSERT INTO location (id, name, description, website,
-                      city, address_line, postal_code,
-                      contact_name, email, phone_number,
-                      geom, created_date)
-VALUES (4, 'Debreceni Stadion', 'Professzionális stadion és edzőpályák.', 'https://debrecenisport.hu', 'Debrecen',
-        'Nagyerdei körút 12.', '4032', 'Tóth Emese', 'emese.toth@example.com', '+36 30 456 7890',
-        ST_SetSRID(ST_MakePoint(21.6299, 47.5459), 4326), CURRENT_TIMESTAMP);
-
-INSERT INTO location_properties
-VALUES (4, 'SHOWER'),
-       (4, 'CHANGING_ROOM');
-
--- 5
-INSERT INTO location (id, name, description, website,
-                      city, address_line, postal_code,
-                      contact_name, email, phone_number,
-                      geom, created_date)
-VALUES (5, 'Győri Sporttelep', 'Kisebb edzőpályák utánpótlásnak.', 'https://gyorisport.hu', 'Győr', 'Sport utca 1.',
-        '9021', 'Balogh László', 'laszlo.balogh@example.com', '+36 70 111 2222',
-        ST_SetSRID(ST_MakePoint(17.6371, 47.6875), 4326), CURRENT_TIMESTAMP);
-
-INSERT INTO location_properties
-VALUES (5, 'FREE_PARKING'),
-       (5, 'CHANGING_ROOM');
-
--- 6
-INSERT INTO location (id, name, description, website,
-                      city, address_line, postal_code,
-                      contact_name, email, phone_number,
-                      geom, created_date)
-VALUES (6, 'Pécsi Fociközpont', 'Sportolási lehetőség gyerekeknek is.', 'https://pecsifoci.hu', 'Pécs',
-        'Verseny utca 4.', '7624', 'Molnár Ádám', 'adam.molnar@example.com', '+36 30 333 4444',
-        ST_SetSRID(ST_MakePoint(18.2293, 46.0727), 4326), CURRENT_TIMESTAMP);
-
-INSERT INTO location_properties
-VALUES (6, 'CAFE'),
-       (6, 'SHOWER');
-
--- 7
-INSERT INTO location (id, name, description, website,
-                      city, address_line, postal_code,
-                      contact_name, email, phone_number,
-                      geom, created_date)
-VALUES (7, 'Kecskeméti Sportpálya', 'Helyi versenyek és edzések helyszíne.', 'https://kecskemetisport.hu', 'Kecskemét',
-        'József Attila utca 5.', '6000', 'Horváth Réka', 'reka.horvath@example.com', '+36 70 555 6666',
-        ST_SetSRID(ST_MakePoint(19.6945, 46.9062), 4326), CURRENT_TIMESTAMP);
-
-INSERT INTO location_properties
-VALUES (7, 'SHOWER'),
-       (7, 'FREE_PARKING');
-
--- 8
-INSERT INTO location (id, name, description, website,
-                      city, address_line, postal_code,
-                      contact_name, email, phone_number,
-                      geom, created_date)
-VALUES (8, 'Miskolci Futballközpont', 'Széles közönség számára nyitva.', 'https://miskolcfoci.hu', 'Miskolc',
-        'Nagy Lajos király útja 10.', '3525', 'Pintér Lili', 'lili.pinter@example.com', '+36 30 777 8888',
-        ST_SetSRID(ST_MakePoint(20.7815, 48.1031), 4326), CURRENT_TIMESTAMP);
-
-INSERT INTO location_properties
-VALUES (8, 'CHANGING_ROOM'),
-       (8, 'FREE_PARKING');
-
--- 9
-INSERT INTO location (id, name, description, website,
-                      city, address_line, postal_code,
-                      contact_name, email, phone_number,
-                      geom, created_date)
-VALUES (9, 'Érdi Foci Center', 'Edzésekhez és amatőr meccsekhez ideális.', 'https://erdfoci.hu', 'Érd',
-        'Futball utca 3.', '2030', 'Jakab Norbert', 'norbert.jakab@example.com', '+36 70 888 9999',
-        ST_SetSRID(ST_MakePoint(18.9027, 47.3915), 4326), CURRENT_TIMESTAMP);
-
-INSERT INTO location_properties
-VALUES (9, 'EQUIPMENT_RENTAL'),
-       (9, 'FREE_PARKING');
-
--- 10
-INSERT INTO location (id, name, description, website,
-                      city, address_line, postal_code,
-                      contact_name, email, phone_number,
-                      geom, created_date)
-VALUES (10, 'Soproni Sportaréna', 'Határon túlról is jönnek ide focizni.', 'https://sopronarena.hu', 'Sopron',
-        'Bécsi út 12.', '9400', 'Szűcs Ákos', 'akos.szucs@example.com', '+36 20 999 0000',
-        ST_SetSRID(ST_MakePoint(16.5845, 47.6817), 4326), CURRENT_TIMESTAMP);
-
-INSERT INTO location_properties
-VALUES (10, 'CAFE'),
-       (10, 'SHOWER');
-
--- 1. pitch
-INSERT INTO pitch (id, name, location_id, description, surface_type, type, created_date)
-VALUES (1, 'Center Court', 1, 'Description of this pitch','ARTIFICIAL_GRASS', 'FIVE_A_SIDE', CURRENT_TIMESTAMP);
+INSERT INTO pitch (
+    id,
+    name,
+    location_id,
+    description,
+    surface_type,
+    type,
+    created_date
+)
+SELECT
+    2000 + gs AS id,
+    'Pitch ' || gs AS name,
+    loc_array[1 + floor(random() * array_length(loc_array, 1))::int] AS location_id,
+    'Generated pitch ' || gs AS description,
+    surface_array[floor(random() * array_length(surface_array,1) + 1)::int] AS surface_type,
+    type_array[floor(random() * array_length(type_array,1) + 1)::int] AS type,
+    CURRENT_TIMESTAMP AS created_date
+FROM generate_series(1,300) gs,
+     LATERAL (SELECT ARRAY_AGG(id ORDER BY id) AS loc_array FROM location WHERE id >= 100) locs,
+     LATERAL (SELECT ARRAY['ARTIFICIAL_GRASS','TURF','CONCRETE','HARDCOURT','GRASS','ASPHALT'] AS surface_array) sa,
+     LATERAL (SELECT ARRAY['FIVE_A_SIDE','SEVEN_A_SIDE','FULL_SIZE','HALF_SIZE','INDOOR','OUTDOOR'] AS type_array) ta;
 
 INSERT INTO pitch_properties (pitch_id, properties)
-VALUES (1, 'LIGHTING'),
-       (1, 'COVERED');
-
--- 2. pitch
-INSERT INTO pitch (id, name, location_id, description, surface_type, type, created_date)
-VALUES (2, 'Street Pitch', 1, 'Description of this pitch', 'CONCRETE', 'SEVEN_A_SIDE', CURRENT_TIMESTAMP);
-
-INSERT INTO pitch_properties (pitch_id, properties)
-VALUES (2, 'COVERED');
-
--- 3. pitch
-INSERT INTO pitch (id, name, location_id, description, surface_type, type, created_date)
-VALUES (3, 'Rooftop Arena', 1, 'Description of this pitch', 'TURF', 'FULL_SIZE', CURRENT_TIMESTAMP);
-
-INSERT INTO pitch_properties (pitch_id, properties)
-VALUES (3, 'COVERED'),
-       (3, 'LIGHTING');
-
-INSERT INTO users (id, full_name, email, password, created_date, last_modified_date, created_by, last_modified_by)
-VALUES (2,
-        'Regular User',
-        'user@example.com',
-        '$2a$10$ZPdQkCGizD3KTVPHe5t0x.kHHUc7C4oHR9uOkiOJZ4cy.4W4MPMea', -- 'user123'
-        now(),
-        now(),
-        'system',
-        'system');
-
-INSERT INTO users (id, full_name, email, password, created_date, last_modified_date, created_by, last_modified_by)
-VALUES (1,
-        'Admin User',
-        'admin@example.com',
-        '$2a$10$XvmCXTExbJYcRy0fWk9caOJMsibWDEws0ElxqyQP9qGNCnLQscOnO', -- 'admin123'
-        now(),
-        now(),
-        'system',
-        'system');
+SELECT
+    p.id,
+    prop.property
+FROM pitch p
+         JOIN (
+    SELECT unnest(ARRAY[
+        'LIGHTING',
+        'COVERED'
+        ]) property
+) prop ON random() < 0.5
+WHERE p.id >= 2000;
