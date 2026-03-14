@@ -56,7 +56,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
+          cache: npm
           cache-dependency-path: eva/package-lock.json
 
       - name: Install dependencies
@@ -120,7 +120,9 @@ jobs:
   notify:
     name: Notify Build Status
     runs-on: ubuntu-latest
-    needs: [build-backend, build-frontend]
+    needs:
+      - build-backend
+      - build-frontend
     if: always()
     steps:
       - name: Build Status
@@ -132,3 +134,4 @@ jobs:
             echo "❌ Build failed!"
             exit 1
           fi
+
