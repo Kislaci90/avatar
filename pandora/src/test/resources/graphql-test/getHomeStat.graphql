@@ -1,0 +1,8 @@
+query getHomeStat {
+    getHomeStat {
+        totalLocations
+        totalPitches
+        totalCities
+        totalUsers
+    }
+}

@@ -106,6 +106,7 @@ export function PitchSearchHeader({
                     onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
                     sx={{
                         borderRadius: 2,
+                        backgroundColor: 'white',
                     }}
                 >
                     <Tune/>

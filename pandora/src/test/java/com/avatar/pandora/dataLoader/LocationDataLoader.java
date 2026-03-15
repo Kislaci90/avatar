@@ -19,6 +19,8 @@ import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -45,8 +47,8 @@ public class LocationDataLoader implements CommandLineRunner {
         contact = new Contact(faker.name().fullName(), faker.phoneNumber().phoneNumber(), faker.internet().emailAddress());
         address = new Address("Eger", faker.address().streetAddress(), faker.address().zipCode());
         point = geometryFactory.createPoint(new Coordinate(Double.parseDouble(faker.address().longitude()), Double.parseDouble(faker.address().latitude())));
-        addSecondLocation(faker, address, contact, point);
 
+        addSecondLocation(faker, address, contact, point);
     }
 
     private void addFirstLocation(Faker faker, Address address, Contact contact, Point point) {
@@ -95,11 +97,6 @@ public class LocationDataLoader implements CommandLineRunner {
         location.setProperties(Set.of(LocationProperty.SHOWER, LocationProperty.CHANGING_ROOM, LocationProperty.FREE_PARKING, LocationProperty.CAFE));
 
         locationRepository.save(location);
-    }
-
-    public static class TestLocations {
-        public static LocationView firstLocation;
-        public static LocationView secondLocation;
     }
 
 }
