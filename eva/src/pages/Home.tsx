@@ -1,96 +1,81 @@
 import React from 'react';
-import {Avatar, Box, Button, Card, CardContent, Container, Grid, Paper, Typography, useTheme} from '@mui/material';
+import {Box, Button, Card, CardContent, Container, Grid, Paper, Typography, useTheme} from '@mui/material';
 import {
-    AccessTime,
     ArrowForward,
-    AttachMoney,
     LocalParking,
+    LocationCity,
     LocationOn,
-    MeetingRoom,
     People,
     Shower,
     SportsSoccer,
-    Star,
     VerifiedUser
 } from '@mui/icons-material';
 import {Link as RouterLink} from 'react-router-dom';
+import {gql} from "@apollo/client";
+import {useQuery} from "@apollo/client/react";
+import {useTranslation} from 'react-i18next';
+import type {HomeStatResult} from "../services/home.ts";
+
+const GET_HOME_STAT = gql`
+    query GetHomeStat {
+        getHomeStat {
+            totalPitches
+            totalLocations
+            totalUsers
+        }
+    }
+`
 
 const Home: React.FC = () => {
     const theme = useTheme();
+    const { t } = useTranslation();
+
+    const {data} = useQuery<HomeStatResult>(GET_HOME_STAT);
+
+    let homeStat = {
+        totalPitches: 0,
+        totalLocations: 0,
+        totalUsers: 0,
+    };
+
+    if (data?.getHomeStat) {
+        homeStat = data?.getHomeStat;
+    }
 
     const features = [
         {
             icon: <LocationOn/>,
-            title: "Prime Locations",
-            description: "Find pitches in the best locations across the city with easy access and parking."
+            title: t('home.primeLocations'),
+            description: t('home.primeLocationsDesc')
         },
         {
             icon: <LocalParking/>,
-            title: "Free Parking",
-            description: "Most locations offer free parking for your convenience."
+            title: t('home.freeParking'),
+            description: t('home.freeParkingDesc')
         },
         {
             icon: <Shower/>,
-            title: "Shower Facilities",
-            description: "Clean shower and changing room facilities available at most locations."
-        },
-        {
-            icon: <MeetingRoom/>,
-            title: "Changing Rooms",
-            description: "Professional changing rooms with lockers for your belongings."
-        },
-        {
-            icon: <AccessTime/>,
-            title: "24/7 Availability",
-            description: "Book pitches at any time, day or night, with flexible scheduling."
-        },
-        {
-            icon: <AttachMoney/>,
-            title: "Competitive Pricing",
-            description: "Get the best value with transparent pricing and no hidden fees."
+            title: t('home.showerFacilities'),
+            description: t('home.showerFacilitiesDesc')
         }
     ];
 
     const stats = [
-        {number: "500+", label: "Active Pitches", icon: <SportsSoccer/>},
-        {number: "50+", label: "Cities Covered", icon: <LocationOn/>},
-        {number: "10K+", label: "Happy Players", icon: <People/>},
-        {number: "99%", label: "Satisfaction Rate", icon: <Star/>}
-    ];
-
-    const testimonials = [
-        {
-            name: "Alex Johnson",
-            role: "Amateur League Player",
-            avatar: "AJ",
-            content: "Found the perfect pitch for our weekly games. The booking process was smooth and the facilities were excellent!",
-            rating: 5
-        },
-        {
-            name: "Sarah Chen",
-            role: "Team Captain",
-            avatar: "SC",
-            content: "Great variety of pitches and locations. The app makes it so easy to find and book exactly what we need.",
-            rating: 5
-        },
-        {
-            name: "Mike Rodriguez",
-            role: "Football Coach",
-            avatar: "MR",
-            content: "Professional facilities at reasonable prices. Perfect for training sessions and matches.",
-            rating: 5
-        }
+        {number: homeStat.totalPitches, label: t('home.activePitches'), icon: <SportsSoccer/>},
+        {number: homeStat.totalLocations, label: t('home.citiesCovered'), icon: <LocationCity/>},
+        {number: homeStat.totalLocations, label: t('home.happyPlayers'), icon: <LocationOn/>},
+        {number: homeStat.totalUsers, label: t('home.happyPlayers'), icon: <People/>},
     ];
 
     const pitchTypes = [
-        {name: "5-a-Side", description: "Perfect for small groups and quick games", color: theme.palette.primary.main},
-        {name: "7-a-Side", description: "Ideal for medium-sized teams", color: theme.palette.secondary.main},
+        {name: t('home.fiveASide'), description: t('home.fiveASideDesc'), color: theme.palette.primary.main},
+        {name: t('home.sevenASide'), description: t('home.sevenASideDesc'), color: theme.palette.secondary.main},
         {
-            name: "11-a-Side",
-            description: "Full-size pitches for competitive matches",
+            name: t('home.elevenASide'),
+            description: t('home.elevenASideDesc'),
             color: theme.palette.success.main
         },
-        {name: "Indoor", description: "Weather-proof indoor facilities", color: theme.palette.warning.main}
+        {name: t('home.indoor'), description: t('home.indoorDesc'), color: theme.palette.warning.main}
     ];
 
     return (
@@ -117,9 +102,9 @@ const Home: React.FC = () => {
                                     lineHeight: 1.2
                                 }}
                             >
-                                Find Your Perfect
+                                {t('home.findYourPerfect')}
                                 <Box component="span" sx={{color: 'secondary.main', display: 'block'}}>
-                                    Football Pitch
+                                    {t('home.footballPitch')}
                                 </Box>
                             </Typography>
                             <Typography
@@ -128,11 +113,7 @@ const Home: React.FC = () => {
                                 mb={4}
                                 sx={{lineHeight: 1.6, fontWeight: 400}}
                             >
-                                Discover and book the best football pitches in your area. From 5-a-side to full-size
-                                pitches,
-                                we have everything you need for the beautiful game. Join thousands of players who trust
-                                us
-                                for their football needs.
+                                {t('home.description')}
                             </Typography>
                             <Box sx={{display: 'flex', gap: 2, flexWrap: 'wrap', mb: 4}}>
                                 <Button
@@ -150,7 +131,7 @@ const Home: React.FC = () => {
                                         borderRadius: 2
                                     }}
                                 >
-                                    Browse Pitches
+                                    {t('home.browsePitches')}
                                 </Button>
                                 <Button
                                     component={RouterLink}
@@ -166,14 +147,14 @@ const Home: React.FC = () => {
                                         borderRadius: 2
                                     }}
                                 >
-                                    Find Locations
+                                    {t('home.findLocations')}
                                 </Button>
                             </Box>
                             <Box sx={{display: 'flex', alignItems: 'center', gap: 3}}>
                                 <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
                                     <VerifiedUser color="secondary"/>
                                     <Typography variant="body2" color="text.secondary">
-                                        Verified Pitches
+                                        {t('home.verifiedPitches')}
                                     </Typography>
                                 </Box>
                             </Box>
@@ -199,10 +180,10 @@ const Home: React.FC = () => {
                                     <Box sx={{textAlign: 'center', mb: 3}}>
                                         <SportsSoccer sx={{fontSize: 64, color: 'primary.main', mb: 2}}/>
                                         <Typography variant="h4" fontWeight={700} gutterBottom>
-                                            Ready to Play?
+                                            {t('home.readyToPlay')}
                                         </Typography>
                                         <Typography variant="body1" color="text.secondary" mb={3}>
-                                            Join thousands of players who have already discovered their perfect pitch
+                                            {t('home.readyToPlayDesc')}
                                         </Typography>
                                         <Button
                                             component={RouterLink}
@@ -218,7 +199,7 @@ const Home: React.FC = () => {
                                                 borderRadius: 2
                                             }}
                                         >
-                                            Get Started Free
+                                            {t('home.getStartedFree')}
                                         </Button>
                                     </Box>
                                 </Paper>
@@ -232,10 +213,10 @@ const Home: React.FC = () => {
             <Container maxWidth="lg" sx={{py: 8}}>
                 <Box textAlign="center" mb={6}>
                     <Typography variant="h3" fontWeight={700} gutterBottom>
-                        Trusted by Players Everywhere
+                        {t('home.trustedByPlayers')}
                     </Typography>
                     <Typography variant="h6" color="text.secondary">
-                        Join our growing community of football enthusiasts
+                        {t('home.joinCommunity')}
                     </Typography>
                 </Box>
                 <Grid container spacing={4}>
@@ -274,10 +255,10 @@ const Home: React.FC = () => {
                 <Container maxWidth="lg">
                     <Box textAlign="center" mb={6}>
                         <Typography variant="h3" fontWeight={700} gutterBottom>
-                            Why Choose Our Platform?
+                            {t('home.whyChoose')}
                         </Typography>
                         <Typography variant="h6" color="text.secondary">
-                            Everything you need for the perfect football experience
+                            {t('home.everythingYouNeed')}
                         </Typography>
                     </Box>
                     <Grid container spacing={4}>
@@ -317,10 +298,10 @@ const Home: React.FC = () => {
             <Container maxWidth="lg" sx={{py: 8}}>
                 <Box textAlign="center" mb={6}>
                     <Typography variant="h3" fontWeight={700} gutterBottom>
-                        Pitch Types Available
+                        {t('home.pitchTypes')}
                     </Typography>
                     <Typography variant="h6" color="text.secondary">
-                        From casual games to competitive matches
+                        {t('home.fromCasualToCompetitive')}
                     </Typography>
                 </Box>
                 <Grid container spacing={4}>
@@ -359,64 +340,6 @@ const Home: React.FC = () => {
             {/* Testimonials Section */}
             <Box sx={{bgcolor: 'background.paper', py: 8}}>
                 <Container maxWidth="lg">
-                    <Box textAlign="center" mb={6}>
-                        <Typography variant="h3" fontWeight={700} gutterBottom>
-                            What Our Users Say
-                        </Typography>
-                        <Typography variant="h6" color="text.secondary">
-                            Real feedback from real players
-                        </Typography>
-                    </Box>
-                    <Grid container spacing={4}>
-                        {testimonials.map((testimonial, index) => (
-                            <Grid size={{xs:12}} key={index}>
-                                <Card
-                                    elevation={3}
-                                    sx={{
-                                        height: '100%',
-                                        borderRadius: 3,
-                                        p: 4,
-                                        transition: 'transform 0.3s ease',
-                                        '&:hover': {
-                                            transform: 'translateY(-4px)',
-                                            boxShadow: 6
-                                        }
-                                    }}
-                                >
-                                    <Box sx={{display: 'flex', alignItems: 'center', mb: 3}}>
-                                        <Avatar
-                                            sx={{
-                                                bgcolor: 'primary.main',
-                                                width: 56,
-                                                height: 56,
-                                                mr: 2,
-                                                fontSize: '1.5rem',
-                                                fontWeight: 600
-                                            }}
-                                        >
-                                            {testimonial.avatar}
-                                        </Avatar>
-                                        <Box>
-                                            <Typography variant="h6" fontWeight={600}>
-                                                {testimonial.name}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary">
-                                                {testimonial.role}
-                                            </Typography>
-                                            <Box sx={{display: 'flex', mt: 1}}>
-                                                {[...Array(testimonial.rating)].map((_, i) => (
-                                                    <Star key={i} sx={{color: 'warning.main', fontSize: 16}}/>
-                                                ))}
-                                            </Box>
-                                        </Box>
-                                    </Box>
-                                    <Typography variant="body1" sx={{lineHeight: 1.6, fontStyle: 'italic'}}>
-                                        "{testimonial.content}"
-                                    </Typography>
-                                </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
                 </Container>
             </Box>
 
@@ -433,10 +356,10 @@ const Home: React.FC = () => {
                     }}
                 >
                     <Typography variant="h3" fontWeight={700} gutterBottom>
-                        Ready to Start Playing?
+                        {t('home.readyToStart')}
                     </Typography>
                     <Typography variant="h6" sx={{mb: 4, opacity: 0.9}}>
-                        Join thousands of players and discover your perfect football pitch today
+                        {t('home.readyToStartDesc')}
                     </Typography>
                     <Box sx={{display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap'}}>
                         <Button
@@ -454,7 +377,7 @@ const Home: React.FC = () => {
                                 borderRadius: 2
                             }}
                         >
-                            Browse All Pitches
+                            {t('home.browseAllPitches')}
                         </Button>
                         <Button
                             component={RouterLink}
@@ -475,7 +398,7 @@ const Home: React.FC = () => {
                                 }
                             }}
                         >
-                            Create Account
+                            {t('home.createAccount')}
                         </Button>
                     </Box>
                 </Paper>

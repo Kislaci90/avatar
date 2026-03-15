@@ -3,8 +3,9 @@ import {Link} from 'react-router-dom';
 import {gql} from '@apollo/client';
 import {useQuery} from '@apollo/client/react';
 import {AppBar, Avatar, Box, Button, IconButton, Menu, MenuItem, Toolbar, Typography} from '@mui/material';
-import {ExitToApp, LocationOn, Person, Search} from '@mui/icons-material';
+import {ExitToApp, LocationOn, Login, Person, PersonAdd, Search} from '@mui/icons-material';
 import type {GetMeResult} from "../services/users.ts";
+import LanguageSwitcher from './LanguageSwitcher';
 
 const GET_CURRENT_USER = gql`
     query GetMe {
@@ -71,6 +72,8 @@ const Navbar: React.FC = () => {
             Find Locations
           </Button>
 
+          <LanguageSwitcher />
+
           {data?.getMe? (
             <>
               <IconButton
@@ -114,6 +117,7 @@ const Navbar: React.FC = () => {
                 to="/login"
                 sx={{color: 'white'}}
                 color="primary"
+                startIcon={<Login/>}
               >
                 Login
               </Button>
@@ -122,6 +126,7 @@ const Navbar: React.FC = () => {
                 to="/register"
                 sx={{color: 'white'}}
                 color="primary"
+                startIcon={<PersonAdd />}
               >
                 Register
               </Button>

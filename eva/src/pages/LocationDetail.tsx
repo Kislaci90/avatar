@@ -143,7 +143,7 @@ const LocationDetail: React.FC = () => {
                                     <List>
                                         <ListItem>
                                             <ListItemIcon>
-                                                <Person/>
+                                                <Person color="primary"/>
                                             </ListItemIcon>
                                             <ListItemText
                                                 primary={location.contact.contactName}
@@ -152,7 +152,7 @@ const LocationDetail: React.FC = () => {
                                         </ListItem>
                                         <ListItem>
                                             <ListItemIcon>
-                                                <Email/>
+                                                <Email color="primary"/>
                                             </ListItemIcon>
                                             <ListItemText
                                                 primary={location.contact.email}
@@ -161,7 +161,7 @@ const LocationDetail: React.FC = () => {
                                         </ListItem>
                                         <ListItem>
                                             <ListItemIcon>
-                                                <Phone/>
+                                                <Phone color="primary"/>
                                             </ListItemIcon>
                                             <ListItemText
                                                 primary={location.contact.phoneNumber}
@@ -174,7 +174,7 @@ const LocationDetail: React.FC = () => {
                                     <List>
                                         <ListItem>
                                             <ListItemIcon>
-                                                <LocationOn/>
+                                                <LocationOn color="primary"/>
                                             </ListItemIcon>
                                             <ListItemText
                                                 primary={location.address.addressLine}
@@ -183,7 +183,7 @@ const LocationDetail: React.FC = () => {
                                         </ListItem>
                                         <ListItem>
                                             <ListItemIcon>
-                                                <Home/>
+                                                <Home color="primary"/>
                                             </ListItemIcon>
                                             <ListItemText
                                                 primary={location.website}
@@ -192,7 +192,7 @@ const LocationDetail: React.FC = () => {
                                         </ListItem>
                                         <ListItem>
                                             <ListItemIcon>
-                                                <SportsSoccer/>
+                                                <SportsSoccer color="primary"/>
                                             </ListItemIcon>
                                             <ListItemText
                                                 primary={location.pitches.length}
