@@ -6,7 +6,7 @@ import {LoadMoreButton} from "../components/location/LoadMoreButton";
 import {LocationCard} from "../components/location/card/LocationCard.tsx";
 import type {UserLocation} from "../services/distance";
 import {LocationSearchHeader} from "../components/location/LocationSearchHeader.tsx";
-import type {SearchLocationResult} from "../services/location.ts";
+import type {LocationView, SearchLocationResult} from "../services/location.ts";
 import {LocationPermission} from "../components/LocationPermission.tsx";
 import theme from "../theme/theme.ts";
 
@@ -75,7 +75,7 @@ const LocationList: React.FC = () => {
     const [sort, setSort] = useState<string>();
     const [currentPage, setCurrentPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
-    const [locations, setLocations] = useState<any[]>([]);
+    const [locations, setLocations] = useState<LocationView[]>([]);
     const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
     const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
 
@@ -197,7 +197,7 @@ const LocationList: React.FC = () => {
                 {locations.length > 0 && (
                     <Box sx={{mb: 6}}>
                         <Grid container spacing={3}>
-                            {locations.map((location: any) => (
+                            {locations.map((location: LocationView) => (
                                 <Grid size={{xs: 12, sm: 6, lg: 4}} key={location.id}>
                                     <LocationCard location={location} userLocation={userLocation}/>
                                 </Grid>

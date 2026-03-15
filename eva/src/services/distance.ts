@@ -27,28 +27,21 @@ export function formatDistance(distance: number): string {
     }
 }
 
-export function getDirectionsUrl(location: any): string {
-    if (location.latitude && location.longitude) {
-        return `https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}`;
-    }
-    return `https://www.google.com/maps/search/${encodeURIComponent(location.address)}`;
-}
-
 export function getGoogleMap(location: LocationView | LazyLocationView, zoom: number, size: string) {
-    let markerColor = "0xFF6D00"
+    const markerColor = "0xFF6D00"
     return `https://maps.googleapis.com/maps/api/staticmap?center=${location.geom.x},${location.geom.y}&zoom=${zoom}&size=${size}&markers=color:${markerColor}%7C${location.geom.x},${location.geom.y}&style=feature:poi|visibility:off&style=feature:transit|visibility:off&key=${import.meta.env.VITE_GOOGLE_MAP_API_KEY}`
 }
 
 export function getMediumGoogleMap(location: LocationView | LazyLocationView) {
-    let zoom = 13
-    let size = "400x300"
+    const zoom = 13
+    const size = "400x300"
 
     return getGoogleMap(location, zoom, size);
 }
 
 export function getLargeGoogleMap(location: LocationView | LazyLocationView) {
-    let zoom = 11
-    let size = "640x640"
+    const zoom = 11
+    const size = "640x640"
 
     return getGoogleMap(location, zoom, size);
 }

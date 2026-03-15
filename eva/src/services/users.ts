@@ -2,6 +2,10 @@ export type LoginResult = {
     login: TokenView,
 }
 
+export type RegisterResult = {
+    register: TokenView,
+}
+
 export type GetMeResult = {
     getMe: UserView,
 }

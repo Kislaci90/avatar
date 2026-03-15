@@ -20,7 +20,7 @@ const httpLink = new HttpLink({
     uri: 'http://localhost:8080/graphql',
 });
 
-const authLink = new SetContextLink((_) => {
+const authLink = new SetContextLink(() => {
     const token = localStorage.getItem('token');
     return {
         headers: {

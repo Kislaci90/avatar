@@ -79,7 +79,7 @@ const PitchList: React.FC = () => {
         }
     }, [data]);
 
-    const handleFilterChange = (field: string, value: any) => {
+    const handleFilterChange = (field: string, value: string) => {
         setFilters(prev => ({...prev, [field]: value}));
     };
 
@@ -168,7 +168,7 @@ const PitchList: React.FC = () => {
                 {pitches.length > 0 && (
                     <Box sx={{mb: 6}}>
                         <Grid container spacing={3}>
-                            {pitches.map((pitch: any, index: number) => (
+                            {pitches.map((pitch: PitchView, index: number) => (
                                 <Grid size={{xs: 12, sm: 6, lg: 4}} key={index}>
                                     <PitchCard pitch={pitch} userLocation={userLocation}/>
                                 </Grid>

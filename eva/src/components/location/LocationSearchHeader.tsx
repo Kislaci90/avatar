@@ -25,7 +25,7 @@ import {locationPropertyIconMap} from "../PropertyMap.tsx";
 interface SearchHeaderProps {
     filters: LocationFilter,
     handleSearch: () => void,
-    clearFilters: any,
+    clearFilters: () => void,
     handleFilterChange: <K extends keyof LocationFilter>(field: K, value: LocationFilter[K]) => void,
     setSort: (value: string) => void
 }

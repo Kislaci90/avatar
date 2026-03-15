@@ -21,7 +21,7 @@ interface PitchSearchHeaderProps {
     filters: { searchTerm: string; surfaceType: string; pitchType: string },
     clearFilters: () => void,
     handleSearch: () => void,
-    handleFilterChange: (field: string, value: any) => void
+    handleFilterChange: (field: string, value: string) => void
 }
 
 export function PitchSearchHeader({

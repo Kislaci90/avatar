@@ -15,6 +15,7 @@ import {
     Typography
 } from '@mui/material';
 import {Email, Lock, Person, PersonAdd, Phone, Visibility, VisibilityOff} from '@mui/icons-material';
+import type {RegisterResult} from "../services/users.ts";
 
 const REGISTER_MUTATION = gql`
     mutation Register($input: UserInput!) {
@@ -44,13 +45,13 @@ const Register: React.FC = () => {
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
-    const [register, {loading}] = useMutation(REGISTER_MUTATION, {
-        onCompleted: (data: any) => {
-            localStorage.setItem('token', data.register.token);
+    const [register, {loading}] = useMutation<RegisterResult, {input: typeof formData}>(REGISTER_MUTATION, {
+        onCompleted: (data) => {
+            localStorage.setItem('token', data.login.token);
             navigate('/');
             window.location.reload();
         },
-        onError: (error: any) => {
+        onError: (error) => {
             setError(error.message);
         }
     });

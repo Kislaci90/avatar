@@ -101,7 +101,7 @@ const LocationDetail: React.FC = () => {
         );
     }
 
-    let location = data.getLocation;
+    const location = data.getLocation;
 
     return (
         <Box sx={{minHeight: '100vh'}}>
