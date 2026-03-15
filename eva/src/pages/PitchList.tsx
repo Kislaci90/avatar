@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {gql} from '@apollo/client';
 import {useQuery} from "@apollo/client/react";
 import {Alert, Box, CircularProgress, Container, Grid, Typography} from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import type {PitchView} from "../services/location.ts";
 import type {SearchPitchesResult} from "../services/pitches.ts";
 import {PitchCard} from "../components/pitch/card/PitchCard.tsx";
@@ -49,6 +50,7 @@ const SEARCH_PITCHES = gql`
 `;
 
 const PitchList: React.FC = () => {
+    const { t } = useTranslation();
     const [filters, setFilters] = useState({
         searchTerm: '',
         surfaceType: '',
@@ -160,7 +162,7 @@ const PitchList: React.FC = () => {
                 )}
                 {pitches.length === 0 && !loading && (
                     <Alert severity="info" sx={{mb: 4}}>
-                        No pitches found matching your criteria. Try adjusting your filters.
+                        {t('pitches.noResults')}
                     </Alert>
                 )}
 
@@ -188,10 +190,10 @@ const PitchList: React.FC = () => {
                 {!hasMore && pitches.length > 0 && (
                     <Box sx={{textAlign: 'center', mt: 6, py: 4}}>
                         <Typography variant="h6" color="text.secondary" sx={{mb: 2}}>
-                            🎯 You've seen all available pitches!
+                            {t('pitches.allPitches')}
                         </Typography>
                         <Typography variant="body1" color="text.secondary">
-                            Try adjusting your filters to find more matches.
+                            {t('pitches.tryAdjusting')}
                         </Typography>
                     </Box>
                 )}

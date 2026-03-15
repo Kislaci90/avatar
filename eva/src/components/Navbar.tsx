@@ -6,6 +6,7 @@ import {AppBar, Avatar, Box, Button, IconButton, Menu, MenuItem, Toolbar, Typogr
 import {ExitToApp, LocationOn, Login, Person, PersonAdd, Search} from '@mui/icons-material';
 import type {GetMeResult} from "../services/users.ts";
 import LanguageSwitcher from './LanguageSwitcher';
+import {useTranslation} from "react-i18next";
 
 const GET_CURRENT_USER = gql`
     query GetMe {
@@ -19,6 +20,7 @@ const GET_CURRENT_USER = gql`
 `;
 
 const Navbar: React.FC = () => {
+  const { t } = useTranslation();
   const { data } = useQuery<GetMeResult>(GET_CURRENT_USER);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -49,7 +51,7 @@ const Navbar: React.FC = () => {
               fontWeight: 'bold',
             }}
           >
-            Eva - Football Pitches
+            {t('navigation.brand')}
           </Typography>
         </Box>
 
@@ -60,7 +62,7 @@ const Navbar: React.FC = () => {
             sx={{color: 'white'}}
             startIcon={<Search />}
           >
-            Find Pitches
+            {t('navigation.findPitches')}
           </Button>
 
           <Button
@@ -69,7 +71,7 @@ const Navbar: React.FC = () => {
             sx={{color: 'white'}}
             startIcon={<LocationOn />}
           >
-            Find Locations
+            {t('navigation.findLocations')}
           </Button>
 
           <LanguageSwitcher />
@@ -101,12 +103,12 @@ const Navbar: React.FC = () => {
               >
                 <MenuItem disabled>
                   <Typography variant="h5">
-                    Welcome, {data.getMe.username}!
+                    {t('navigation.welcome')}, {data.getMe.username}!
                   </Typography>
                 </MenuItem>
                 <MenuItem onClick={handleLogout} sx={{ color: 'error.main' }}>
                   <ExitToApp sx={{ mr: 1 }} />
-                  Logout
+                  {t('navigation.logout')}
                 </MenuItem>
               </Menu>
             </>
@@ -119,7 +121,7 @@ const Navbar: React.FC = () => {
                 color="primary"
                 startIcon={<Login/>}
               >
-                Login
+                {t('navigation.login')}
               </Button>
               <Button
                 component={Link}
@@ -128,7 +130,7 @@ const Navbar: React.FC = () => {
                 color="primary"
                 startIcon={<PersonAdd />}
               >
-                Register
+                {t('navigation.register')}
               </Button>
             </>
           )}

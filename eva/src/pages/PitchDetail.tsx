@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {gql} from '@apollo/client';
 import {useQuery} from "@apollo/client/react";
+import {useTranslation} from 'react-i18next';
 import {
     Alert,
     Avatar,
@@ -57,6 +58,7 @@ const GET_PITCH = gql`
 
 const PitchDetail: React.FC = () => {
     const theme = useTheme();
+    const { t } = useTranslation();
     const {id} = useParams<{ id: string }>();
     const numericId = id ? parseInt(id, 10) : null;
     const {loading, error, data} = useQuery<GetPitchResult>(GET_PITCH, {variables: {id: numericId}});
@@ -80,7 +82,7 @@ const PitchDetail: React.FC = () => {
     if (!data?.getPitch) return (
         <Container maxWidth="md" sx={{py: 8}}>
             <Alert severity="info" sx={{fontSize: '1.1rem', py: 2}}>
-                Pitch not found
+                {t('errors.notFound')}
             </Alert>
         </Container>
     );
@@ -178,9 +180,9 @@ const PitchDetail: React.FC = () => {
                                             }
                                         }}
                                     >
-                                        <Tab label="Details"/>
-                                        <Tab label="Location"/>
-                                        <Tab label="Owner"/>
+                                        <Tab label={t('pitches.details')}/>
+                                        <Tab label={t('pitches.location')}/>
+                                        <Tab label={t('navigation.profile')}/>
                                     </Tabs>
                                 </Box>
 
@@ -188,7 +190,7 @@ const PitchDetail: React.FC = () => {
                                 {activeTab === 0 && (
                                     <Box>
                                         <Typography variant="h5" sx={{mb: 3, color: 'text.primary'}}>
-                                            Pitch Details
+                                            {t('pitches.details')}
                                         </Typography>
                                         <Grid container spacing={3} sx={{mb: 4}}>
                                             <Grid size={{xs: 12, sm: 6}}>
@@ -220,7 +222,7 @@ const PitchDetail: React.FC = () => {
                                         </Grid>
 
                                         <Typography variant="h5" sx={{mb: 3, color: 'text.primary'}}>
-                                            Facilities
+                                            {t('pitches.properties')}
                                         </Typography>
                                         <Grid container spacing={2}>
                                             {data.getPitch.properties.map((property, index) => (
@@ -269,7 +271,7 @@ const PitchDetail: React.FC = () => {
                                 {activeTab === 1 && (
                                     <Box>
                                         <Typography variant="h5" sx={{mb: 3, color: 'text.primary'}}>
-                                            Location
+                                            {t('pitches.location')}
                                         </Typography>
                                         <Paper elevation={0} sx={{
                                             p: 4,
@@ -279,7 +281,7 @@ const PitchDetail: React.FC = () => {
                                             <Box sx={{display: 'flex', alignItems: 'center', gap: 2, mb: 3}}>
                                                 <LocationOn sx={{color: theme.palette.primary.main, fontSize: 28}}/>
                                                 <Typography variant="h6" color="text.primary">
-                                                    Address
+                                                    {t('locations.address')}
                                                 </Typography>
                                             </Box>
                                             <Typography variant="body1"
@@ -303,7 +305,7 @@ const PitchDetail: React.FC = () => {
                                 {activeTab === 2 && (
                                     <Box>
                                         <Typography variant="h5" sx={{mb: 3, color: 'text.primary'}}>
-                                            Owner Information
+                                            {t('locations.contact')}
                                         </Typography>
                                         <Paper elevation={0} sx={{
                                             p: 4,
@@ -328,7 +330,7 @@ const PitchDetail: React.FC = () => {
                                                         {pitch.location.contact.contactName}
                                                     </Typography>
                                                     <Typography variant="body1" color="text.secondary">
-                                                        Pitch Owner
+                                                        {t('locations.contactName')}
                                                     </Typography>
                                                 </Box>
                                             </Box>

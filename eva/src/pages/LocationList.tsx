@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {gql} from '@apollo/client';
 import {useQuery} from "@apollo/client/react";
 import {Alert, Box, CircularProgress, Container, Grid, Typography} from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import {LoadMoreButton} from "../components/location/LoadMoreButton";
 import {LocationCard} from "../components/location/card/LocationCard.tsx";
 import type {UserLocation} from "../services/distance";
@@ -67,6 +68,7 @@ export type LocationFilter = {
 };
 
 const LocationList: React.FC = () => {
+    const { t } = useTranslation();
     const [filters, setFilters] = useState<LocationFilter>({
         searchTerm: '',
         locationProperties: [],
@@ -190,7 +192,7 @@ const LocationList: React.FC = () => {
                 )}
                 {locations.length === 0 && !loading && (
                     <Alert severity="info" sx={{mb: 4}}>
-                        No locations found matching your criteria. Try adjusting your filters.
+                        {t('locations.noResults')}
                     </Alert>
                 )}
 
@@ -215,10 +217,10 @@ const LocationList: React.FC = () => {
                 {!hasMore && locations.length > 0 && (
                     <Box sx={{textAlign: 'center', mt: 6, py: 4}}>
                         <Typography variant="h6" color="text.secondary" sx={{mb: 2}}>
-                            🎯 You've seen all available locations!
+                            {t('locations.allLocations')}
                         </Typography>
                         <Typography variant="body1" color="text.secondary">
-                            Try adjusting your filters to find more matches.
+                            {t('locations.tryAdjusting')}
                         </Typography>
                     </Box>
                 )}

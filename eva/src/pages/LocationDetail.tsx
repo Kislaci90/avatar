@@ -2,6 +2,7 @@ import React from 'react';
 import {useParams} from 'react-router-dom';
 import {gql} from '@apollo/client';
 import {useQuery} from "@apollo/client/react";
+import { useTranslation } from 'react-i18next';
 import {
     Alert,
     Box,
@@ -65,6 +66,7 @@ const GET_LOCATION_DETAIL = gql`
 `;
 
 const LocationDetail: React.FC = () => {
+    const { t } = useTranslation();
     const {id} = useParams<{ id: string }>();
 
     const numericId = id ? parseInt(id, 10) : null;
@@ -95,7 +97,7 @@ const LocationDetail: React.FC = () => {
         return (
             <Container maxWidth="lg" sx={{py: 4}}>
                 <Alert severity="warning">
-                    Location not found.
+                    {t('errors.notFound')}
                 </Alert>
             </Container>
         );
@@ -147,7 +149,7 @@ const LocationDetail: React.FC = () => {
                                             </ListItemIcon>
                                             <ListItemText
                                                 primary={location.contact.contactName}
-                                                secondary="Contact Name"
+                                                secondary={t('locations.contactName')}
                                             />
                                         </ListItem>
                                         <ListItem>
@@ -156,7 +158,7 @@ const LocationDetail: React.FC = () => {
                                             </ListItemIcon>
                                             <ListItemText
                                                 primary={location.contact.email}
-                                                secondary="Contact Email"
+                                                secondary={t('locations.email')}
                                             />
                                         </ListItem>
                                         <ListItem>
@@ -165,7 +167,7 @@ const LocationDetail: React.FC = () => {
                                             </ListItemIcon>
                                             <ListItemText
                                                 primary={location.contact.phoneNumber}
-                                                secondary="Contact Phonenumber"
+                                                secondary={t('locations.phoneNumber')}
                                             />
                                         </ListItem>
                                     </List>
@@ -196,7 +198,7 @@ const LocationDetail: React.FC = () => {
                                             </ListItemIcon>
                                             <ListItemText
                                                 primary={location.pitches.length}
-                                                secondary="No. Pitches"
+                                                secondary={t('locations.pitches')}
                                             />
                                         </ListItem>
                                     </List>
@@ -211,7 +213,7 @@ const LocationDetail: React.FC = () => {
                             pt: 2
                         }}>
                             <Typography variant="h5" component="h1">
-                                Description
+                                {t('locations.description')}
                             </Typography>
                         </Box>
                         <Box sx={{display: 'flex', justifyContent: 'left', mt: 2}}>
@@ -227,7 +229,7 @@ const LocationDetail: React.FC = () => {
                             pt: 2
                         }}>
                             <Typography variant="h5" component="h1">
-                                Facilities & Amenities
+                                {t('locations.properties')}
                             </Typography>
                         </Box>
                         <Box>

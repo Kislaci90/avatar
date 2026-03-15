@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import {Search, SportsSoccer, Tune} from "@mui/icons-material";
 import {useState} from "react";
+import { useTranslation } from "react-i18next";
 
 interface PitchSearchHeaderProps {
     filters: { searchTerm: string; surfaceType: string; pitchType: string },
@@ -29,24 +30,25 @@ export function PitchSearchHeader({
                                       handleSearch,
                                       handleFilterChange
                                   }: Readonly<PitchSearchHeaderProps>) {
+    const { t } = useTranslation();
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
     const pitchTypes = [
-        {value: 'FULL_SIZE', label: 'Full Size (11-a-side)', icon: <SportsSoccer/>},
-        {value: 'HALF_SIZE', label: 'Half Size', icon: <SportsSoccer/>},
-        {value: 'FIVE_A_SIDE', label: '5-a-Side', icon: <SportsSoccer/>},
-        {value: 'SEVEN_A_SIDE', label: '7-a-Side', icon: <SportsSoccer/>},
-        {value: 'INDOOR', label: 'Indoor', icon: <SportsSoccer/>},
-        {value: 'OUTDOOR', label: 'Outdoor', icon: <SportsSoccer/>}
+        {value: 'FULL_SIZE', label: t('pitches.fullSize'), icon: <SportsSoccer/>},
+        {value: 'HALF_SIZE', label: t('pitches.halfSize'), icon: <SportsSoccer/>},
+        {value: 'FIVE_A_SIDE', label: t('pitches.fiveASide'), icon: <SportsSoccer/>},
+        {value: 'SEVEN_A_SIDE', label: t('pitches.sevenASide'), icon: <SportsSoccer/>},
+        {value: 'INDOOR', label: t('pitches.indoor'), icon: <SportsSoccer/>},
+        {value: 'OUTDOOR', label: t('home.browseAllPitches'), icon: <SportsSoccer/>}
     ];
 
     const surfaceTypes = [
-        {value: 'GRASS', label: 'Natural Grass', color: '#4caf50'},
-        {value: 'ARTIFICIAL_GRASS', label: 'Artificial Grass', color: '#8bc34a'},
-        {value: 'CONCRETE', label: 'Concrete', color: '#9e9e9e'},
-        {value: 'ASPHALT', label: 'Asphalt', color: '#607d8b'},
-        {value: 'TURF', label: 'Turf', color: '#795548'},
-        {value: 'HARDCOURT', label: 'Hard Court', color: '#ff9800'}
+        {value: 'GRASS', label: t('pitches.naturalGrass'), color: '#4caf50'},
+        {value: 'ARTIFICIAL_GRASS', label: t('pitches.artificialGrass'), color: '#8bc34a'},
+        {value: 'CONCRETE', label: t('pitches.concrete'), color: '#9e9e9e'},
+        {value: 'ASPHALT', label: t('pitches.asphalt'), color: '#607d8b'},
+        {value: 'TURF', label: t('pitches.turf'), color: '#795548'},
+        {value: 'HARDCOURT', label: t('pitches.hardCourt'), color: '#ff9800'}
     ];
 
     const getActiveFiltersCount = () => {
@@ -66,7 +68,7 @@ export function PitchSearchHeader({
 
             <Box display="flex" alignItems="center" justifyContent="center" mb={3} sx={{borderBottom: 1}}>
                 <Typography variant="h4" fontWeight={700} color="primary.main">
-                    Find Your Pitches Locations
+                    {t('pitches.searchHeader')}
                 </Typography>
             </Box>
 
@@ -74,7 +76,7 @@ export function PitchSearchHeader({
             <Box display="flex" gap={2} mb={3}>
                 <TextField
                     fullWidth
-                    placeholder="Search by pitch name, description, or location..."
+                    placeholder={t('pitches.searchPlaceholder')}
                     value={filters.searchTerm}
                     onChange={e => handleFilterChange('searchTerm', e.target.value)}
                     slotProps={{
@@ -97,7 +99,7 @@ export function PitchSearchHeader({
                         borderRadius: 2,
                     }}
                 >
-                    Search
+                    {t('pitches.searchButton')}
                 </Button>
                 <Button
                     variant="outlined"
@@ -147,14 +149,14 @@ export function PitchSearchHeader({
                     {/* Pitch Type */}
                     <Grid size={{xs: 4}}>
                         <FormControl fullWidth>
-                            <InputLabel>Pitch Type</InputLabel>
+                            <InputLabel>{t('pitches.pitchType')}</InputLabel>
                             <Select
                                 value={filters.pitchType}
                                 onChange={e => handleFilterChange('pitchType', e.target.value)}
-                                label="Pitch Type"
+                                label={t('pitches.pitchType')}
                                 sx={{borderRadius: 2, backgroundColor: 'white'}}
                             >
-                                <MenuItem value="">All Types</MenuItem>
+                                <MenuItem value="">{t('pitches.allTypes')}</MenuItem>
                                 {pitchTypes.map(type => (
                                     <MenuItem key={type.value} value={type.value}>
                                         <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
@@ -170,14 +172,14 @@ export function PitchSearchHeader({
                     {/* Surface Type */}
                     <Grid size={{xs: 4}}>
                         <FormControl fullWidth>
-                            <InputLabel>Surface Type</InputLabel>
+                            <InputLabel>{t('pitches.surfaceType')}</InputLabel>
                             <Select
                                 value={filters.surfaceType}
                                 onChange={e => handleFilterChange('surfaceType', e.target.value)}
-                                label="Surface Type"
+                                label={t('pitches.surfaceType')}
                                 sx={{borderRadius: 2, backgroundColor: 'white'}}
                             >
-                                <MenuItem value="">All Surfaces</MenuItem>
+                                <MenuItem value="">{t('pitches.allSurfaces')}</MenuItem>
                                 {surfaceTypes.map(surface => (
                                     <MenuItem key={surface.value} value={surface.value}>
                                         <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>

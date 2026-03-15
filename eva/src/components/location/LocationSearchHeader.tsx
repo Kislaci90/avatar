@@ -20,6 +20,7 @@ import {
 import {ArrowDownward, ArrowUpward, Search, Tune} from "@mui/icons-material";
 import type {LocationFilter} from "../../pages/LocationList.tsx";
 import {useState} from "react";
+import { useTranslation } from "react-i18next";
 import {locationPropertyIconMap} from "../PropertyMap.tsx";
 
 interface SearchHeaderProps {
@@ -42,22 +43,9 @@ const MenuProps = {
     },
 };
 
-const locationSort = [
-    {value: "DISTANCE_ASC", label: "Nearest location", icon: <ArrowUpward/>},
-    {value: "DISTANCE_DESC", label: "Farest location", icon: <ArrowDownward/>},
-]
-
 const cities = [
     {value: 'Budapest', label: 'Budapest'},
     {value: 'Eger', label: 'Eger'}
-];
-
-const locationProperties = [
-    {value: 'FREE_PARKING', label: 'Free Parking', icon: locationPropertyIconMap["FREE_PARKING"]},
-    {value: 'SHOWER', label: 'Shower', icon: locationPropertyIconMap["SHOWER"]},
-    {value: 'CHANGING_ROOM', label: 'Changing room', icon: locationPropertyIconMap["CHANGING_ROOM"]},
-    {value: 'CAFE', label: 'Cafe', icon: locationPropertyIconMap["CAFE"]},
-    {value: 'EQUIPMENT_RENTAL', label: 'Equipment Rental', icon: locationPropertyIconMap["EQUIPMENT_RENTAL"]},
 ];
 
 export function LocationSearchHeader({
@@ -67,7 +55,21 @@ export function LocationSearchHeader({
                                          setSort
                                      }: Readonly<SearchHeaderProps>) {
 
+    const { t } = useTranslation();
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+
+    const locationSort = [
+        {value: "DISTANCE_ASC", label: t('locations.nearestLocation'), icon: <ArrowUpward/>},
+        {value: "DISTANCE_DESC", label: t('locations.farthestLocation'), icon: <ArrowDownward/>},
+    ]
+
+    const locationProperties = [
+        {value: 'FREE_PARKING', label: t('locations.freeParking'), icon: locationPropertyIconMap["FREE_PARKING"]},
+        {value: 'SHOWER', label: t('locations.shower'), icon: locationPropertyIconMap["SHOWER"]},
+        {value: 'CHANGING_ROOM', label: t('locations.changingRoom'), icon: locationPropertyIconMap["CHANGING_ROOM"]},
+        {value: 'CAFE', label: t('locations.cafe'), icon: locationPropertyIconMap["CAFE"]},
+        {value: 'EQUIPMENT_RENTAL', label: t('locations.equipmentRental'), icon: locationPropertyIconMap["EQUIPMENT_RENTAL"]},
+    ];
 
     const getActiveFiltersCount = () => {
         return Object.values(filters).filter(value =>
@@ -85,14 +87,14 @@ export function LocationSearchHeader({
         }}>
             <Box display="flex" alignItems="center" justifyContent="center" mb={3} sx={{borderBottom: 1}}>
                 <Typography variant="h4" fontWeight={700} color="primary.main">
-                    Find Your Football Locations
+                    {t('locations.searchHeader')}
                 </Typography>
             </Box>
 
             <Box display="flex" gap={2} mb={3}>
                 <TextField
                     fullWidth
-                    placeholder="Search by location name, description, or address..."
+                    placeholder={t('locations.searchPlaceholder')}
                     value={filters.searchTerm}
                     onChange={e => handleFilterChange('searchTerm', e.target.value)}
                     variant="outlined"
@@ -116,13 +118,14 @@ export function LocationSearchHeader({
                         borderRadius: 2,
                     }}
                 >
-                    Search
+                    {t('locations.searchButton')}
                 </Button>
                 <Button
                     variant="outlined"
                     onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
                     sx={{
                         borderRadius: 2,
+                        backgroundColor: 'white',
                     }}
                 >
                     <Tune/>
@@ -158,14 +161,14 @@ export function LocationSearchHeader({
                     <Grid container spacing={4}>
                         <Grid size={{xs: 4}}>
                             <FormControl fullWidth sx={{mb: 2}}>
-                                <InputLabel id="cities-multiple-checkbox-label">Cities</InputLabel>
+                                <InputLabel id="cities-multiple-checkbox-label">{t('locations.cities')}</InputLabel>
                                 <Select
                                     labelId="cities-multiple-checkbox-label"
                                     id="cities-multiple-checkbox"
                                     multiple
                                     value={filters.cities}
                                     onChange={e => handleFilterChange('cities', Array.from(e.target.value))}
-                                    input={<OutlinedInput label="Cities"/>}
+                                    input={<OutlinedInput label={t('locations.cities')}/>}
                                     renderValue={(selected) => selected.join(', ')}
                                     MenuProps={MenuProps}
                                     sx={{borderRadius: 2, backgroundColor: 'white'}}
@@ -181,15 +184,14 @@ export function LocationSearchHeader({
                         </Grid>
                         <Grid size={{xs: 4}}>
                             <FormControl fullWidth>
-                                <InputLabel id="location-properties-multiple-checkbox-label">Location
-                                    Property</InputLabel>
+                                <InputLabel id="location-properties-multiple-checkbox-label">{t('locations.locationProperty')}</InputLabel>
                                 <Select
                                     labelId="location-properties-multiple-checkbox-label"
                                     id="location-properties-multiple-checkbox"
                                     multiple
                                     value={filters.locationProperties}
                                     onChange={e => handleFilterChange('locationProperties', Array.from(e.target.value))}
-                                    input={<OutlinedInput label="Location Porperties"/>}
+                                    input={<OutlinedInput label={t('locations.locationProperty')}/>}
                                     renderValue={(selected) => selected.join(', ')}
                                     MenuProps={MenuProps}
                                     sx={{borderRadius: 2, backgroundColor: 'white'}}
@@ -208,12 +210,12 @@ export function LocationSearchHeader({
 
                         <Grid size={{xs: 4}}>
                             <FormControl fullWidth>
-                                <InputLabel id="sort-multiple-checkbox-label">Location Sort</InputLabel>
+                                <InputLabel id="sort-multiple-checkbox-label">{t('locations.locationSort')}</InputLabel>
                                 <Select
                                     labelId="sort-multiple-checkbox-label"
                                     id="sort-multiple-checkbox"
                                     onChange={e => setSort(String(e.target.value))}
-                                    input={<OutlinedInput label="Location sorting"/>}
+                                    input={<OutlinedInput label={t('locations.locationSort')}/>}
                                     sx={{borderRadius: 2, backgroundColor: 'white'}}
                                 >
                                     {locationSort.map((sort) => (
