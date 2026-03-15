@@ -47,7 +47,7 @@ const Register: React.FC = () => {
 
     const [register, {loading}] = useMutation<RegisterResult, {input: typeof formData}>(REGISTER_MUTATION, {
         onCompleted: (data) => {
-            localStorage.setItem('token', data.login.token);
+            localStorage.setItem('token', data.register.token);
             navigate('/');
             window.location.reload();
         },
