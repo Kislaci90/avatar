@@ -19,7 +19,12 @@ public class User extends BaseEntity implements UserDetails {
     @Getter
     @Setter
     @Column(nullable = false)
-    private String fullName;
+    private String firstName;
+
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private String lastName;
 
     @Setter
     @Getter

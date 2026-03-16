@@ -1,7 +1,8 @@
-package com.avatar.pandora.controller;
+package com.avatar.pandora.product.controllers;
 
 import com.avatar.pandora.product.models.location.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -25,6 +26,7 @@ import java.util.stream.Stream;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Transactional
+@DisplayName("Query Locations Controller Tests")
 class QueryLocationsControllerTest {
 
     @Autowired
@@ -32,6 +34,7 @@ class QueryLocationsControllerTest {
 
     @ParameterizedTest
     @MethodSource("provideLocationFilters")
+    @DisplayName("Should search locations with various filter combinations")
     void searchLocations(String searchTerm, Set<String> cities, Set<String> locationProperties, Integer expected) {
         LocationFilter locationFilter = LocationFilterBuilder.builder()
                 .searchTerm(searchTerm)
@@ -108,6 +111,7 @@ class QueryLocationsControllerTest {
     }
 
     @Test
+    @DisplayName("Should retrieve location details by ID")
     void getLocation() {
         LocationView location = httpGraphQlTester.documentName("locationDetails")
                 .variable("id", 1L)

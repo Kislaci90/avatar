@@ -14,19 +14,17 @@ import {
     TextField,
     Typography
 } from '@mui/material';
-import {Email, Lock, Person, PersonAdd, Phone, Visibility, VisibilityOff} from '@mui/icons-material';
-import type {RegisterResult} from "../services/users.ts";
+import {Email, Lock, PersonAdd, Visibility, VisibilityOff} from '@mui/icons-material';
+import type {RegisterResult, RegisterUserInput} from "../services/users.ts";
 
 const REGISTER_MUTATION = gql`
-    mutation Register($input: UserInput!) {
-        register(input: $input) {
-            token
-            type
-            user {
-                id
-                username
-                email
-                role
+    mutation Register($registerUserInput: RegisterUserInput!) {
+        register(registerUserInput: $registerUserInput) {
+            success
+            message
+            loginResponse {
+                token
+                expiresIn
             }
         }
     }
@@ -34,20 +32,18 @@ const REGISTER_MUTATION = gql`
 
 const Register: React.FC = () => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        username: '',
+    const [registerUserInput, setRegisterUserInput] = useState<RegisterUserInput>({
         email: '',
         password: '',
         firstName: '',
         lastName: '',
-        phoneNumber: ''
-    });
+    })
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
-    const [register, {loading}] = useMutation<RegisterResult, {input: typeof formData}>(REGISTER_MUTATION, {
+    const [register, {loading}] = useMutation<RegisterResult>(REGISTER_MUTATION, {
         onCompleted: (data) => {
-            localStorage.setItem('token', data.register.token);
+            localStorage.setItem('token', data.register.loginResponse.token);
             navigate('/');
             window.location.reload();
         },
@@ -59,16 +55,18 @@ const Register: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
+        console.log(registerUserInput);
         register({
             variables: {
-                input: formData
+                registerUserInput: registerUserInput
             }
         });
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({
-            ...formData,
+        console.log(e.target.name, e.target.value);
+        setRegisterUserInput({
+            ...registerUserInput,
             [e.target.name]: e.target.value
         });
     };
@@ -123,21 +121,32 @@ const Register: React.FC = () => {
                     )}
 
                     <Box component="form" onSubmit={handleSubmit} sx={{width: '100%'}}>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="username"
-                            label="Username"
-                            name="username"
-                            autoComplete="username"
-                            autoFocus
-                            value={formData.username}
-                            onChange={handleChange}
-                            InputProps={{
-                                startAdornment: <Person sx={{mr: 1, color: 'text.secondary'}}/>,
-                            }}
-                        />
+                        <Grid container spacing={2} sx={{mt: 0}}>
+                            <Grid size={{xs: 12, sm: 6}}>
+                                <TextField
+                                    margin="normal"
+                                    fullWidth
+                                    id="firstName"
+                                    label="First Name"
+                                    name="firstName"
+                                    autoComplete="given-name"
+                                    value={registerUserInput.firstName}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid size={{xs: 12, sm: 6}}>
+                                <TextField
+                                    margin="normal"
+                                    fullWidth
+                                    id="lastName"
+                                    label="Last Name"
+                                    name="lastName"
+                                    autoComplete="family-name"
+                                    value={registerUserInput.lastName}
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                        </Grid>
 
                         <TextField
                             margin="normal"
@@ -148,7 +157,7 @@ const Register: React.FC = () => {
                             name="email"
                             autoComplete="email"
                             type="email"
-                            value={formData.email}
+                            value={registerUserInput.email}
                             onChange={handleChange}
                             InputProps={{
                                 startAdornment: <Email sx={{mr: 1, color: 'text.secondary'}}/>,
@@ -164,7 +173,7 @@ const Register: React.FC = () => {
                             type={showPassword ? 'text' : 'password'}
                             id="password"
                             autoComplete="new-password"
-                            value={formData.password}
+                            value={registerUserInput.password}
                             onChange={handleChange}
                             InputProps={{
                                 startAdornment: <Lock sx={{mr: 1, color: 'text.secondary'}}/>,
@@ -176,48 +185,6 @@ const Register: React.FC = () => {
                                         {showPassword ? <VisibilityOff/> : <Visibility/>}
                                     </Button>
                                 ),
-                            }}
-                        />
-
-                        <Grid container spacing={2} sx={{mt: 0}}>
-                            <Grid size={{xs: 12, sm: 6}}>
-                                <TextField
-                                    margin="normal"
-                                    fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    name="firstName"
-                                    autoComplete="given-name"
-                                    value={formData.firstName}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-                            <Grid size={{xs: 12, sm: 6}}>
-                                <TextField
-                                    margin="normal"
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="family-name"
-                                    value={formData.lastName}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-                        </Grid>
-
-                        <TextField
-                            margin="normal"
-                            fullWidth
-                            id="phoneNumber"
-                            label="Phone Number"
-                            name="phoneNumber"
-                            autoComplete="tel"
-                            type="tel"
-                            value={formData.phoneNumber}
-                            onChange={handleChange}
-                            InputProps={{
-                                startAdornment: <Phone sx={{mr: 1, color: 'text.secondary'}}/>,
                             }}
                         />
 

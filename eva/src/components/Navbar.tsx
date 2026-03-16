@@ -12,9 +12,9 @@ const GET_CURRENT_USER = gql`
     query GetMe {
         getMe {
             id
-            username
             email
-            fullName
+            firstName
+            lastName
         }
     }
 `;
@@ -103,7 +103,7 @@ const Navbar: React.FC = () => {
               >
                 <MenuItem disabled>
                   <Typography variant="h5">
-                    {t('navigation.welcome')}, {data.getMe.username}!
+                    {t('navigation.welcome')}, {data.getMe.firstName} {data.getMe.lastName}!
                   </Typography>
                 </MenuItem>
                 <MenuItem onClick={handleLogout} sx={{ color: 'error.main' }}>

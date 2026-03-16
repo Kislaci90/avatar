@@ -1,10 +1,11 @@
-package com.avatar.pandora.controller;
+package com.avatar.pandora.product.controllers;
 
 import com.avatar.pandora.product.models.pitch.PitchFilter;
 import com.avatar.pandora.product.models.pitch.PitchFilterBuilder;
 import com.avatar.pandora.product.models.pitch.PitchProperty;
 import com.avatar.pandora.product.models.pitch.PitchView;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -29,6 +30,7 @@ import java.util.stream.Stream;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Transactional
+@DisplayName("Query Pitches Controller Tests")
 class QueryPitchesControllerTest {
 
     @Autowired
@@ -36,6 +38,7 @@ class QueryPitchesControllerTest {
 
     @ParameterizedTest
     @MethodSource("providePitchesFilters")
+    @DisplayName("Should search pitches with various filter combinations")
     void searchPitches(String searchTerm, Set<String> propertiesNames, Integer expected) {
         PitchFilter pitchFilter = PitchFilterBuilder.builder()
                 .searchTerm(searchTerm)
@@ -104,6 +107,7 @@ class QueryPitchesControllerTest {
     }
 
     @Test
+    @DisplayName("Should retrieve pitch details by ID")
     void getPitch() {
         PitchView pitchView = httpGraphQlTester.documentName("pitchDetails")
                 .variable("id", 1L)

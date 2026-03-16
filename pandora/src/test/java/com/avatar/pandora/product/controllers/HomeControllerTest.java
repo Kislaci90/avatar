@@ -1,7 +1,8 @@
-package com.avatar.pandora.controller;
+package com.avatar.pandora.product.controllers;
 
 import com.avatar.pandora.product.models.stats.HomeStatView;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
@@ -19,12 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Transactional
+@DisplayName("Home Controller Tests")
 public class HomeControllerTest {
 
     @Autowired
     private GraphQlTester httpGraphQlTester;
 
     @Test
+    @DisplayName("Should return correct home statistics with location, pitch, and city counts")
     void getHomeStat() {
         var homeStat = httpGraphQlTester.documentName("getHomeStat")
                 .execute()
