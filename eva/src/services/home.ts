@@ -5,5 +5,6 @@ export type HomeStatResult = {
 export type HomeStat = {
     totalPitches: number,
     totalLocations: number,
+    totalCities: number,
     totalUsers: number,
 };

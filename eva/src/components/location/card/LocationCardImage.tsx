@@ -82,7 +82,7 @@ export function LocationCardImage({location}: Readonly<LocationCardImageProps>) 
                 borderRadius: 1,
                 backdropFilter: "blur(2px)",
             }}>
-                <Favorite color="secondary"></Favorite>
+                <Favorite color={"secondary"}></Favorite>
             </Box>
 
 

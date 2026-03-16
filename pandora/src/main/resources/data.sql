@@ -1,13 +1,4 @@
 -- random magyar város lista
-WITH cities AS (
-    SELECT unnest(ARRAY[
-        'Budapest','Szeged','Debrecen','Győr','Pécs','Kecskemét',
-        'Miskolc','Székesfehérvár','Nyíregyháza','Szolnok',
-        'Tatabánya','Zalaegerszeg','Kaposvár','Békéscsaba',
-        'Sopron','Eger','Dunaújváros','Veszprém'
-        ]) AS city
-)
-
 INSERT INTO location (
     id,
     name,
@@ -27,7 +18,7 @@ SELECT
     'Sport Center ' || gs,
     'Test location description ' || gs,
     'https://sport' || gs || '.hu',
-    (SELECT city FROM cities ORDER BY random() LIMIT 1),
+    cities_array[1 + floor(random() * array_length(cities_array, 1))::int],
     'Sport utca ' || gs,
     (1000 + gs)::text,
     'Contact ' || gs,
@@ -41,7 +32,13 @@ SELECT
             4326
     ),
     CURRENT_TIMESTAMP
-FROM generate_series(1,100) gs;
+FROM generate_series(1,100) gs,
+     LATERAL (SELECT ARRAY[
+        'Budapest','Szeged','Debrecen','Győr','Pécs','Kecskemét',
+        'Miskolc','Székesfehérvár','Nyíregyháza','Szolnok',
+        'Tatabánya','Zalaegerszeg','Kaposvár','Békéscsaba',
+        'Sopron','Eger','Dunaújváros','Veszprém'
+        ] AS cities_array) ca;
 
 INSERT INTO location_properties (location_id, properties)
 SELECT
