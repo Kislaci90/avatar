@@ -123,4 +123,22 @@ class QueryLocationsControllerTest {
         Assertions.assertNotNull(location);
     }
 
+    @Test
+    @DisplayName("Should retrieve location search filters with available cities and properties")
+    void getLocationSearchFilters() {
+        var filters = httpGraphQlTester.documentName("getLocationSearchFilters")
+                .execute()
+                .path("data.getLocationSearchFilters")
+                .entity(LocationSearchFilter.class)
+                .get();
+
+        Assertions.assertNotNull(filters);
+        Assertions.assertNotNull(filters.cities());
+        Assertions.assertNotNull(filters.locationProperties());
+        Assertions.assertFalse(filters.cities().isEmpty(), "Cities should not be empty");
+        Assertions.assertFalse(filters.locationProperties().isEmpty(), "Properties should not be empty");
+        Assertions.assertTrue(filters.cities().contains("Budapest"), "Budapest should be in cities");
+        Assertions.assertTrue(filters.locationProperties().contains(LocationProperty.CAFE.name()), "CAFE property should be available");
+    }
+
 }

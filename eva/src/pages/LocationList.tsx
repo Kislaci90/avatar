@@ -1,65 +1,21 @@
 import React, {useEffect, useState} from 'react';
-import {gql} from '@apollo/client';
 import {useQuery} from "@apollo/client/react";
 import {Alert, Box, CircularProgress, Container, Grid, Typography} from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import {LoadMoreButton} from "../components/location/LoadMoreButton";
 import {LocationCard} from "../components/location/card/LocationCard.tsx";
 import type {UserLocation} from "../services/distance";
 import {LocationSearchHeader} from "../components/location/LocationSearchHeader.tsx";
-import type {LocationView, SearchLocationResult} from "../services/location.ts";
+import {
+    GET_LOCATION_SEARCH_FILTERS, type GetLocationSearchFilterResult, type LocationSearchFilter,
+    type LocationView,
+    SEARCH_LOCATIONS,
+    type SearchLocationResult
+} from "../services/location.ts";
 import {LocationPermission} from "../components/LocationPermission.tsx";
+import ViewToggle from "../components/location/ViewToggle";
+import LocationsMap from "../components/location/map/LocationsMap";
 import theme from "../theme/theme.ts";
-
-const SEARCH_LOCATIONS = gql`
-    query SearchLocations(
-        $filter: LocationFilter!,
-        $count:Int!,
-        $offset:Int!,
-        $sort:String,
-    ) {
-        searchLocations(
-            filter: $filter,
-            count: $count,
-            offset: $offset,
-            sort: $sort,
-        ) {
-            total
-            pageable {
-                pageNumber
-                pageSize
-            }
-            content {
-                id
-                name
-                description
-                website
-                address {
-                    addressLine
-                    postalCode
-                    city
-                }
-                contact {
-                    contactName
-                    email
-                    phoneNumber
-                }
-                geom {
-                    x
-                    y
-                }
-                properties
-                pitches {
-                    id
-                    name
-                    pitchType
-                    surfaceType
-                    properties
-                }
-            }
-        }
-    }
-`;
 
 export type LocationFilter = {
     searchTerm: string;
@@ -69,6 +25,7 @@ export type LocationFilter = {
 
 const LocationList: React.FC = () => {
     const { t } = useTranslation();
+    const [view, setView] = useState<'grid' | 'map'>('grid');
     const [filters, setFilters] = useState<LocationFilter>({
         searchTerm: '',
         locationProperties: [],
@@ -78,14 +35,46 @@ const LocationList: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [locations, setLocations] = useState<LocationView[]>([]);
+    const [searchFilters, setSearchFilters] = useState<LocationSearchFilter>({
+        locationProperties: [''],
+        cities: [''],
+    });
     const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
     const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
 
     const handleFilterChange = <K extends keyof LocationFilter>(
         field: K,
-        value: LocationFilter[K]
+        value: string | string[],
+        checked?: boolean
     ) => {
-        setFilters(prev => ({...prev, [field]: value}));
+        setFilters(prev => {
+            const current = prev[field];
+
+            if (Array.isArray(current)) {
+                if (typeof checked === "boolean") {
+                    return {
+                        ...prev,
+                        [field]: checked
+                            ? [...current, value as string]
+                            : current.filter(v => v !== value)
+                    };
+                }
+
+                if (Array.isArray(value)) {
+                    return { ...prev, [field]: value };
+                }
+
+                return {
+                    ...prev,
+                    [field]: [...current, value as string]
+                };
+            }
+
+            return {
+                ...prev,
+                [field]: value as string
+            };
+        });
     };
 
     const clearFilters = () => {
@@ -122,7 +111,7 @@ const LocationList: React.FC = () => {
         }
     }, []);
 
-    const {data, loading, error, refetch} = useQuery<SearchLocationResult>(SEARCH_LOCATIONS, {
+    const {data: locationsData, loading: locationsLoading, error: locationsError, refetch: locationsRefetch} = useQuery<SearchLocationResult>(SEARCH_LOCATIONS, {
         variables: {
             filter: filters,
             count: 0,
@@ -131,20 +120,27 @@ const LocationList: React.FC = () => {
         }
     });
 
+    const {data: searchFiltersData, error: searchFilterError} = useQuery<GetLocationSearchFilterResult>(GET_LOCATION_SEARCH_FILTERS);
+
     useEffect(() => {
-        if (data?.searchLocations) {
-            console.log(data?.searchLocations.content);
-            setLocations(data.searchLocations.content);
-            setHasMore(data.searchLocations.content.length >= 6);
+        if (searchFiltersData?.getLocationSearchFilters) {
+            setSearchFilters(searchFiltersData.getLocationSearchFilters);
         }
-    }, [data]);
+    }, [searchFiltersData]);
+
+    useEffect(() => {
+        if (locationsData?.searchLocations) {
+            setLocations(locationsData.searchLocations.content);
+            setHasMore(locationsData.searchLocations.content.length >= 6);
+        }
+    }, [locationsData]);
 
     const handleSearch = () => {
         setCurrentPage(1);
         setHasMore(true);
-        refetch({
+        locationsRefetch({
             filters: filters,
-            count: 6, // Number of items per page
+            count: 6,
             offset: currentPage * 6,
             sort: sort
         });
@@ -159,6 +155,24 @@ const LocationList: React.FC = () => {
         const displayedItems = (nextPage + 1) * itemsPerPage;
 
         setHasMore(displayedItems < totalItems);
+    };
+
+    const handleViewChange = (newView: 'grid' | 'map') => {
+        if (newView === 'map') {
+            locationsRefetch({
+                filter: filters,
+                count: 0,
+                offset: locationsData?.searchLocations.total,
+                sort: sort,
+            });
+        }if (newView === 'grid') {
+            locationsRefetch({
+                filter: filters,
+                count: 0,
+                offset: 6,
+            })
+        }
+        setView(newView);
     };
 
     return (
@@ -176,45 +190,55 @@ const LocationList: React.FC = () => {
 
                     <LocationSearchHeader filters={filters} clearFilters={clearFilters}
                                           handleSearch={handleSearch} setSort={setSort}
-                                          handleFilterChange={handleFilterChange}/>
+                                          handleFilterChange={handleFilterChange}
+                                          searchFilters={searchFilters}/>
                 </Container>
             </Box>
             <Container maxWidth="lg" sx={{py: 4}}>
-                {loading && (
-                    <Box textAlign="center" py={6}>
-                        <CircularProgress/>
-                    </Box>
-                )}
-                {error && (
+                {/* View Toggle */}
+                <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
+                    <Typography variant="h5" sx={{mb: 2}}>{t('locations.total')}: {locationsData?.searchLocations.total}</Typography>
+                    <ViewToggle currentView={view} onViewChange={handleViewChange} />
+                </Box>
+
+                {(locationsError || searchFilterError) && (
                     <Alert severity="error" sx={{mb: 4}}>
-                        {error.message}
+                        {locationsError?.message}, {searchFilterError?.message}
                     </Alert>
                 )}
-                {locations.length === 0 && !loading && (
+                {locations.length === 0 && !locationsLoading && (
                     <Alert severity="info" sx={{mb: 4}}>
                         {t('locations.noResults')}
                     </Alert>
                 )}
 
-                {locations.length > 0 && (
+                {/* Map View */}
+                {view === 'map' && locations.length > 0 && (
+                    <Box sx={{mb: 4}}>
+                        <LocationsMap locations={locations} />
+                    </Box>
+                )}
+
+                {/* Grid View */}
+                {view === 'grid' && locations.length > 0 && (
                     <Box sx={{mb: 6}}>
                         <Grid container spacing={3}>
                             {locations.map((location: LocationView) => (
                                 <Grid size={{xs: 12, sm: 6, lg: 4}} key={location.id}>
-                                    <LocationCard location={location} userLocation={userLocation}/>
+                                    <LocationCard location={location} userLocation={userLocation} useImage={true}/>
                                 </Grid>
                             ))}
                         </Grid>
                     </Box>
                 )}
 
-                {hasMore && locations.length > 0 && (
+                {hasMore && locations.length > 0 && view === 'grid' && (
                     <Box sx={{display: 'flex', justifyContent: 'center', mt: 6}}>
-                        <LoadMoreButton loading={loading} onClick={handleLoadMore}/>
+                        <LoadMoreButton loading={locationsLoading} onClick={handleLoadMore}/>
                     </Box>
                 )}
 
-                {!hasMore && locations.length > 0 && (
+                {!hasMore && locations.length > 0 && view === 'grid' && (
                     <Box sx={{textAlign: 'center', mt: 6, py: 4}}>
                         <Typography variant="h6" color="text.secondary" sx={{mb: 2}}>
                             {t('locations.allLocations')}

@@ -1,6 +1,7 @@
 type Query {
     searchLocations(count:Int, offset:Int, filter: LocationFilter, sort: String): LocationPage
     getLocation(id: Int!): LocationView
+    getLocationSearchFilters: LocationSearchFilter
 }
 
 input LocationFilter {
@@ -47,4 +48,9 @@ type Contact {
     contactName: String!
     email: String!
     phoneNumber: String!
+}
+
+type LocationSearchFilter {
+    cities: [String]
+    locationProperties: [String]
 }

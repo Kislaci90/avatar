@@ -98,7 +98,15 @@
     "properties": "Facilities",
     "pitches": "Available Pitches",
     "reviews": "Reviews",
-    "gallery": "Gallery"
+    "gallery": "Gallery",
+    "total": "Total",
+    "property" : {
+      "CAFE": "Coffee",
+      "FREE_PARKING": "Free Parking",
+      "SHOWER": "Shower",
+      "CHANGING_ROOM": "Changing Room",
+      "EQUIPMENT_RENTAL": "Equipment Rental"
+    }
   },
   "pitches": {
     "title": "Pitches",
@@ -166,5 +174,7 @@
     "loginFailed": "Login failed. Please try again.",
     "registerFailed": "Registration failed. Please try again.",
     "notFound": "Page not found"
-  }
+  },
+  "grid": "Grid View",
+  "map": "Map View"
 }

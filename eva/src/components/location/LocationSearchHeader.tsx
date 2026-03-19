@@ -4,8 +4,10 @@ import {
     Checkbox,
     Chip,
     Collapse,
-    Divider,
     FormControl,
+    FormControlLabel,
+    FormGroup,
+    FormLabel,
     Grid,
     InputAdornment,
     InputLabel,
@@ -14,21 +16,24 @@ import {
     OutlinedInput,
     Paper,
     Select,
+    Stack,
     TextField,
     Typography
 } from "@mui/material";
 import {ArrowDownward, ArrowUpward, Search, Tune} from "@mui/icons-material";
 import type {LocationFilter} from "../../pages/LocationList.tsx";
 import {useState} from "react";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import {locationPropertyIconMap} from "../PropertyMap.tsx";
+import type {LocationSearchFilter} from "../../services/location.ts";
 
 interface SearchHeaderProps {
     filters: LocationFilter,
     handleSearch: () => void,
     clearFilters: () => void,
-    handleFilterChange: <K extends keyof LocationFilter>(field: K, value: LocationFilter[K]) => void,
-    setSort: (value: string) => void
+    handleFilterChange: <K extends keyof LocationFilter>(field: K, value: LocationFilter[K] | string | string[]) => void,
+    setSort: (value: string) => void,
+    searchFilters?: LocationSearchFilter
 }
 
 const ITEM_HEIGHT = 48;
@@ -43,19 +48,15 @@ const MenuProps = {
     },
 };
 
-const cities = [
-    {value: 'Budapest', label: 'Budapest'},
-    {value: 'Eger', label: 'Eger'}
-];
-
 export function LocationSearchHeader({
                                          filters,
                                          handleSearch,
                                          handleFilterChange,
-                                         setSort
+                                         setSort,
+                                         searchFilters
                                      }: Readonly<SearchHeaderProps>) {
 
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
     const locationSort = [
@@ -63,17 +64,9 @@ export function LocationSearchHeader({
         {value: "DISTANCE_DESC", label: t('locations.farthestLocation'), icon: <ArrowDownward/>},
     ]
 
-    const locationProperties = [
-        {value: 'FREE_PARKING', label: t('locations.freeParking'), icon: locationPropertyIconMap["FREE_PARKING"]},
-        {value: 'SHOWER', label: t('locations.shower'), icon: locationPropertyIconMap["SHOWER"]},
-        {value: 'CHANGING_ROOM', label: t('locations.changingRoom'), icon: locationPropertyIconMap["CHANGING_ROOM"]},
-        {value: 'CAFE', label: t('locations.cafe'), icon: locationPropertyIconMap["CAFE"]},
-        {value: 'EQUIPMENT_RENTAL', label: t('locations.equipmentRental'), icon: locationPropertyIconMap["EQUIPMENT_RENTAL"]},
-    ];
-
     const getActiveFiltersCount = () => {
         return Object.values(filters).filter(value =>
-            value !== '' && value !== null && !Array.isArray(value)
+            value !== '' && value !== null
         ).length;
     };
 
@@ -91,7 +84,7 @@ export function LocationSearchHeader({
                 </Typography>
             </Box>
 
-            <Box display="flex" gap={2} mb={3}>
+            <Box display="flex" gap={2} mb={1}>
                 <TextField
                     fullWidth
                     placeholder={t('locations.searchPlaceholder')}
@@ -137,7 +130,7 @@ export function LocationSearchHeader({
                 <Box display="flex" gap={1} flexWrap="wrap" mb={3}>
                     {filters.searchTerm && (
                         <Chip
-                            label={`Search: ${filters.searchTerm}`}
+                            label={`${t('locations.search')}: ${filters.searchTerm}`}
                             onDelete={() => handleFilterChange('searchTerm', '')}
                             color="primary"
                             variant="outlined"
@@ -145,8 +138,16 @@ export function LocationSearchHeader({
                     )}
                     {filters.cities && filters.cities.length > 0 && (
                         <Chip
-                            label={`Cities: ${cities.find(c => filters.cities.includes(c.value))?.label}`}
+                            label={`${t('locations.cities')}: ${filters.cities.join(', ')}`}
                             onDelete={() => handleFilterChange('cities', [])}
+                            color="primary"
+                            variant="outlined"
+                        />
+                    )}
+                    {filters.locationProperties && filters.locationProperties.length > 0 && (
+                        <Chip
+                            label={`${t('locations.locationProperty')}: ${filters.locationProperties.join(', ')}`}
+                            onDelete={() => handleFilterChange('locationProperties', [])}
                             color="primary"
                             variant="outlined"
                         />
@@ -154,12 +155,10 @@ export function LocationSearchHeader({
                 </Box>
             )}
 
-
-            <Collapse in={showAdvancedFilters}>
-                <Divider sx={{my: 3}}/>
-                <Box sx={{flexGrow: 1}}>
+            <Collapse in={showAdvancedFilters} sx={{borderRadius: 2, backgroundColor: 'white', p: 3}}>
+                <Box sx={{flexGrow: 1,}}>
                     <Grid container spacing={4}>
-                        <Grid size={{xs: 4}}>
+                        <Grid size={{xs: 6}}>
                             <FormControl fullWidth sx={{mb: 2}}>
                                 <InputLabel id="cities-multiple-checkbox-label">{t('locations.cities')}</InputLabel>
                                 <Select
@@ -167,48 +166,23 @@ export function LocationSearchHeader({
                                     id="cities-multiple-checkbox"
                                     multiple
                                     value={filters.cities}
-                                    onChange={e => handleFilterChange('cities', Array.from(e.target.value))}
+                                    onChange={e => handleFilterChange('cities', e.target.value)}
                                     input={<OutlinedInput label={t('locations.cities')}/>}
                                     renderValue={(selected) => selected.join(', ')}
                                     MenuProps={MenuProps}
                                     sx={{borderRadius: 2, backgroundColor: 'white'}}
                                 >
-                                    {cities.map((city) => (
-                                        <MenuItem key={city.value} value={city.value}>
-                                            <Checkbox checked={filters.cities.includes(city.value)}/>
-                                            <ListItemText primary={city.label}/>
+                                    {searchFilters?.cities.map((city) => (
+                                        <MenuItem key={city} value={city}>
+                                            <Checkbox checked={filters.cities.includes(city)}/>
+                                            <ListItemText primary={city}/>
                                         </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid size={{xs: 4}}>
-                            <FormControl fullWidth>
-                                <InputLabel id="location-properties-multiple-checkbox-label">{t('locations.locationProperty')}</InputLabel>
-                                <Select
-                                    labelId="location-properties-multiple-checkbox-label"
-                                    id="location-properties-multiple-checkbox"
-                                    multiple
-                                    value={filters.locationProperties}
-                                    onChange={e => handleFilterChange('locationProperties', Array.from(e.target.value))}
-                                    input={<OutlinedInput label={t('locations.locationProperty')}/>}
-                                    renderValue={(selected) => selected.join(', ')}
-                                    MenuProps={MenuProps}
-                                    sx={{borderRadius: 2, backgroundColor: 'white'}}
-                                >
-                                    {locationProperties.map((property) => (
-                                        <MenuItem key={property.value} value={property.value}>
-                                            <Checkbox checked={filters.locationProperties.includes(property.value)}/>
-                                            {property.icon}
-                                            <ListItemText primary={property.label}/>
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
 
-                        </Grid>
-
-                        <Grid size={{xs: 4}}>
+                        <Grid size={{xs: 6}}>
                             <FormControl fullWidth>
                                 <InputLabel id="sort-multiple-checkbox-label">{t('locations.locationSort')}</InputLabel>
                                 <Select
@@ -220,11 +194,39 @@ export function LocationSearchHeader({
                                 >
                                     {locationSort.map((sort) => (
                                         <MenuItem key={sort.value} value={sort.value}>
-                                            <Box sx={{mr: 1, mt: 1}}>{sort.icon}</Box> {sort.label}
+                                            <Stack direction="row" spacing={1} alignItems="center">
+                                                {sort.icon}
+                                                {sort.label}
+                                            </Stack>
                                         </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
+                        </Grid>
+                        <Grid size={{xs: 12}}>
+                            <FormLabel>{t('locations.locationProperty')}</FormLabel>
+                            <FormGroup row sx={{
+                                mt: 2,
+                                flexWrap: 'wrap',
+                                gap: 2,
+                                justifyContent: 'space-between',
+                                backgroundColor: 'white',
+                                borderRadius: 2,
+                                padding: 2
+                            }}>
+                                {searchFilters?.locationProperties.map((property) => (
+                                    <FormControlLabel control={
+                                        <Checkbox checked={filters.locationProperties.includes(property)}
+                                                  value={property}
+                                                  onChange={e => handleFilterChange('locationProperties', e.target.value, e.target.checked)}/>}
+                                                      label={
+                                                          <Stack direction="row" spacing={1} alignItems="center">
+                                                              {locationPropertyIconMap[property]}
+                                                              {t('locations.property.'+property)}
+                                                          </Stack>
+                                                      }/>
+                                ))}
+                            </FormGroup>
                         </Grid>
                     </Grid>
                 </Box>

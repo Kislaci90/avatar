@@ -1,0 +1,7 @@
+query getLocationSearchFilters {
+    getLocationSearchFilters {
+        cities
+        locationProperties
+    }
+}
+

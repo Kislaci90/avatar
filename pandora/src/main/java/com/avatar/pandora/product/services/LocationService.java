@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,11 +23,11 @@ public class LocationService {
         this.locationConverter = locationConverter;
     }
 
-    public Page<LocationView> searchLocations(Integer count, Integer offset, LocationFilter filter, String sort) {
+    public Page<LocationView> searchLocations(Integer pageNumber, Integer pageSize, LocationFilter filter, String sort) {
         LocationSort locationSort = LocationSort.valueOf(Optional.ofNullable(sort).orElse(LocationSort.DISTANCE_ASC.name()));
-        PageRequest pageRequest = PageRequest.of(count, offset, locationSort.getDirection(), locationSort.getField());
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, locationSort.getDirection(), locationSort.getField());
 
-        return locationRepository.searchByLocationFiler(pageRequest,
+        return locationRepository.searchByLocationFilter(pageRequest,
                 filter.searchTerm(),
                 filter.cities(),
                 filter.cities().isEmpty(),
@@ -58,5 +59,11 @@ public class LocationService {
 
     public Long countCities() {
         return locationRepository.countDistinctCities();
+    }
+
+    public LocationSearchFilter getLocationSearchFilter() {
+        return new LocationSearchFilter(
+                locationRepository.getDistinctCities(),
+                Arrays.stream(LocationProperty.values()).map(LocationProperty::name).collect(Collectors.toSet()));
     }
 }

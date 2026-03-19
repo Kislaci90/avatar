@@ -75,11 +75,6 @@
     "locationSort": "Helyszín Rendezés",
     "nearestLocation": "Legközelebbi helyszín",
     "farthestLocation": "Legtávolabbi helyszín",
-    "freeParking": "Ingyenes Parkolás",
-    "shower": "Zuhany",
-    "changingRoom": "Öltöző",
-    "cafe": "Kávézó",
-    "equipmentRental": "Felszerlés Kölcsönzés",
     "loading": "Helyszínek betöltése...",
     "error": "Hiba a helyszínek betöltésekor",
     "allLocations": "🎯 Az összes rendelkezésre álló helyszínt láttad!",
@@ -98,7 +93,15 @@
     "properties": "Felszereltség",
     "pitches": "Elérhető Pályák",
     "reviews": "Értékelések",
-    "gallery": "Galéria"
+    "gallery": "Galéria",
+    "total": "Összesen",
+    "property" : {
+      "CAFE": "Kávé",
+      "FREE_PARKING": "Ingyenes Parkolás",
+      "SHOWER": "Zuhany",
+      "CHANGING_ROOM": "Öltöző",
+      "EQUIPMENT_RENTAL": "Felszerlés Kölcsönzés"
+    }
   },
   "pitches": {
     "title": "Pályák",
@@ -170,5 +173,7 @@
     "loginFailed": "Bejelentkezés sikertelen. Próbáld újra.",
     "registerFailed": "Regisztráció sikertelen. Próbáld újra.",
     "notFound": "Az oldal nem található"
-  }
+  },
+  "grid": "Rács Nézet",
+  "map": "Térkép Nézet"
 }
