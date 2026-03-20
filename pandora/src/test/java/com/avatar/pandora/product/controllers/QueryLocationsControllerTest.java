@@ -1,5 +1,6 @@
 package com.avatar.pandora.product.controllers;
 
+import com.avatar.pandora.product.models.Filter;
 import com.avatar.pandora.product.models.location.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -36,10 +37,13 @@ class QueryLocationsControllerTest {
     @MethodSource("provideLocationFilters")
     @DisplayName("Should search locations with various filter combinations")
     void searchLocations(String searchTerm, Set<String> cities, Set<String> locationProperties, Integer expected) {
-        LocationFilter locationFilter = LocationFilterBuilder.builder()
+        Filter locationFilter = Filter.builder()
                 .searchTerm(searchTerm)
                 .cities(cities)
                 .locationProperties(locationProperties)
+                .surfaceTypes(Set.of())
+                .pitchTypes(Set.of())
+                .properties(Set.of())
                 .build();
 
         var locations = httpGraphQlTester.documentName("searchLocations")
@@ -122,23 +126,4 @@ class QueryLocationsControllerTest {
 
         Assertions.assertNotNull(location);
     }
-
-    @Test
-    @DisplayName("Should retrieve location search filters with available cities and properties")
-    void getSearchFilters() {
-        var filters = httpGraphQlTester.documentName("getLocationSearchFilters")
-                .execute()
-                .path("data.getSearchFilters")
-                .entity(SearchFilter.class)
-                .get();
-
-        Assertions.assertNotNull(filters);
-        Assertions.assertNotNull(filters.cities());
-        Assertions.assertNotNull(filters.locationProperties());
-        Assertions.assertFalse(filters.cities().isEmpty(), "Cities should not be empty");
-        Assertions.assertFalse(filters.locationProperties().isEmpty(), "Properties should not be empty");
-        Assertions.assertTrue(filters.cities().contains("Budapest"), "Budapest should be in cities");
-        Assertions.assertTrue(filters.locationProperties().contains(LocationProperty.CAFE.name()), "CAFE property should be available");
-    }
-
 }

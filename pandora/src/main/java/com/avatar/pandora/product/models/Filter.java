@@ -1,23 +1,25 @@
 package com.avatar.pandora.product.models;
 
+import com.avatar.pandora.product.validation.ValidFilter;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 @Getter
 @Setter
+@Builder
+@ValidFilter
 public class Filter implements FilterMap {
-    String searchTerm;
-    private Set<String> locationProperties = new HashSet<>();
-    private Set<String> cities = new HashSet<>();
-    private Set<String> pitchProperties = new HashSet<>();
-    private Set<String> surfaceTypes = new HashSet<>();
-    private Set<String> pitchTypes = new HashSet<>();
-    private Set<String> properties = new HashSet<>();
+    private String searchTerm;
+    private Set<String> locationProperties;
+    private Set<String> cities;
+    private Set<String> surfaceTypes;
+    private Set<String> pitchTypes;
+    private Set<String> properties;
 
     @Override
     public Map<String, Object> getAsMap() {
@@ -30,9 +32,6 @@ public class Filter implements FilterMap {
         }
         if (!cities.isEmpty()) {
             map.put("cities", cities);
-        }
-        if (!pitchProperties.isEmpty()) {
-            map.put("pitchProperties", pitchProperties);
         }
         if (!surfaceTypes.isEmpty()) {
             map.put("surfaceTypes", surfaceTypes);

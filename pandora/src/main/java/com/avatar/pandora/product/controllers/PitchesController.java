@@ -3,6 +3,7 @@ package com.avatar.pandora.product.controllers;
 import com.avatar.pandora.product.models.Filter;
 import com.avatar.pandora.product.models.pitch.PitchView;
 import com.avatar.pandora.product.services.PitchService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -20,7 +21,10 @@ public class PitchesController {
     }
 
     @QueryMapping
-    public Page<PitchView> searchPitches(@Argument(name = "count") Integer count, @Argument(name = "offset") Integer offset, @Argument(name = "filter") Filter filter, @Argument(name = "sort") String sort) {
+    public Page<PitchView> searchPitches(@Argument(name = "count") Integer count,
+                                         @Argument(name = "offset") Integer offset,
+                                         @Valid @Argument(name = "filter") Filter filter,
+                                         @Argument(name = "sort") String sort) {
         return pitchService.searchPitches(count, offset, filter, sort);
     }
 

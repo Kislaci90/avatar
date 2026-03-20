@@ -1,4 +1,4 @@
-query searchPitches($count: Int!, $offset: Int!, $filter: PitchFilter!, $sort: PitchSort) {
+query searchPitches($count: Int!, $offset: Int!, $filter: PitchFilter!, $sort: String) {
     searchPitches(count: $count, offset: $offset, filter: $filter, sort:  $sort) {
         total
         pageable {
