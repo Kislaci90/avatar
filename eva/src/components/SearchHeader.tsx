@@ -63,11 +63,11 @@ export function SearchHeader({
     const {t} = useTranslation();
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
     const [searchFilters, setSearchFilters] = useState<LocationSearchFilter>({
-        locationProperties: [''],
-        cities: [''],
-        pitchProperties: [''],
-        pitchTypes: [''],
-        surfaceTypes: [''],
+        locationProperties: [],
+        cities: [],
+        pitchProperties: [],
+        pitchTypes: [],
+        surfaceTypes: [],
     });
 
     const sort = [
@@ -298,7 +298,6 @@ export function SearchHeader({
                                                   onChange={e => handleFilterChange('surfaceTypes', e.target.value, e.target.checked)}/>}
                                                       label={
                                                           <Stack direction="row" spacing={1} alignItems="center">
-                                                              {pitchPropertyIconMap[surfaceType]}
                                                               {t('pitches.surfaceTypeOptions.'+surfaceType)}
                                                           </Stack>
                                                       }/>
@@ -324,7 +323,6 @@ export function SearchHeader({
                                                   onChange={e => handleFilterChange('pitchTypes', e.target.value, e.target.checked)}/>}
                                                       label={
                                                           <Stack direction="row" spacing={1} alignItems="center">
-                                                              {pitchPropertyIconMap[type]}
                                                               {t('pitches.pitchTypeOptions.'+type)}
                                                           </Stack>
                                                       }/>

@@ -24,8 +24,8 @@ export function LocationCardImage({location}: Readonly<LocationCardImageProps>) 
     const theme = useTheme()
 
     const mapCenter: [number, number] = [
-        parseInt(location.geom?.x?.toString() || '47.5'),
-        parseInt(location.geom?.y?.toString() || '19.04')
+        Number(location.geom?.x || 47.5),
+        Number(location.geom?.y || 19.04)
     ];
 
     return (

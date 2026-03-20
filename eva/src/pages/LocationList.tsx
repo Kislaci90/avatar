@@ -79,7 +79,7 @@ const LocationList: React.FC = () => {
     useEffect(() => {
         if (data?.searchLocations) {
             setLocations(data.searchLocations.content);
-            setHasMore(data.searchLocations.content.length > 6);
+            setHasMore(data.searchLocations.content.length >= 6);
         }
     }, [data]);
 
@@ -87,7 +87,7 @@ const LocationList: React.FC = () => {
         setCurrentPage(1);
         setHasMore(true);
         refetch({
-            filters: filters,
+            filter: filters,
             count: 0,
             offset: currentPage * 6,
             sort: sort

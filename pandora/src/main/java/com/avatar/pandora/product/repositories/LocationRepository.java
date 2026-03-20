@@ -11,6 +11,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -61,7 +62,7 @@ public interface LocationRepository extends
     Long countDistinctCities();
 
     @Query("""
-       SELECT DISTINCT l.address.city FROM Location l
+       SELECT DISTINCT l.address.city FROM Location l ORDER BY l.address.city ASC
        """)
-    Set<String> getDistinctCities();
+    List<String> getDistinctCities();
 }

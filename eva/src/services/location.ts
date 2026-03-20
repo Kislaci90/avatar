@@ -17,11 +17,11 @@ export type GetLocationSearchFilterResult = {
 }
 
 export type LocationSearchFilter = {
-    cities: [string],
-    locationProperties: [string],
-    pitchProperties: [string],
-    pitchTypes: [string],
-    surfaceTypes: [string],
+    cities: string[],
+    locationProperties: string[],
+    pitchProperties: string[],
+    pitchTypes: string[],
+    surfaceTypes: string[],
 }
 
 export const SEARCH_LOCATIONS = gql`
@@ -88,7 +88,7 @@ export type SearchLocations = {
         pageNumber: number,
         pageSize: number,
     },
-    content: [LocationView],
+    content: LocationView[],
 }
 
 export type LocationView = {

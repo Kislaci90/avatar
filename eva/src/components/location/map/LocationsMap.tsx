@@ -17,8 +17,8 @@ const LocationsMap: React.FC<LocationsMapProps> = ({ locations }) => {
     const calculateCenter = (): [number, number] => {
         if (locations.length === 0) return [47.5, 19.04]; // Default Budapest
         
-        const avgLat = locations.reduce((sum, loc) => sum + ( parseInt(loc.geom?.x) || 0), 0) / locations.length;
-        const avgLng = locations.reduce((sum, loc) => sum + (parseInt(loc.geom?.y) || 0), 0) / locations.length;
+        const avgLat = locations.reduce((sum, loc) => sum + (Number(loc.geom?.x) || 0), 0) / locations.length;
+        const avgLng = locations.reduce((sum, loc) => sum + (Number(loc.geom?.y) || 0), 0) / locations.length;
         return [avgLat, avgLng];
     };
 
@@ -37,14 +37,14 @@ const LocationsMap: React.FC<LocationsMapProps> = ({ locations }) => {
             >
                 <TileLayer
                     url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-                    attribution='"&copy; OpenStreetMap & CARTO"'
+                    attribution="&copy; OpenStreetMap & CARTO"
                 />
                 
                 {locations.map((location) => (
                     location.geom && (
                         <Marker
                             key={`${location.id}`}
-                            position={[parseInt(location.geom.x), parseInt(location.geom.y)]}
+                            position={[Number(location.geom.x), Number(location.geom.y)]}
                         >
                             <Popup maxWidth={300}>
                                 <LocationPopup location={location} />

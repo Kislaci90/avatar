@@ -32,7 +32,7 @@ public class LocationService {
         PageRequest pageRequest = PageRequest.of(count, offset, locationSort.getDirection(), locationSort.getField());
 
         return locationRepository.searchByLocationFilter(pageRequest,
-                filter.getSearchTerm(),
+                Optional.of(filter.getSearchTerm()).orElse(""),
                 filter.getCities(),
                 filter.getCities().isEmpty(),
                 filter.getLocationProperties().stream().map(LocationProperty::valueOf).collect(Collectors.toSet()),

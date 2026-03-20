@@ -100,7 +100,7 @@
       "FREE_PARKING": "Ingyenes Parkolás",
       "SHOWER": "Zuhany",
       "CHANGING_ROOM": "Öltöző",
-      "EQUIPMENT_RENTAL": "Felszerlés Kölcsönzés"
+      "EQUIPMENT_RENTAL": "Felszerelés Kölcsönzés"
     }
   },
   "pitches": {
@@ -158,7 +158,7 @@
     "type": "Típus",
     "surface": "Felület",
     "location": "Helyszín",
-    "properties": "Palya Tulajdonságok",
+    "properties": "Palya tulajdonságok",
     "reviews": "Értékelések",
     "gallery": "Galéria",
     "bookNow": "Foglalj Most",

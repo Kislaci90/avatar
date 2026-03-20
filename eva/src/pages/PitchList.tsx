@@ -61,16 +61,17 @@ const PitchList: React.FC = () => {
         pitchTypes: [],
     });
     const [sort, setSort] = useState<string>('DISTANCE_ASC');
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [pitches, setPitches] = useState<PitchView[]>([]);
     const [userLocation] = useState<UserLocation | null>(null);
+    const itemsPerPage = 6;
 
     const {loading, error, data, refetch} = useQuery<SearchPitchesResult>(SEARCH_PITCHES, {
         variables: {
             filter: filters,
-            count: 0,
-            offset: currentPage * 6,
+            count: itemsPerPage,
+            offset: currentPage * itemsPerPage,
             sort: sort
         }
     });
@@ -78,7 +79,7 @@ const PitchList: React.FC = () => {
     useEffect(() => {
         if (data?.searchPitches) {
             setPitches(data.searchPitches.content);
-            setHasMore(data.searchPitches.content.length > 6);
+            setHasMore(data.searchPitches.content.length >= itemsPerPage);
         }
     }, [data]);
 
@@ -91,11 +92,14 @@ const PitchList: React.FC = () => {
     };
 
     const handleSearch = () => {
-        setCurrentPage(1);
+        // Use local page value instead of relying on async state update
+        const newPage = 0;
+        const newOffset = newPage * itemsPerPage;
+        setCurrentPage(newPage);
         setHasMore(true);
         refetch({
-            count: 6,
-            offset: currentPage * 6,
+            count: itemsPerPage,
+            offset: newOffset,
             filter: filters,
             sort: sort,
         });
@@ -103,13 +107,15 @@ const PitchList: React.FC = () => {
 
     const handleLoadMore = () => {
         const nextPage = currentPage + 1;
+        const newOffset = nextPage * itemsPerPage;
         setCurrentPage(nextPage);
 
-        const itemsPerPage = 6;
-        const totalItems = pitches.length;
-        const displayedItems = (nextPage + 1) * itemsPerPage;
-
-        setHasMore(displayedItems < totalItems);
+        refetch({
+            count: itemsPerPage,
+            offset: newOffset,
+            filter: filters,
+            sort: sort,
+        });
     };
 
     return (

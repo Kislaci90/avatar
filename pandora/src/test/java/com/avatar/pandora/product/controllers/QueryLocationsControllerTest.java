@@ -128,7 +128,7 @@ class QueryLocationsControllerTest {
     void getSearchFilters() {
         var filters = httpGraphQlTester.documentName("getLocationSearchFilters")
                 .execute()
-                .path("data.getLocationSearchFilters")
+                .path("data.getSearchFilters")
                 .entity(SearchFilter.class)
                 .get();
 

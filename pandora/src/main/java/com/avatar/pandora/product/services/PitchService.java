@@ -1,7 +1,6 @@
 package com.avatar.pandora.product.services;
 
 import com.avatar.pandora.product.models.Filter;
-import com.avatar.pandora.product.models.location.LocationSort;
 import com.avatar.pandora.product.models.pitch.*;
 import com.avatar.pandora.product.repositories.PitchRepository;
 import org.springframework.data.domain.Page;
