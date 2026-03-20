@@ -56,7 +56,7 @@ public interface LocationRepository extends
                                           Integer locationPropertySize);
 
     @Query("""
-       SELECT COUNT(DISTINCT l.address.city) FROM Location l ORDER BY l.address.city ASC
+       SELECT COUNT(DISTINCT l.address.city) FROM Location l
        """)
     Long countDistinctCities();
 

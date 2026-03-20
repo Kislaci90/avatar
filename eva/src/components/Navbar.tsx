@@ -21,7 +21,10 @@ const GET_CURRENT_USER = gql`
 
 const Navbar: React.FC = () => {
   const { t } = useTranslation();
-  const { data } = useQuery<GetMeResult>(GET_CURRENT_USER);
+  const isLoggedIn = !!localStorage.getItem('token');
+  const { data } = useQuery<GetMeResult>(GET_CURRENT_USER, {
+    skip: !isLoggedIn
+  });
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleLogout = () => {

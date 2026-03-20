@@ -134,6 +134,9 @@ jobs:
       - build-backend
       - build-frontend
     if: always()
+    permissions:
+      pull-requests: write
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
