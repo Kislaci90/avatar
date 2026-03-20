@@ -135,6 +135,26 @@
     "asphalt": "Asphalt",
     "turf": "Turf",
     "hardCourt": "Hard Court",
+    "pitchTypeOptions": {
+      "FULL_SIZE": "Full Size (11-a-side)",
+      "HALF_SIZE": "Half Size",
+      "FIVE_A_SIDE": "5-a-Side",
+      "SEVEN_A_SIDE": "7-a-Side",
+      "INDOOR": "Indoor",
+      "OUTDOOR": "Outdoor"
+    },
+    "surfaceTypeOptions": {
+      "GRASS": "Natural Grass",
+      "ARTIFICIAL_GRASS": "Artificial Grass",
+      "CONCRETE": "Concrete",
+      "ASPHALT": "Asphalt",
+      "TURF": "Turf",
+      "HARDCOURT": "Hard Court"
+    },
+    "pitchPropertyOptions": {
+      "LIGHTING": "Lighting",
+      "COVERED": "Covered"
+    },
     "details": "Pitch Details",
     "type": "Type",
     "surface": "Surface",

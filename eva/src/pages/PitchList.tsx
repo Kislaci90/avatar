@@ -2,21 +2,22 @@ import React, {useEffect, useState} from 'react';
 import {gql} from '@apollo/client';
 import {useQuery} from "@apollo/client/react";
 import {Alert, Box, CircularProgress, Container, Grid, Typography} from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import type {PitchView} from "../services/location.ts";
 import type {SearchPitchesResult} from "../services/pitches.ts";
 import {PitchCard} from "../components/pitch/card/PitchCard.tsx";
 import {LoadMoreButton} from "../components/location/LoadMoreButton.tsx";
-import {PitchSearchHeader} from "../components/pitch/PitchSearchHeader.tsx";
 import theme from "../theme/theme.ts";
 import type {UserLocation} from "../services/distance.ts";
+import {SearchHeader} from "../components/SearchHeader.tsx";
+import {type Filter, handleFilterChange} from "../services/filters";
 
 const SEARCH_PITCHES = gql`
     query searchPitches(
         $filter: PitchFilter!,
         $count:Int!,
         $offset:Int!,
-        $sort:PitchSort!,
+        $sort:String!,
     ) {
         searchPitches(
             filter: $filter,
@@ -50,26 +51,26 @@ const SEARCH_PITCHES = gql`
 `;
 
 const PitchList: React.FC = () => {
-    const { t } = useTranslation();
-    const [filters, setFilters] = useState({
+    const {t} = useTranslation();
+    const [filters, setFilters] = useState<Filter>({
         searchTerm: '',
-        surfaceType: '',
-        pitchType: '',
+        locationProperties: [],
+        cities: [],
+        properties: [],
+        surfaceTypes: [],
+        pitchTypes: [],
     });
-    const [sort] = useState({
-        field: 'name',
-        direction: 'ASC'
-    });
-    const [currentPage, setCurrentPage] = useState(0);
+    const [sort, setSort] = useState<string>('DISTANCE_ASC');
+    const [currentPage, setCurrentPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [pitches, setPitches] = useState<PitchView[]>([]);
     const [userLocation] = useState<UserLocation | null>(null);
 
-    const {loading, error, data, refetch, fetchMore} = useQuery<SearchPitchesResult>(SEARCH_PITCHES, {
+    const {loading, error, data, refetch} = useQuery<SearchPitchesResult>(SEARCH_PITCHES, {
         variables: {
             filter: filters,
             count: 0,
-            offset: 12,
+            offset: currentPage * 6,
             sort: sort
         }
     });
@@ -77,22 +78,26 @@ const PitchList: React.FC = () => {
     useEffect(() => {
         if (data?.searchPitches) {
             setPitches(data.searchPitches.content);
-            setHasMore(data.searchPitches.content.length >= 12);
+            setHasMore(data.searchPitches.content.length > 6);
         }
     }, [data]);
 
-    const handleFilterChange = (field: string, value: string) => {
-        setFilters(prev => ({...prev, [field]: value}));
+    const onFilterChange = <K extends keyof Filter>(
+        field: K,
+        value: string | string[],
+        checked?: boolean
+    ) => {
+        setFilters(prev => handleFilterChange(prev, field, value, checked));
     };
 
     const handleSearch = () => {
-        setCurrentPage(0);
+        setCurrentPage(1);
         setHasMore(true);
         refetch({
-            page: 0,
-            size: 12,
-            pitchType: filters.pitchType || null,
-            surfaceType: filters.surfaceType || null,
+            count: 6,
+            offset: currentPage * 6,
+            filter: filters,
+            sort: sort,
         });
     };
 
@@ -100,38 +105,11 @@ const PitchList: React.FC = () => {
         const nextPage = currentPage + 1;
         setCurrentPage(nextPage);
 
-        fetchMore({
-            variables: {
-                page: nextPage,
-                size: 12,
-                pitchType: filters.pitchType || null,
-                surfaceType: filters.surfaceType || null,
-            },
-            // updateQuery: (prev, {fetchMoreResult}) => {
-            //     if (!fetchMoreResult) return prev;
-            //
-            //     const newContent = [...prev.searchPitches.content, ...fetchMoreResult.searchPitches.content];
-            //     const hasMorePages = nextPage < fetchMoreResult.searchPitches.total - 1;
-            //     setHasMore(hasMorePages);
-            //
-            //     return {
-            //         searchPitches: {
-            //             ...fetchMoreResult.searchPitches,
-            //             content: newContent
-            //         }
-            //     };
-            // }
-        });
-    };
+        const itemsPerPage = 6;
+        const totalItems = pitches.length;
+        const displayedItems = (nextPage + 1) * itemsPerPage;
 
-    const clearFilters = () => {
-        setFilters({
-            searchTerm: '',
-            pitchType: '',
-            surfaceType: ''
-        });
-        setCurrentPage(0);
-        setHasMore(true);
+        setHasMore(displayedItems < totalItems);
     };
 
     return (
@@ -142,8 +120,8 @@ const PitchList: React.FC = () => {
                 background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.primary.main}15 100%)`
             }}>
                 <Container maxWidth="lg">
-                    <PitchSearchHeader filters={filters} clearFilters={clearFilters} handleSearch={handleSearch}
-                                       handleFilterChange={handleFilterChange}/>
+                    <SearchHeader filters={filters} handleSearch={handleSearch}
+                                  setSort={setSort} handleFilterChange={onFilterChange}/>
                 </Container>
             </Box>
 

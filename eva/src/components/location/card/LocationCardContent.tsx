@@ -3,6 +3,7 @@ import {type LocationView} from "../../../services/location.ts";
 import {locationPropertyIconMap} from "../../PropertyMap.tsx";
 import {useNavigate} from "react-router-dom";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
+import {t} from "i18next";
 
 interface LocationCardContentProps {
     location: LocationView
@@ -63,7 +64,7 @@ export function LocationCardContent({location}: Readonly<LocationCardContentProp
                             <Chip size="small"
                                   variant="outlined"
                                   color="primary"
-                                  label={property}
+                                  label={t('locations.property.'+property)}
                                   sx={{
                                       '& .MuiChip-label': {
                                           px: 0.7,

@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
             component={Link}
             to="/pitches"
             sx={{color: 'white'}}
-            startIcon={<Search />}
+            startIcon={<Search color="secondary"/>}
           >
             {t('navigation.findPitches')}
           </Button>
@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
             component={Link}
             to="/locations"
             sx={{color: 'white'}}
-            startIcon={<LocationOn />}
+            startIcon={<LocationOn color="secondary"/>}
           >
             {t('navigation.findLocations')}
           </Button>
@@ -119,7 +119,7 @@ const Navbar: React.FC = () => {
                 to="/login"
                 sx={{color: 'white'}}
                 color="primary"
-                startIcon={<Login/>}
+                startIcon={<Login color="secondary"/>}
               >
                 {t('navigation.login')}
               </Button>
@@ -128,7 +128,7 @@ const Navbar: React.FC = () => {
                 to="/register"
                 sx={{color: 'white'}}
                 color="primary"
-                startIcon={<PersonAdd />}
+                startIcon={<PersonAdd color="secondary"/>}
               >
                 {t('navigation.register')}
               </Button>

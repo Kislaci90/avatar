@@ -1,21 +1,27 @@
 import {gql} from "@apollo/client";
 
-export const GET_LOCATION_SEARCH_FILTERS = gql`
-    query GetLocationSearchFilters {
-        getLocationSearchFilters {
+export const GET_SEARCH_FILTERS = gql`
+    query GetSearchFilters {
+        getSearchFilters {
             cities
             locationProperties
+            surfaceTypes
+            pitchTypes
+            pitchProperties
         }
     }
 `;
 
 export type GetLocationSearchFilterResult = {
-    getLocationSearchFilters: LocationSearchFilter,
+    getSearchFilters: LocationSearchFilter,
 }
 
 export type LocationSearchFilter = {
     cities: [string],
     locationProperties: [string],
+    pitchProperties: [string],
+    pitchTypes: [string],
+    surfaceTypes: [string],
 }
 
 export const SEARCH_LOCATIONS = gql`

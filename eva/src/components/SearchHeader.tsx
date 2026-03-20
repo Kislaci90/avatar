@@ -21,19 +21,24 @@ import {
     Typography
 } from "@mui/material";
 import {ArrowDownward, ArrowUpward, Search, Tune} from "@mui/icons-material";
-import type {LocationFilter} from "../../pages/LocationList.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {locationPropertyIconMap} from "../PropertyMap.tsx";
-import type {LocationSearchFilter} from "../../services/location.ts";
+import {locationPropertyIconMap, pitchPropertyIconMap} from "./PropertyMap.tsx";
+import {
+    GET_SEARCH_FILTERS,
+    type GetLocationSearchFilterResult,
+    type LocationSearchFilter,
+} from "../services/location.ts";
+import theme from "../theme/theme.ts";
+import type {Filter} from "../services/filters.ts";
+import {useQuery} from "@apollo/client/react";
+import {getPitchTypeColor, getSurfaceTypeColor} from "../services/pitches.ts";
 
-interface SearchHeaderProps {
-    filters: LocationFilter,
+interface SearchHeaderProps<F extends Filter> {
+    filters: F,
     handleSearch: () => void,
-    clearFilters: () => void,
-    handleFilterChange: <K extends keyof LocationFilter>(field: K, value: LocationFilter[K] | string | string[]) => void,
+    handleFilterChange: <K extends keyof Filter>(field: K, value: Filter[K] | string | string[], checked?: boolean) => void,
     setSort: (value: string) => void,
-    searchFilters?: LocationSearchFilter
 }
 
 const ITEM_HEIGHT = 48;
@@ -48,25 +53,45 @@ const MenuProps = {
     },
 };
 
-export function LocationSearchHeader({
+export function SearchHeader({
                                          filters,
                                          handleSearch,
                                          handleFilterChange,
-                                         setSort,
-                                         searchFilters
-                                     }: Readonly<SearchHeaderProps>) {
+                                         setSort
+                                     }: Readonly<SearchHeaderProps<Filter>>) {
 
     const {t} = useTranslation();
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+    const [searchFilters, setSearchFilters] = useState<LocationSearchFilter>({
+        locationProperties: [''],
+        cities: [''],
+        pitchProperties: [''],
+        pitchTypes: [''],
+        surfaceTypes: [''],
+    });
 
-    const locationSort = [
+    const sort = [
         {value: "DISTANCE_ASC", label: t('locations.nearestLocation'), icon: <ArrowUpward/>},
         {value: "DISTANCE_DESC", label: t('locations.farthestLocation'), icon: <ArrowDownward/>},
     ]
 
+    const {
+        data: searchFiltersData,
+    } = useQuery<GetLocationSearchFilterResult>(GET_SEARCH_FILTERS);
+
+    useEffect(() => {
+        if (searchFiltersData?.getSearchFilters) {
+            setSearchFilters(searchFiltersData.getSearchFilters);
+        }
+    }, [searchFiltersData]);
+
     const getActiveFiltersCount = () => {
-        return Object.values(filters).filter(value =>
-            value !== '' && value !== null
+        return Object.values(filters).filter(value => {
+                if (Array.isArray(value)) {
+                    return value.length > 0;
+                }
+                return value !== '' && value !== null
+            }
         ).length;
     };
 
@@ -109,6 +134,7 @@ export function LocationSearchHeader({
                     sx={{
                         px: 4,
                         borderRadius: 2,
+                        backgroundColor: theme.palette.secondary.main,
                     }}
                 >
                     {t('locations.searchButton')}
@@ -146,7 +172,7 @@ export function LocationSearchHeader({
                     )}
                     {filters.locationProperties && filters.locationProperties.length > 0 && (
                         <Chip
-                            label={`${t('locations.locationProperty')}: ${filters.locationProperties.join(', ')}`}
+                            label={`${t('locations.locationProperty')}: ${filters.locationProperties.map((p: string) => t('locations.property.' + p)).join(', ')}`}
                             onDelete={() => handleFilterChange('locationProperties', [])}
                             color="primary"
                             variant="outlined"
@@ -192,7 +218,7 @@ export function LocationSearchHeader({
                                     input={<OutlinedInput label={t('locations.locationSort')}/>}
                                     sx={{borderRadius: 2, backgroundColor: 'white'}}
                                 >
-                                    {locationSort.map((sort) => (
+                                    {sort.map((sort) => (
                                         <MenuItem key={sort.value} value={sort.value}>
                                             <Stack direction="row" spacing={1} alignItems="center">
                                                 {sort.icon}
@@ -215,7 +241,7 @@ export function LocationSearchHeader({
                                 padding: 2
                             }}>
                                 {searchFilters?.locationProperties.map((property) => (
-                                    <FormControlLabel control={
+                                    <FormControlLabel key={property} control={
                                         <Checkbox checked={filters.locationProperties.includes(property)}
                                                   value={property}
                                                   onChange={e => handleFilterChange('locationProperties', e.target.value, e.target.checked)}/>}
@@ -223,6 +249,83 @@ export function LocationSearchHeader({
                                                           <Stack direction="row" spacing={1} alignItems="center">
                                                               {locationPropertyIconMap[property]}
                                                               {t('locations.property.'+property)}
+                                                          </Stack>
+                                                      }/>
+                                ))}
+                            </FormGroup>
+                        </Grid>
+                        <Grid size={{xs: 4}}>
+                            <FormLabel>{t('pitches.properties')}</FormLabel>
+                            <FormGroup sx={{
+                                mt: 2,
+                                flexWrap: 'wrap',
+                                gap: 2,
+                                justifyContent: 'space-between',
+                                backgroundColor: 'white',
+                                borderRadius: 2,
+                                padding: 2
+                            }}>
+                                {searchFilters?.pitchProperties.map((property) => (
+                                    <FormControlLabel key={property} control={
+                                        <Checkbox checked={filters.properties.includes(property)}
+                                                  value={property}
+                                                  onChange={e => handleFilterChange('properties', e.target.value, e.target.checked)}/>}
+                                                      label={
+                                                          <Stack direction="row" spacing={1} alignItems="center">
+                                                              {pitchPropertyIconMap[property]}
+                                                              {t('pitches.pitchPropertyOptions.'+property)}
+                                                          </Stack>
+                                                      }/>
+                                ))}
+                            </FormGroup>
+                        </Grid>
+                        <Grid size={{xs: 4}}>
+                            <FormLabel>{t('pitches.surfaceType')}</FormLabel>
+                            <FormGroup sx={{
+                                mt: 2,
+                                flexWrap: 'wrap',
+                                gap: 2,
+                                justifyContent: 'space-between',
+                                backgroundColor: 'white',
+                                borderRadius: 2,
+                                padding: 2
+                            }}>
+                                {searchFilters?.surfaceTypes.map((surfaceType) => (
+                                    <FormControlLabel key={surfaceType} control={
+                                        <Checkbox checked={filters.surfaceTypes.includes(surfaceType)}
+                                                  sx={{color: getSurfaceTypeColor(surfaceType), '&.Mui-checked': {color: getSurfaceTypeColor(surfaceType)}}}
+                                                  value={surfaceType}
+                                                  onChange={e => handleFilterChange('surfaceTypes', e.target.value, e.target.checked)}/>}
+                                                      label={
+                                                          <Stack direction="row" spacing={1} alignItems="center">
+                                                              {pitchPropertyIconMap[surfaceType]}
+                                                              {t('pitches.surfaceTypeOptions.'+surfaceType)}
+                                                          </Stack>
+                                                      }/>
+                                ))}
+                            </FormGroup>
+                        </Grid>
+                        <Grid size={{xs: 4}}>
+                            <FormLabel>{t('pitches.pitchType')}</FormLabel>
+                            <FormGroup sx={{
+                                mt: 2,
+                                flexWrap: 'wrap',
+                                gap: 2,
+                                justifyContent: 'space-between',
+                                backgroundColor: 'white',
+                                borderRadius: 2,
+                                padding: 2
+                            }}>
+                                {searchFilters?.pitchTypes.map((type) => (
+                                    <FormControlLabel key={type} control={
+                                        <Checkbox checked={filters.pitchTypes.includes(type)}
+                                                  value={type}
+                                                  sx={{color: getPitchTypeColor(type), '&.Mui-checked': {color: getPitchTypeColor(type)}}}
+                                                  onChange={e => handleFilterChange('pitchTypes', e.target.value, e.target.checked)}/>}
+                                                      label={
+                                                          <Stack direction="row" spacing={1} alignItems="center">
+                                                              {pitchPropertyIconMap[type]}
+                                                              {t('pitches.pitchTypeOptions.'+type)}
                                                           </Stack>
                                                       }/>
                                 ))}

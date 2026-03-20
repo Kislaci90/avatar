@@ -125,11 +125,11 @@ class QueryLocationsControllerTest {
 
     @Test
     @DisplayName("Should retrieve location search filters with available cities and properties")
-    void getLocationSearchFilters() {
+    void getSearchFilters() {
         var filters = httpGraphQlTester.documentName("getLocationSearchFilters")
                 .execute()
                 .path("data.getLocationSearchFilters")
-                .entity(LocationSearchFilter.class)
+                .entity(SearchFilter.class)
                 .get();
 
         Assertions.assertNotNull(filters);

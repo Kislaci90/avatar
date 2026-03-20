@@ -95,7 +95,7 @@
       "CAFE": "Kaffee",
       "FREE_PARKING": "Kostenloses Parken",
       "SHOWER": "Dusche",
-      "CHANGING_ROOM": "Changing Room",
+      "CHANGING_ROOM": "Umkleideraum",
       "EQUIPMENT_RENTAL": "Ausrüstungsvermietung"
     }
   },
@@ -126,9 +126,28 @@
     "asphalt": "Asphalt",
     "turf": "Rasen",
     "hardCourt": "Hartplatz",
+    "pitchTypeOptions": {
+      "FULL_SIZE": "Vollfeld (11er-Platz)",
+      "HALF_SIZE": "Halber Platz",
+      "FIVE_A_SIDE": "5er-Platz",
+      "SEVEN_A_SIDE": "7er-Platz",
+      "INDOOR": "Hallenplatz",
+      "OUTDOOR": "Außenplatz"
+    },
+    "surfaceTypeOptions": {
+      "GRASS": "Naturrasen",
+      "ARTIFICIAL_GRASS": "Kunstrasen",
+      "CONCRETE": "Beton",
+      "ASPHALT": "Asphalt",
+      "TURF": "Rasen",
+      "HARDCOURT": "Hartplatz"
+    },
+    "pitchPropertyOptions": {
+      "LIGHTING": "Beleuchtung",
+      "COVERED": "Überdacht"
+    },
     "allPitches": "🎯 Du hast alle verfügbaren Plätze gesehen!",
     "tryAdjusting": "Versuchen Sie, Ihre Filter anzupassen, um mehr Übereinstimmungen zu finden.",
-    "searchPlaceholder": "Nach Platzname suchen",
     "loading": "Plätze werden geladen...",
     "error": "Fehler beim Laden von Plätzen",
     "details": "Platzdetails",

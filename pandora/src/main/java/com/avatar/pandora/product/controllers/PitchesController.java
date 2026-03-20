@@ -1,7 +1,6 @@
 package com.avatar.pandora.product.controllers;
 
-import com.avatar.pandora.product.models.pitch.PitchFilter;
-import com.avatar.pandora.product.models.pitch.PitchSort;
+import com.avatar.pandora.product.models.Filter;
 import com.avatar.pandora.product.models.pitch.PitchView;
 import com.avatar.pandora.product.services.PitchService;
 import org.springframework.data.domain.Page;
@@ -21,7 +20,7 @@ public class PitchesController {
     }
 
     @QueryMapping
-    public Page<PitchView> searchPitches(@Argument(name = "count") Integer count, @Argument(name = "offset") Integer offset, @Argument(name = "filter") PitchFilter filter, @Argument(name = "sort") PitchSort sort) {
+    public Page<PitchView> searchPitches(@Argument(name = "count") Integer count, @Argument(name = "offset") Integer offset, @Argument(name = "filter") Filter filter, @Argument(name = "sort") String sort) {
         return pitchService.searchPitches(count, offset, filter, sort);
     }
 

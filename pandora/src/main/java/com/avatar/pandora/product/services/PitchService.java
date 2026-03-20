@@ -1,11 +1,14 @@
 package com.avatar.pandora.product.services;
 
+import com.avatar.pandora.product.models.Filter;
+import com.avatar.pandora.product.models.location.LocationSort;
 import com.avatar.pandora.product.models.pitch.*;
 import com.avatar.pandora.product.repositories.PitchRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,11 +29,12 @@ public class PitchService {
         return pitchConverter.convertToView(pitchRepository.save(pitchConverter.convertToEntity(new Pitch(), pitchForm)));
     }
 
-    public Page<PitchView> searchPitches(Integer count, Integer offset, PitchFilter filter, PitchSort sort) {
-        PageRequest pageable = PageRequest.of(count, offset, sort.getSort());
-        Set<PitchProperty> properties = filter.properties().stream().map(PitchProperty::valueOf).collect(Collectors.toSet());
+    public Page<PitchView> searchPitches(Integer count, Integer offset, Filter filter, String sort) {
+        PitchSort pitchSort = PitchSort.valueOf(Optional.ofNullable(sort).orElse(PitchSort.DISTANCE_ASC.name()));
+        PageRequest pageable = PageRequest.of(count, offset, pitchSort.getDirection(), pitchSort.getField());
+        Set<PitchProperty> properties = filter.getProperties().stream().map(PitchProperty::valueOf).collect(Collectors.toSet());
         return pitchRepository.searchByPitchFiler(pageable,
-                filter.searchTerm(),
+                filter.getSearchTerm(),
                 properties,
                 properties.isEmpty(),
                 properties.size()).map(pitchConverter::convertToView);

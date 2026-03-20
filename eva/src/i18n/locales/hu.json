@@ -94,7 +94,7 @@
     "pitches": "Elérhető Pályák",
     "reviews": "Értékelések",
     "gallery": "Galéria",
-    "total": "Összesen",
+    "total": "Összes találat",
     "property" : {
       "CAFE": "Kávé",
       "FREE_PARKING": "Ingyenes Parkolás",
@@ -119,7 +119,6 @@
     "allTypes": "Összes Típus",
     "allSurfaces": "Összes Felület",
     "pitchType": "Pálya Típus",
-    "surfaceType": "Felület Típus",
     "fullSize": "Teljes Méret (11-es pálya)",
     "halfSize": "Fél Méret",
     "fiveASide": "5 Fős",
@@ -130,6 +129,27 @@
     "asphalt": "Aszfalt",
     "turf": "Gyep",
     "hardCourt": "Kemény Pálya",
+    "pitchTypeOptions": {
+      "FULL_SIZE": "Teljes Méret (11-es pálya)",
+      "HALF_SIZE": "Fél Méret",
+      "FIVE_A_SIDE": "5 Fős",
+      "SEVEN_A_SIDE": "7 Fős",
+      "INDOOR": "Fedett",
+      "OUTDOOR": "Nyitott"
+    },
+    "surfaceType" : "Felület Típus",
+    "surfaceTypeOptions": {
+      "GRASS": "Természetes Fű",
+      "ARTIFICIAL_GRASS": "Műfű",
+      "CONCRETE": "Beton",
+      "ASPHALT": "Aszfalt",
+      "TURF": "Gyep",
+      "HARDCOURT": "Kemény Pálya"
+    },
+    "pitchPropertyOptions": {
+      "LIGHTING": "Világítás",
+      "COVERED": "Fedett"
+    },
     "allPitches": "🎯 Az összes rendelkezésre álló pályát láttad!",
     "tryAdjusting": "Próbáld meg módosítani a szűrőket további egyezések megtalálásához.",
     "loading": "Pályák betöltése...",
@@ -138,7 +158,7 @@
     "type": "Típus",
     "surface": "Felület",
     "location": "Helyszín",
-    "properties": "Tulajdonságok",
+    "properties": "Palya Tulajdonságok",
     "reviews": "Értékelések",
     "gallery": "Galéria",
     "bookNow": "Foglalj Most",

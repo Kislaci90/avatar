@@ -1,92 +1,43 @@
 import React, {useEffect, useState} from 'react';
 import {useQuery} from "@apollo/client/react";
-import {Alert, Box, CircularProgress, Container, Grid, Typography} from '@mui/material';
+import {Alert, Box, Container, Grid, Typography} from '@mui/material';
 import {useTranslation} from 'react-i18next';
 import {LoadMoreButton} from "../components/location/LoadMoreButton";
 import {LocationCard} from "../components/location/card/LocationCard.tsx";
 import type {UserLocation} from "../services/distance";
-import {LocationSearchHeader} from "../components/location/LocationSearchHeader.tsx";
-import {
-    GET_LOCATION_SEARCH_FILTERS, type GetLocationSearchFilterResult, type LocationSearchFilter,
-    type LocationView,
-    SEARCH_LOCATIONS,
-    type SearchLocationResult
-} from "../services/location.ts";
+import {SearchHeader} from "../components/SearchHeader.tsx";
+import {type LocationView, SEARCH_LOCATIONS, type SearchLocationResult} from "../services/location.ts";
 import {LocationPermission} from "../components/LocationPermission.tsx";
 import ViewToggle from "../components/location/ViewToggle";
 import LocationsMap from "../components/location/map/LocationsMap";
 import theme from "../theme/theme.ts";
-
-export type LocationFilter = {
-    searchTerm: string;
-    locationProperties: string[];
-    cities: string[];
-};
+import {type Filter, handleFilterChange} from "../services/filters";
 
 const LocationList: React.FC = () => {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const [view, setView] = useState<'grid' | 'map'>('grid');
-    const [filters, setFilters] = useState<LocationFilter>({
+    const [filters, setFilters] = useState<Filter>({
         searchTerm: '',
         locationProperties: [],
         cities: [],
+        properties: [],
+        surfaceTypes: [],
+        pitchTypes: [],
     });
-    const [sort, setSort] = useState<string>();
+    const [sort, setSort] = useState<string>('DISTANCE_ASC');
     const [currentPage, setCurrentPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [locations, setLocations] = useState<LocationView[]>([]);
-    const [searchFilters, setSearchFilters] = useState<LocationSearchFilter>({
-        locationProperties: [''],
-        cities: [''],
-    });
     const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
     const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
 
-    const handleFilterChange = <K extends keyof LocationFilter>(
+    const onFilterChange = <K extends keyof Filter>(
         field: K,
         value: string | string[],
         checked?: boolean
     ) => {
-        setFilters(prev => {
-            const current = prev[field];
-
-            if (Array.isArray(current)) {
-                if (typeof checked === "boolean") {
-                    return {
-                        ...prev,
-                        [field]: checked
-                            ? [...current, value as string]
-                            : current.filter(v => v !== value)
-                    };
-                }
-
-                if (Array.isArray(value)) {
-                    return { ...prev, [field]: value };
-                }
-
-                return {
-                    ...prev,
-                    [field]: [...current, value as string]
-                };
-            }
-
-            return {
-                ...prev,
-                [field]: value as string
-            };
-        });
+        setFilters(prev => handleFilterChange(prev, field, value, checked));
     };
-
-    const clearFilters = () => {
-        setFilters({
-            searchTerm: '',
-            locationProperties: [],
-            cities: [],
-        });
-        setCurrentPage(0);
-        setHasMore(true);
-    };
-
 
     useEffect(() => {
         if (navigator.geolocation) {
@@ -111,7 +62,12 @@ const LocationList: React.FC = () => {
         }
     }, []);
 
-    const {data: locationsData, loading: locationsLoading, error: locationsError, refetch: locationsRefetch} = useQuery<SearchLocationResult>(SEARCH_LOCATIONS, {
+    const {
+        data: data,
+        loading: loading,
+        error: error,
+        refetch: refetch
+    } = useQuery<SearchLocationResult>(SEARCH_LOCATIONS, {
         variables: {
             filter: filters,
             count: 0,
@@ -120,27 +76,19 @@ const LocationList: React.FC = () => {
         }
     });
 
-    const {data: searchFiltersData, error: searchFilterError} = useQuery<GetLocationSearchFilterResult>(GET_LOCATION_SEARCH_FILTERS);
-
     useEffect(() => {
-        if (searchFiltersData?.getLocationSearchFilters) {
-            setSearchFilters(searchFiltersData.getLocationSearchFilters);
+        if (data?.searchLocations) {
+            setLocations(data.searchLocations.content);
+            setHasMore(data.searchLocations.content.length > 6);
         }
-    }, [searchFiltersData]);
-
-    useEffect(() => {
-        if (locationsData?.searchLocations) {
-            setLocations(locationsData.searchLocations.content);
-            setHasMore(locationsData.searchLocations.content.length >= 6);
-        }
-    }, [locationsData]);
+    }, [data]);
 
     const handleSearch = () => {
         setCurrentPage(1);
         setHasMore(true);
-        locationsRefetch({
+        refetch({
             filters: filters,
-            count: 6,
+            count: 0,
             offset: currentPage * 6,
             sort: sort
         });
@@ -159,17 +107,21 @@ const LocationList: React.FC = () => {
 
     const handleViewChange = (newView: 'grid' | 'map') => {
         if (newView === 'map') {
-            locationsRefetch({
+            const total = data?.searchLocations?.total;
+            const safeOffsetForMap = typeof total === 'number' ? total : locations.length;
+            refetch({
                 filter: filters,
                 count: 0,
-                offset: locationsData?.searchLocations.total,
+                offset: safeOffsetForMap,
                 sort: sort,
             });
-        }if (newView === 'grid') {
-            locationsRefetch({
+        }
+        if (newView === 'grid') {
+            refetch({
                 filter: filters,
                 count: 0,
                 offset: 6,
+                sort: sort,
             })
         }
         setView(newView);
@@ -188,25 +140,25 @@ const LocationList: React.FC = () => {
                                             setUserLocation={setUserLocation}/>
                     )}
 
-                    <LocationSearchHeader filters={filters} clearFilters={clearFilters}
-                                          handleSearch={handleSearch} setSort={setSort}
-                                          handleFilterChange={handleFilterChange}
-                                          searchFilters={searchFilters}/>
+                    <SearchHeader filters={filters}
+                                  handleSearch={handleSearch} setSort={setSort}
+                                  handleFilterChange={onFilterChange}/>
                 </Container>
             </Box>
             <Container maxWidth="lg" sx={{py: 4}}>
                 {/* View Toggle */}
                 <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
-                    <Typography variant="h5" sx={{mb: 2}}>{t('locations.total')}: {locationsData?.searchLocations.total}</Typography>
-                    <ViewToggle currentView={view} onViewChange={handleViewChange} />
+                    <Typography variant="h5"
+                                sx={{mb: 2}}>{t('locations.total')}: {data?.searchLocations.total}</Typography>
+                    <ViewToggle currentView={view} onViewChange={handleViewChange}/>
                 </Box>
 
-                {(locationsError || searchFilterError) && (
+                {(error) && (
                     <Alert severity="error" sx={{mb: 4}}>
-                        {locationsError?.message}, {searchFilterError?.message}
+                        {error?.message}
                     </Alert>
                 )}
-                {locations.length === 0 && !locationsLoading && (
+                {locations.length === 0 && !loading && (
                     <Alert severity="info" sx={{mb: 4}}>
                         {t('locations.noResults')}
                     </Alert>
@@ -215,7 +167,7 @@ const LocationList: React.FC = () => {
                 {/* Map View */}
                 {view === 'map' && locations.length > 0 && (
                     <Box sx={{mb: 4}}>
-                        <LocationsMap locations={locations} />
+                        <LocationsMap locations={locations}/>
                     </Box>
                 )}
 
@@ -234,7 +186,7 @@ const LocationList: React.FC = () => {
 
                 {hasMore && locations.length > 0 && view === 'grid' && (
                     <Box sx={{display: 'flex', justifyContent: 'center', mt: 6}}>
-                        <LoadMoreButton loading={locationsLoading} onClick={handleLoadMore}/>
+                        <LoadMoreButton loading={loading} onClick={handleLoadMore}/>
                     </Box>
                 )}
 
