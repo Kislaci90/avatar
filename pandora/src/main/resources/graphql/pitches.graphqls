@@ -1,6 +1,6 @@
 extend type Query {
     getPitch(id: Int!): PitchView
-    searchPitches(count:Int, offset:Int, filter: PitchFilter, sort: PitchSort): PitchPage
+    searchPitches(count:Int, offset:Int, filter: PitchFilter, sort: String): PitchPage
 }
 
 type PitchPage {
@@ -13,11 +13,10 @@ type PitchPage {
 input PitchFilter {
     searchTerm: String,
     properties: [String],
-}
-
-input PitchSort {
-    field: String,
-    direction: String!
+    locationProperties: [String],
+    cities: [String],
+    surfaceTypes: [String],
+    pitchTypes: [String]
 }
 
 type LazyLocationView {

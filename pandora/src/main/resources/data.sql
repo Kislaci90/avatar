@@ -26,8 +26,8 @@ SELECT
     '+36 30 ' || (1000000 + gs),
     ST_SetSRID(
             ST_MakePoint(
-                    16 + random()*6,
-                    46 + random()*3
+                    16.1 + random() * (22.9 - 16.1),  -- longitude
+                    45.7 + random() * (48.6 - 45.7)   -- latitude
             ),
             4326
     ),

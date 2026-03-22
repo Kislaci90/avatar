@@ -1,12 +1,17 @@
 package com.avatar.pandora.product.services;
 
+import com.avatar.pandora.product.models.Filter;
 import com.avatar.pandora.product.models.location.*;
+import com.avatar.pandora.product.models.pitch.PitchProperty;
+import com.avatar.pandora.product.models.pitch.PitchSurfaceType;
+import com.avatar.pandora.product.models.pitch.PitchType;
 import com.avatar.pandora.product.repositories.LocationRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.EnumSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,17 +27,17 @@ public class LocationService {
         this.locationConverter = locationConverter;
     }
 
-    public Page<LocationView> searchLocations(Integer count, Integer offset, LocationFilter filter, String sort) {
+    public Page<LocationView> searchLocations(Integer count, Integer offset, Filter filter, String sort) {
         LocationSort locationSort = LocationSort.valueOf(Optional.ofNullable(sort).orElse(LocationSort.DISTANCE_ASC.name()));
         PageRequest pageRequest = PageRequest.of(count, offset, locationSort.getDirection(), locationSort.getField());
 
-        return locationRepository.searchByLocationFiler(pageRequest,
-                filter.searchTerm(),
-                filter.cities(),
-                filter.cities().isEmpty(),
-                filter.locationProperties().stream().map(LocationProperty::valueOf).collect(Collectors.toSet()),
-                filter.locationProperties().isEmpty(),
-                filter.locationProperties().size()).map(locationConverter::convertToView);
+        return locationRepository.searchByLocationFilter(pageRequest,
+                Optional.of(filter.getSearchTerm()).orElse(""),
+                filter.getCities(),
+                filter.getCities().isEmpty(),
+                filter.getLocationProperties().stream().map(LocationProperty::valueOf).collect(Collectors.toSet()),
+                filter.getLocationProperties().isEmpty(),
+                filter.getLocationProperties().size()).map(locationConverter::convertToView);
     }
 
     public LocationView getById(Long id) {
@@ -58,5 +63,15 @@ public class LocationService {
 
     public Long countCities() {
         return locationRepository.countDistinctCities();
+    }
+
+    public SearchFilter getSearchFilter() {
+        return new SearchFilter(
+                locationRepository.getDistinctCities(),
+                EnumSet.allOf(LocationProperty.class).stream().map(Enum::name).collect(Collectors.toSet()),
+                EnumSet.allOf(PitchProperty.class).stream().map(Enum::name).collect(Collectors.toSet()),
+                EnumSet.allOf(PitchSurfaceType.class).stream().map(Enum::name).collect(Collectors.toSet()),
+                EnumSet.allOf(PitchType.class).stream().map(Enum::name).collect(Collectors.toSet())
+                );
     }
 }

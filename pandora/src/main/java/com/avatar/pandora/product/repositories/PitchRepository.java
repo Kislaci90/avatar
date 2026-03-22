@@ -19,16 +19,27 @@ public interface PitchRepository extends JpaRepository<Pitch, Long> {
     Pitch getPitchById(@Param("id") Long id);
 
     @NotNull
-    @Query("""
-             SELECT p FROM Pitch p
-             LEFT JOIN FETCH p.properties properties
-             WHERE (:searchTerm = '' OR p.name LIKE %:searchTerm%)
-             AND (:propertiesIsEmpty = TRUE
-                        OR :propertySize = (SELECT COUNT(prop)
-                                         FROM Pitch p2
-                                         JOIN p2.properties prop
-                                         WHERE p2.id = p.id AND prop IN (:properties)))
-            """)
+    @Query(value = """
+            SELECT p FROM Pitch p
+            LEFT JOIN FETCH p.properties properties
+            WHERE (:searchTerm = '' OR p.name LIKE %:searchTerm%)
+            AND (:propertiesIsEmpty = TRUE
+                OR :propertySize = (SELECT COUNT(prop)
+                                 FROM Pitch p2
+                                 JOIN p2.properties prop
+                                 WHERE p2.id = p.id AND prop IN (:properties)))
+            """,
+            countQuery = """
+            SELECT COUNT(DISTINCT p) FROM Pitch p
+            LEFT JOIN p.properties properties
+            WHERE (:searchTerm = '' OR p.name LIKE %:searchTerm%)
+            AND (:propertiesIsEmpty = TRUE
+                OR :propertySize = (SELECT COUNT(prop)
+                                 FROM Pitch p2
+                                 JOIN p2.properties prop
+                                 WHERE p2.id = p.id AND prop IN (:properties)))
+            """
+    )
     Page<Pitch> searchByPitchFiler(@NotNull Pageable pageable,
                                          String searchTerm,
                                          Set<PitchProperty> properties,

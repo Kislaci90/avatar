@@ -1,7 +1,0 @@
-repositories:
-  private-helm-repo:
-    url: http://localhost:5000
-    name: local-repo
-    type: helm
-    password: admin
-    username: "kvMaJKXDOjNwmY3N"

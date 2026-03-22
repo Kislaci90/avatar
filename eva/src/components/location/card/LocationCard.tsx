@@ -8,9 +8,10 @@ import type {UserLocation} from "../../../services/distance.ts";
 interface LocationCardProps {
     location: LocationView,
     userLocation: UserLocation | null
+    useImage?: boolean
 }
 
-export function LocationCard({location, userLocation}: Readonly<LocationCardProps>) {
+export function LocationCard({location, userLocation, useImage}: Readonly<LocationCardProps>) {
     const theme = useTheme()
 
     return (
@@ -33,7 +34,7 @@ export function LocationCard({location, userLocation}: Readonly<LocationCardProp
                 }
             }}
         >
-            <LocationCardImage location={location} userLocation={userLocation}/>
+            {useImage && <LocationCardImage location={location} userLocation={userLocation}/>}
 
             <LocationCardContent location={location}/>
 
