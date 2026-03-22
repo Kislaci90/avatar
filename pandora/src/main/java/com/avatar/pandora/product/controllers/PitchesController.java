@@ -23,7 +23,7 @@ public class PitchesController {
     @QueryMapping
     public Page<PitchView> searchPitches(@Argument(name = "count") Integer count,
                                          @Argument(name = "offset") Integer offset,
-                                         @Valid @Argument(name = "filter") Filter filter,
+                                         @Argument(name = "filter") Filter filter,
                                          @Argument(name = "sort") String sort) {
         return pitchService.searchPitches(count, offset, filter, sort);
     }

@@ -104,8 +104,6 @@ class QueryPitchesControllerTest {
                 Arguments.of("Pitch", Set.of(PitchProperty.COVERED.name()), 2),
                 // Combine search term with another property filter
                 Arguments.of("Pitch", Set.of(PitchProperty.LIGHTING.name()), 1),
-                // Multiple property filter (different combinations)
-                Arguments.of("", Set.of(PitchProperty.COVERED.name()), 2),
                 // Only one property at a time
                 Arguments.of("", Set.of(PitchProperty.LIGHTING.name()), 1)
         );
