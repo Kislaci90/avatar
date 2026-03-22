@@ -3,7 +3,7 @@ import {type LocationView} from "../../../services/location.ts";
 import {locationPropertyIconMap} from "../../PropertyMap.tsx";
 import {useNavigate} from "react-router-dom";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
-import {t} from "i18next";
+import {useTranslation} from "react-i18next";
 
 interface LocationCardContentProps {
     location: LocationView
@@ -11,6 +11,7 @@ interface LocationCardContentProps {
 
 export function LocationCardContent({location}: Readonly<LocationCardContentProps>) {
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
     return (
         <CardContent sx={{flexGrow: 1, p: 3}}>
