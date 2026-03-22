@@ -1,7 +1,6 @@
 package com.avatar.pandora.exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -46,7 +45,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @Override
-  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @NotNull HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     List<ApiValidationError> subErrors = ex.getBindingResult().getAllErrors().stream()
             .map(e -> ((FieldError) e))
             .map(e -> new ApiValidationError(e.getField(), e.getRejectedValue(), e.getDefaultMessage()))
