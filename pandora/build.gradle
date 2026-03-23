@@ -53,4 +53,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    
+    // Ensure Spring Boot test profile is activated
+    systemProperty 'spring.profiles.active', 'test'
+    
+    // Ensure test resources are available on classpath
+    shouldRunAfter processTestResources
 }
