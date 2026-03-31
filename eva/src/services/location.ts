@@ -1,3 +1,79 @@
+import {gql} from "@apollo/client";
+
+export const GET_SEARCH_FILTERS = gql`
+    query GetSearchFilters {
+        getSearchFilters {
+            cities
+            locationProperties
+            surfaceTypes
+            pitchTypes
+            pitchProperties
+        }
+    }
+`;
+
+export type GetLocationSearchFilterResult = {
+    getSearchFilters: LocationSearchFilter,
+}
+
+export type LocationSearchFilter = {
+    cities: string[],
+    locationProperties: string[],
+    pitchProperties: string[],
+    pitchTypes: string[],
+    surfaceTypes: string[],
+}
+
+export const SEARCH_LOCATIONS = gql`
+    query SearchLocations(
+        $filter: LocationFilter!,
+        $count:Int!,
+        $offset:Int!,
+        $sort:String,
+    ) {
+        searchLocations(
+            filter: $filter,
+            count: $count,
+            offset: $offset,
+            sort: $sort,
+        ) {
+            total
+            pageable {
+                pageNumber
+                pageSize
+            }
+            content {
+                id
+                name
+                description
+                website
+                address {
+                    addressLine
+                    postalCode
+                    city
+                }
+                contact {
+                    contactName
+                    email
+                    phoneNumber
+                }
+                geom {
+                    x
+                    y
+                }
+                properties
+                pitches {
+                    id
+                    name
+                    pitchType
+                    surfaceType
+                    properties
+                }
+            }
+        }
+    }
+`;
+
 export type SearchLocationResult = {
     searchLocations: SearchLocations,
 }
@@ -8,7 +84,11 @@ export type GetLocationResult = {
 
 export type SearchLocations = {
     total: number,
-    content: [LocationView],
+    pageable: {
+        pageNumber: number,
+        pageSize: number,
+    },
+    content: LocationView[],
 }
 
 export type LocationView = {

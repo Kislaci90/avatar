@@ -1,14 +1,19 @@
 package com.avatar.pandora.product.models.pitch;
 
+import lombok.Getter;
 import org.springframework.data.domain.Sort;
 
-public record PitchSort(String direction) {
+public enum PitchSort {
+    DISTANCE_DESC("name", Sort.Direction.DESC),
+    DISTANCE_ASC("name", Sort.Direction.ASC);
 
-    public Sort.Direction getDirection() {
-        return Sort.Direction.fromString(direction.toUpperCase());
-    }
+    @Getter
+    private final Sort.Direction direction;
+    @Getter
+    private final String field;
 
-    public Sort getSort() {
-        return Sort.by(getDirection(), "name");
+    PitchSort(String field, Sort.Direction direction) {
+        this.direction = direction;
+        this.field = field;
     }
 }

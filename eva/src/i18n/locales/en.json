@@ -98,7 +98,15 @@
     "properties": "Facilities",
     "pitches": "Available Pitches",
     "reviews": "Reviews",
-    "gallery": "Gallery"
+    "gallery": "Gallery",
+    "total": "Total",
+    "property" : {
+      "CAFE": "Coffee",
+      "FREE_PARKING": "Free Parking",
+      "SHOWER": "Shower",
+      "CHANGING_ROOM": "Changing Room",
+      "EQUIPMENT_RENTAL": "Equipment Rental"
+    }
   },
   "pitches": {
     "title": "Pitches",
@@ -127,6 +135,26 @@
     "asphalt": "Asphalt",
     "turf": "Turf",
     "hardCourt": "Hard Court",
+    "pitchTypeOptions": {
+      "FULL_SIZE": "Full Size (11-a-side)",
+      "HALF_SIZE": "Half Size",
+      "FIVE_A_SIDE": "5-a-Side",
+      "SEVEN_A_SIDE": "7-a-Side",
+      "INDOOR": "Indoor",
+      "OUTDOOR": "Outdoor"
+    },
+    "surfaceTypeOptions": {
+      "GRASS": "Natural Grass",
+      "ARTIFICIAL_GRASS": "Artificial Grass",
+      "CONCRETE": "Concrete",
+      "ASPHALT": "Asphalt",
+      "TURF": "Turf",
+      "HARDCOURT": "Hard Court"
+    },
+    "pitchPropertyOptions": {
+      "LIGHTING": "Lighting",
+      "COVERED": "Covered"
+    },
     "details": "Pitch Details",
     "type": "Type",
     "surface": "Surface",
@@ -166,5 +194,7 @@
     "loginFailed": "Login failed. Please try again.",
     "registerFailed": "Registration failed. Please try again.",
     "notFound": "Page not found"
-  }
+  },
+  "grid": "Grid View",
+  "map": "Map View"
 }

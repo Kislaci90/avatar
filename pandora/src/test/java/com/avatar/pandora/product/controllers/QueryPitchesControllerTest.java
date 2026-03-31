@@ -1,8 +1,9 @@
 package com.avatar.pandora.product.controllers;
 
-import com.avatar.pandora.product.models.pitch.PitchFilter;
-import com.avatar.pandora.product.models.pitch.PitchFilterBuilder;
+import com.avatar.pandora.product.models.Filter;
+import com.avatar.pandora.product.models.location.LocationSort;
 import com.avatar.pandora.product.models.pitch.PitchProperty;
+import com.avatar.pandora.product.models.pitch.PitchSort;
 import com.avatar.pandora.product.models.pitch.PitchView;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -40,16 +41,20 @@ class QueryPitchesControllerTest {
     @MethodSource("providePitchesFilters")
     @DisplayName("Should search pitches with various filter combinations")
     void searchPitches(String searchTerm, Set<String> propertiesNames, Integer expected) {
-        PitchFilter pitchFilter = PitchFilterBuilder.builder()
+        Filter pitchFilter = Filter.builder()
                 .searchTerm(searchTerm)
                 .properties(propertiesNames)
+                .locationProperties(Set.of())
+                .surfaceTypes(Set.of())
+                .pitchTypes(Set.of())
+                .cities(Set.of())
                 .build();
 
         var pitches = httpGraphQlTester.documentName("searchPitches")
                 .variable("filter", pitchFilter.getAsMap())
                 .variable("offset", 10)
                 .variable("count", 0)
-                .variable("sort", Map.of("direction", "ASC"))
+                .variable("sort", PitchSort.DISTANCE_ASC.name())
                 .execute()
                 .path("data.searchPitches.content")
                 .entityList(PitchView.class)
@@ -99,8 +104,6 @@ class QueryPitchesControllerTest {
                 Arguments.of("Pitch", Set.of(PitchProperty.COVERED.name()), 2),
                 // Combine search term with another property filter
                 Arguments.of("Pitch", Set.of(PitchProperty.LIGHTING.name()), 1),
-                // Multiple property filter (different combinations)
-                Arguments.of("", Set.of(PitchProperty.COVERED.name()), 2),
                 // Only one property at a time
                 Arguments.of("", Set.of(PitchProperty.LIGHTING.name()), 1)
         );

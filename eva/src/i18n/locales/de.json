@@ -75,11 +75,6 @@
     "locationSort": "Standortsortierung",
     "nearestLocation": "Nächster Standort",
     "farthestLocation": "Entferntester Standort",
-    "freeParking": "Kostenloses Parken",
-    "shower": "Dusche",
-    "changingRoom": "Umkleideraum",
-    "cafe": "Café",
-    "equipmentRental": "Ausrüstungsvermietung",
     "details": "Ortdetails",
     "name": "Name",
     "description": "Beschreibung",
@@ -94,7 +89,15 @@
     "properties": "Ausstattung",
     "pitches": "Verfügbare Plätze",
     "reviews": "Bewertungen",
-    "gallery": "Galerie"
+    "gallery": "Galerie",
+    "total": "Gesamt",
+    "property" : {
+      "CAFE": "Kaffee",
+      "FREE_PARKING": "Kostenloses Parken",
+      "SHOWER": "Dusche",
+      "CHANGING_ROOM": "Umkleideraum",
+      "EQUIPMENT_RENTAL": "Ausrüstungsvermietung"
+    }
   },
   "pitches": {
     "title": "Plätze",
@@ -123,9 +126,28 @@
     "asphalt": "Asphalt",
     "turf": "Rasen",
     "hardCourt": "Hartplatz",
+    "pitchTypeOptions": {
+      "FULL_SIZE": "Vollfeld (11er-Platz)",
+      "HALF_SIZE": "Halber Platz",
+      "FIVE_A_SIDE": "5er-Platz",
+      "SEVEN_A_SIDE": "7er-Platz",
+      "INDOOR": "Hallenplatz",
+      "OUTDOOR": "Außenplatz"
+    },
+    "surfaceTypeOptions": {
+      "GRASS": "Naturrasen",
+      "ARTIFICIAL_GRASS": "Kunstrasen",
+      "CONCRETE": "Beton",
+      "ASPHALT": "Asphalt",
+      "TURF": "Rasen",
+      "HARDCOURT": "Hartplatz"
+    },
+    "pitchPropertyOptions": {
+      "LIGHTING": "Beleuchtung",
+      "COVERED": "Überdacht"
+    },
     "allPitches": "🎯 Du hast alle verfügbaren Plätze gesehen!",
     "tryAdjusting": "Versuchen Sie, Ihre Filter anzupassen, um mehr Übereinstimmungen zu finden.",
-    "searchPlaceholder": "Nach Platzname suchen",
     "loading": "Plätze werden geladen...",
     "error": "Fehler beim Laden von Plätzen",
     "details": "Platzdetails",
@@ -167,5 +189,7 @@
     "loginFailed": "Anmelden fehlgeschlagen. Bitte versuche es erneut.",
     "registerFailed": "Registrierung fehlgeschlagen. Bitte versuche es erneut.",
     "notFound": "Seite nicht gefunden"
-  }
+  },
+  "grid": "Rasteransicht",
+  "map": "Kartenansicht"
 }

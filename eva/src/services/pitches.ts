@@ -7,7 +7,7 @@ export type SearchPitchesResult = {
 
 export type SearchPitches = {
     total: number,
-    content: [PitchView],
+    content: PitchView[],
 }
 
 

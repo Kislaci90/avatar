@@ -21,7 +21,10 @@ const GET_CURRENT_USER = gql`
 
 const Navbar: React.FC = () => {
   const { t } = useTranslation();
-  const { data } = useQuery<GetMeResult>(GET_CURRENT_USER);
+  const isLoggedIn = !!localStorage.getItem('token');
+  const { data } = useQuery<GetMeResult>(GET_CURRENT_USER, {
+    skip: !isLoggedIn
+  });
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleLogout = () => {
@@ -60,7 +63,7 @@ const Navbar: React.FC = () => {
             component={Link}
             to="/pitches"
             sx={{color: 'white'}}
-            startIcon={<Search />}
+            startIcon={<Search color="secondary"/>}
           >
             {t('navigation.findPitches')}
           </Button>
@@ -69,7 +72,7 @@ const Navbar: React.FC = () => {
             component={Link}
             to="/locations"
             sx={{color: 'white'}}
-            startIcon={<LocationOn />}
+            startIcon={<LocationOn color="secondary"/>}
           >
             {t('navigation.findLocations')}
           </Button>
@@ -119,7 +122,7 @@ const Navbar: React.FC = () => {
                 to="/login"
                 sx={{color: 'white'}}
                 color="primary"
-                startIcon={<Login/>}
+                startIcon={<Login color="secondary"/>}
               >
                 {t('navigation.login')}
               </Button>
@@ -128,7 +131,7 @@ const Navbar: React.FC = () => {
                 to="/register"
                 sx={{color: 'white'}}
                 color="primary"
-                startIcon={<PersonAdd />}
+                startIcon={<PersonAdd color="secondary"/>}
               >
                 {t('navigation.register')}
               </Button>

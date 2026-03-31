@@ -1,11 +1,10 @@
 package com.avatar.pandora.product.controllers;
 
-import com.avatar.pandora.product.models.location.LocationFilter;
+import com.avatar.pandora.product.models.Filter;
 import com.avatar.pandora.product.models.location.LocationForm;
 import com.avatar.pandora.product.models.location.LocationView;
 import com.avatar.pandora.product.services.LocationService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -18,13 +17,12 @@ public class LocationController {
 
     private final LocationService locationService;
 
-    @Autowired
     public LocationController(LocationService locationService) {
         this.locationService = locationService;
     }
 
     @PostMapping
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = HttpStatus.CREATED)
     public LocationView save(@Valid @RequestBody LocationForm locationForm) {
         return locationService.save(locationForm);
     }
@@ -36,7 +34,10 @@ public class LocationController {
     }
 
     @QueryMapping
-    public Page<LocationView> searchLocations(@Argument(name = "count") Integer count, @Argument(name = "offset") Integer offset, @Argument(name = "filter") LocationFilter filter, @Argument(name = "sort") String sort) {
+    public Page<LocationView> searchLocations(@Argument(name = "count") Integer count,
+                                              @Argument(name = "offset") Integer offset,
+                                              @Valid @Argument(name = "filter") Filter filter,
+                                              @Argument(name = "sort") String sort) {
         return locationService.searchLocations(count, offset, filter, sort);
     }
 

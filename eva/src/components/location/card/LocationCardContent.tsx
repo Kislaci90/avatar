@@ -1,7 +1,9 @@
-import {Box, CardContent, Chip, Divider, Link, Stack, Tooltip, Typography} from "@mui/material";
+import {Box, CardContent, Checkbox, Chip, Divider, Link, Stack, Tooltip, Typography} from "@mui/material";
 import {type LocationView} from "../../../services/location.ts";
 import {locationPropertyIconMap} from "../../PropertyMap.tsx";
 import {useNavigate} from "react-router-dom";
+import {Favorite, FavoriteBorder} from "@mui/icons-material";
+import {useTranslation} from "react-i18next";
 
 interface LocationCardContentProps {
     location: LocationView
@@ -9,10 +11,11 @@ interface LocationCardContentProps {
 
 export function LocationCardContent({location}: Readonly<LocationCardContentProps>) {
     const navigate = useNavigate()
+    const {t} = useTranslation()
 
     return (
         <CardContent sx={{flexGrow: 1, p: 3}}>
-            <Box sx={{justifyContent: "left", alignItems: "center", display: "flex"}}>
+            <Box sx={{justifyContent: "space-between", alignItems: "center", display: "flex"}}>
                 <Typography
                     variant="h6"
                     color="text.primary"
@@ -22,6 +25,9 @@ export function LocationCardContent({location}: Readonly<LocationCardContentProp
                 >
                     {location.name}
                 </Typography>
+                <Box>
+                    <Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} color="secondary"/>
+                </Box>
             </Box>
 
             <Box sx={{justifyContent: "space-between", alignItems: "center", display: "flex"}}>
@@ -59,7 +65,7 @@ export function LocationCardContent({location}: Readonly<LocationCardContentProp
                             <Chip size="small"
                                   variant="outlined"
                                   color="primary"
-                                  label={property}
+                                  label={t('locations.property.'+property)}
                                   sx={{
                                       '& .MuiChip-label': {
                                           px: 0.7,
