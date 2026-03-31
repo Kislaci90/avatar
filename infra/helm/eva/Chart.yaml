@@ -1,0 +1,15 @@
+apiVersion: v2
+name: eva
+description: Avatar Frontend (Eva) - React/Vite Application
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - avatar
+  - frontend
+  - react
+  - vite
+maintainers:
+  - name: Avatar Team
+    email: team@avatar.local
+
