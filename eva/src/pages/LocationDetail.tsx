@@ -1,13 +1,19 @@
-import React from 'react';
-import {useParams} from 'react-router-dom';
+import React, {useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import {gql} from '@apollo/client';
-import {useQuery} from "@apollo/client/react";
+import {useMutation, useQuery} from "@apollo/client/react";
 import { useTranslation } from 'react-i18next';
 import {
     Alert,
     Box,
+    Button,
     CircularProgress,
     Container,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     Grid,
     List,
     ListItem,
@@ -15,12 +21,15 @@ import {
     ListItemText,
     Typography,
 } from '@mui/material';
+import {Add, Delete} from '@mui/icons-material';
 import type {GetLocationResult, PitchView} from "../services/location.ts";
+import {DELETE_LOCATION} from "../services/location.ts";
 import theme from "../theme/theme.ts";
 import {Email, Favorite, Home, LocationOn, Person, Phone, SportsSoccer} from "@mui/icons-material";
 import {locationPropertyIconMap} from "../components/PropertyMap.tsx";
 import {LocationDetailPitchCard} from "../components/location/detail/LocationDetailPitchCard.tsx";
 import {LocationDetailSendMessage} from "../components/location/detail/LocationDetailSendMessage.tsx";
+import PitchFormDialog from "../components/pitch/PitchFormDialog.tsx";
 
 const GET_LOCATION_DETAIL = gql`
     query GetLocation($id: Int!) {
@@ -68,11 +77,22 @@ const GET_LOCATION_DETAIL = gql`
 const LocationDetail: React.FC = () => {
     const { t } = useTranslation();
     const {id} = useParams<{ id: string }>();
+    const navigate = useNavigate();
 
     const numericId = id ? parseInt(id, 10) : null;
 
-    const {loading, error, data} = useQuery<GetLocationResult>(GET_LOCATION_DETAIL, {
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [addPitchOpen, setAddPitchOpen] = useState(false);
+
+    const {loading, error, data, refetch} = useQuery<GetLocationResult>(GET_LOCATION_DETAIL, {
         variables: {id: numericId},
+    });
+
+    const [deleteLocation, {loading: deleteLoading}] = useMutation(DELETE_LOCATION, {
+        onCompleted: () => {
+            navigate('/locations');
+        },
+        onError: (e) => console.error(e.message),
     });
 
     if (loading) {
@@ -126,7 +146,18 @@ const LocationDetail: React.FC = () => {
                             <Typography variant="h4" component="h1">
                                 {location.name}
                             </Typography>
-                            <Favorite color="secondary"></Favorite>
+                            <Box sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
+                                <Favorite color="secondary"/>
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    startIcon={deleteLoading ? <CircularProgress size={16}/> : <Delete/>}
+                                    onClick={() => setDeleteConfirmOpen(true)}
+                                    disabled={deleteLoading}
+                                >
+                                    Delete
+                                </Button>
+                            </Box>
                         </Box>
                         <Box sx={{
                             display: 'flex',
@@ -261,8 +292,44 @@ const LocationDetail: React.FC = () => {
                     <Box sx={{my: 3}} key={pitch.id}>
                         <LocationDetailPitchCard pitch={pitch} />
                     </Box>))}
+                <Box sx={{mt: 3, mb: 6}}>
+                    <Button
+                        variant="contained"
+                        startIcon={<Add/>}
+                        onClick={() => setAddPitchOpen(true)}
+                    >
+                        Add Pitch
+                    </Button>
+                </Box>
 
             </Container>
+
+            <Dialog open={deleteConfirmOpen} onClose={() => setDeleteConfirmOpen(false)}>
+                <DialogTitle>Delete Location</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to delete "{location.name}"? This will also delete all associated pitches. This action cannot be undone.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDeleteConfirmOpen(false)}>Cancel</Button>
+                    <Button
+                        color="error"
+                        variant="contained"
+                        onClick={() => deleteLocation({variables: {id: numericId}})}
+                        disabled={deleteLoading}
+                    >
+                        {deleteLoading ? <CircularProgress size={20}/> : 'Delete'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <PitchFormDialog
+                open={addPitchOpen}
+                onClose={() => setAddPitchOpen(false)}
+                onSuccess={() => refetch()}
+                locationId={numericId!}
+            />
         </Box>
     );
 };

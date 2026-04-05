@@ -74,4 +74,10 @@ public class LocationService {
                 EnumSet.allOf(PitchType.class).stream().map(Enum::name).collect(Collectors.toSet())
                 );
     }
+
+    @Transactional
+    public Boolean delete(Long id) {
+        locationRepository.deleteById(id);
+        return true;
+    }
 }

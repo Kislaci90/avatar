@@ -1,3 +1,4 @@
+import {gql} from "@apollo/client";
 import type {PitchView} from "./location.ts";
 import theme from "../theme/theme.ts";
 
@@ -14,6 +15,55 @@ export type SearchPitches = {
 export type GetPitchResult = {
     getPitch: PitchView,
 }
+
+export type PitchInput = {
+    name: string,
+    description: string,
+    pitchType: string,
+    surfaceType: string,
+    properties: string[],
+    locationId: number,
+}
+
+export const CREATE_PITCH = gql`
+    mutation CreatePitch($pitchInput: PitchInput!) {
+        createPitch(pitchInput: $pitchInput) {
+            id
+            name
+            description
+            pitchType
+            surfaceType
+            properties
+            location {
+                id
+                name
+            }
+        }
+    }
+`;
+
+export const UPDATE_PITCH = gql`
+    mutation UpdatePitch($id: Int!, $pitchInput: PitchInput!) {
+        updatePitch(id: $id, pitchInput: $pitchInput) {
+            id
+            name
+            description
+            pitchType
+            surfaceType
+            properties
+            location {
+                id
+                name
+            }
+        }
+    }
+`;
+
+export const DELETE_PITCH = gql`
+    mutation DeletePitch($id: Int!) {
+        deletePitch(id: $id)
+    }
+`;
 
 export function getSurfaceTypeColor (surfaceType: string){
     const colors: { [key: string]: string } = {

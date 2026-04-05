@@ -7,6 +7,7 @@ import com.avatar.pandora.product.services.LocationService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +45,11 @@ public class LocationController {
     @QueryMapping
     public LocationView getLocation(@Argument(name = "id") Long id) {
         return locationService.getById(id);
+    }
+
+    @MutationMapping
+    public Boolean deleteLocation(@Argument("id") Long id) {
+        return locationService.delete(id);
     }
 
 }

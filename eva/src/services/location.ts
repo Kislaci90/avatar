@@ -12,6 +12,16 @@ export const GET_SEARCH_FILTERS = gql`
     }
 `;
 
+export const DELETE_LOCATION = gql`
+    mutation DeleteLocation($id: Int!) {
+        deleteLocation(id: $id)
+    }
+`;
+
+export type DeleteLocationResult = {
+    deleteLocation: boolean,
+}
+
 export type GetLocationSearchFilterResult = {
     getSearchFilters: LocationSearchFilter,
 }

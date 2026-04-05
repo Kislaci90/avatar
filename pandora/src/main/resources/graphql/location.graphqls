@@ -4,6 +4,10 @@ type Query {
     getSearchFilters: SearchFilter
 }
 
+extend type Mutation {
+    deleteLocation(id: Int!): Boolean!
+}
+
 input LocationFilter {
     searchTerm: String,
     properties: [String],

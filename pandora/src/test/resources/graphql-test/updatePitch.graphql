@@ -1,0 +1,14 @@
+mutation updatePitch($id: Int!, $pitchInput: PitchInput!) {
+    updatePitch(id: $id, pitchInput: $pitchInput) {
+        id
+        name
+        description
+        pitchType
+        surfaceType
+        properties
+        location {
+            id
+            name
+        }
+    }
+}

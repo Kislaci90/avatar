@@ -1,19 +1,23 @@
 import React, {useState} from 'react';
-import {Link, useParams} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import {gql} from '@apollo/client';
-import {useQuery} from "@apollo/client/react";
+import {useMutation, useQuery} from "@apollo/client/react";
 import {useTranslation} from 'react-i18next';
 import {
     Alert,
     Avatar,
     Box,
+    Button,
     CardContent,
     CardMedia,
     Chip,
     CircularProgress,
     Container,
     Dialog,
+    DialogActions,
     DialogContent,
+    DialogContentText,
+    DialogTitle,
     Divider,
     Grid,
     IconButton,
@@ -25,10 +29,11 @@ import {
     Typography,
     useTheme
 } from '@mui/material';
-import {Close, Email, LocationOn} from '@mui/icons-material';
-import {type GetPitchResult, getSurfaceTypeColor} from "../services/pitches.ts";
+import {Close, Delete, Edit, Email, LocationOn} from '@mui/icons-material';
+import {type GetPitchResult, DELETE_PITCH, getSurfaceTypeColor} from "../services/pitches.ts";
 import {locationPropertyIconMap, pitchPropertyIconMap} from "../components/PropertyMap.tsx";
 import PitchSvg from "../components/PitchSvg.tsx";
+import PitchFormDialog from "../components/pitch/PitchFormDialog.tsx";
 
 const GET_PITCH = gql`
     query GetPitch($id: Int!) {
@@ -60,10 +65,18 @@ const PitchDetail: React.FC = () => {
     const theme = useTheme();
     const { t } = useTranslation();
     const {id} = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const numericId = id ? parseInt(id, 10) : null;
-    const {loading, error, data} = useQuery<GetPitchResult>(GET_PITCH, {variables: {id: numericId}});
+    const {loading, error, data, refetch} = useQuery<GetPitchResult>(GET_PITCH, {variables: {id: numericId}});
     const [imageDialogOpen, setImageDialogOpen] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [editPitchOpen, setEditPitchOpen] = useState(false);
+
+    const [deletePitch, {loading: deleteLoading}] = useMutation(DELETE_PITCH, {
+        onCompleted: () => navigate('/pitches'),
+        onError: (e) => console.error(e.message),
+    });
 
     if (loading) return (
         <Box sx={{minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
@@ -140,6 +153,26 @@ const PitchDetail: React.FC = () => {
                                         sx={{textDecoration: 'none'}}>
                                         {pitch.name}
                                     </Typography>
+                                    <Box sx={{display: 'flex', gap: 1, mt: 1, mb: 1}}>
+                                        <Button
+                                            variant="outlined"
+                                            size="small"
+                                            startIcon={<Edit/>}
+                                            onClick={() => setEditPitchOpen(true)}
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            variant="outlined"
+                                            color="error"
+                                            size="small"
+                                            startIcon={deleteLoading ? <CircularProgress size={14}/> : <Delete/>}
+                                            onClick={() => setDeleteConfirmOpen(true)}
+                                            disabled={deleteLoading}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </Box>
                                     <Box sx={{display: 'flex', alignItems: 'center', gap: 2, mb: 2}}>
                                         <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
                                             <LocationOn sx={{color: theme.palette.primary.main}}/>
@@ -392,6 +425,34 @@ const PitchDetail: React.FC = () => {
                     />
                 </DialogContent>
             </Dialog>
+
+            <Dialog open={deleteConfirmOpen} onClose={() => setDeleteConfirmOpen(false)}>
+                <DialogTitle>Delete Pitch</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to delete "{pitch.name}"? This action cannot be undone.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setDeleteConfirmOpen(false)}>Cancel</Button>
+                    <Button
+                        color="error"
+                        variant="contained"
+                        onClick={() => deletePitch({variables: {id: numericId}})}
+                        disabled={deleteLoading}
+                    >
+                        {deleteLoading ? <CircularProgress size={20}/> : 'Delete'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <PitchFormDialog
+                open={editPitchOpen}
+                onClose={() => setEditPitchOpen(false)}
+                onSuccess={() => refetch()}
+                locationId={Number(pitch.location.id)}
+                existingPitch={pitch}
+            />
         </Box>
     );
 };

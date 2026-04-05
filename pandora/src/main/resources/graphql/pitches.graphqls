@@ -3,6 +3,21 @@ extend type Query {
     searchPitches(count:Int, offset:Int, filter: PitchFilter, sort: String): PitchPage
 }
 
+extend type Mutation {
+    createPitch(pitchInput: PitchInput!): PitchView!
+    updatePitch(id: Int!, pitchInput: PitchInput!): PitchView!
+    deletePitch(id: Int!): Boolean!
+}
+
+input PitchInput {
+    name: String!
+    description: String!
+    pitchType: String!
+    surfaceType: String!
+    properties: [String]
+    locationId: Int!
+}
+
 type PitchPage {
     content: [PitchView]
     pageable: Pageable!

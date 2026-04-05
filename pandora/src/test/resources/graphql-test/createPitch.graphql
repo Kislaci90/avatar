@@ -1,0 +1,14 @@
+mutation createPitch($pitchInput: PitchInput!) {
+    createPitch(pitchInput: $pitchInput) {
+        id
+        name
+        description
+        pitchType
+        surfaceType
+        properties
+        location {
+            id
+            name
+        }
+    }
+}

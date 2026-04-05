@@ -1,9 +1,11 @@
 package com.avatar.pandora.product.services;
 
-import com.avatar.pandora.product.models.pitch.Pitch;
-import com.avatar.pandora.product.models.pitch.PitchForm;
-import com.avatar.pandora.product.models.pitch.PitchView;
+import com.avatar.pandora.product.models.location.Location;
+import com.avatar.pandora.product.models.pitch.*;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.stream.Collectors;
 
 @Service
 public class PitchConverter implements Converter<Pitch, PitchView, PitchForm> {
@@ -29,5 +31,17 @@ public class PitchConverter implements Converter<Pitch, PitchView, PitchForm> {
     public Pitch convertToNewEntity(PitchForm pitchForm) {
         Pitch pitch = new Pitch();
         return convertToEntity(pitch, pitchForm);
+    }
+
+    public Pitch convertFromInput(Pitch pitch, PitchInput input, Location location) {
+        pitch.setName(input.name());
+        pitch.setDescription(input.description());
+        pitch.setType(PitchType.valueOf(input.pitchType()));
+        pitch.setSurfaceType(PitchSurfaceType.valueOf(input.surfaceType()));
+        pitch.setProperties(input.properties() != null
+                ? input.properties().stream().map(PitchProperty::valueOf).collect(Collectors.toSet())
+                : new HashSet<>());
+        pitch.setLocation(location);
+        return pitch;
     }
 }
