@@ -6,6 +6,7 @@ import com.avatar.pandora.product.models.pitch.PitchProperty;
 import com.avatar.pandora.product.models.pitch.PitchSurfaceType;
 import com.avatar.pandora.product.models.pitch.PitchType;
 import com.avatar.pandora.product.repositories.LocationRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -77,6 +78,9 @@ public class LocationService {
 
     @Transactional
     public Boolean delete(Long id) {
+        if (!locationRepository.existsById(id)) {
+            throw new EntityNotFoundException("Location not found: " + id);
+        }
         locationRepository.deleteById(id);
         return true;
     }

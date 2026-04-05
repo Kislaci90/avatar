@@ -132,7 +132,7 @@ const PitchFormDialog: React.FC<PitchFormDialogProps> = ({open, onClose, onSucce
                             onChange={(e) => setForm({...form, pitchType: e.target.value})}
                         >
                             {PITCH_TYPES.map((type) => (
-                                <MenuItem key={type} value={type}>{type.replace('_', ' ')}</MenuItem>
+                                <MenuItem key={type} value={type}>{type.replaceAll('_', ' ')}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
@@ -143,7 +143,7 @@ const PitchFormDialog: React.FC<PitchFormDialogProps> = ({open, onClose, onSucce
                             onChange={(e) => setForm({...form, surfaceType: e.target.value})}
                         >
                             {SURFACE_TYPES.map((type) => (
-                                <MenuItem key={type} value={type}>{type.replace('_', ' ')}</MenuItem>
+                                <MenuItem key={type} value={type}>{type.replaceAll('_', ' ')}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
