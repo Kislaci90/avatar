@@ -61,7 +61,7 @@ const PitchList: React.FC = () => {
         pitchTypes: [],
     });
     const [sort, setSort] = useState<string>('DISTANCE_ASC');
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [pitches, setPitches] = useState<PitchView[]>([]);
     const [userLocation] = useState<UserLocation | null>(null);
@@ -70,7 +70,7 @@ const PitchList: React.FC = () => {
     const {loading, error, data, refetch} = useQuery<SearchPitchesResult>(SEARCH_PITCHES, {
         variables: {
             filter: filters,
-            count: itemsPerPage,
+            count: 0,
             offset: currentPage * itemsPerPage,
             sort: sort
         }
@@ -92,30 +92,24 @@ const PitchList: React.FC = () => {
     };
 
     const handleSearch = () => {
-        // Use local page value instead of relying on async state update
-        const newPage = 0;
-        const newOffset = newPage * itemsPerPage;
-        setCurrentPage(newPage);
+        setCurrentPage(1);
         setHasMore(true);
         refetch({
-            count: itemsPerPage,
-            offset: newOffset,
             filter: filters,
+            count: 0,
+            offset: currentPage * itemsPerPage,
             sort: sort,
         });
     };
 
     const handleLoadMore = () => {
         const nextPage = currentPage + 1;
-        const newOffset = nextPage * itemsPerPage;
         setCurrentPage(nextPage);
 
-        refetch({
-            count: itemsPerPage,
-            offset: newOffset,
-            filter: filters,
-            sort: sort,
-        });
+        const totalItems = pitches.length;
+        const displayedItems = (nextPage + 1) * itemsPerPage;
+
+        setHasMore(displayedItems < totalItems);
     };
 
     return (

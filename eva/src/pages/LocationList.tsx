@@ -30,6 +30,7 @@ const LocationList: React.FC = () => {
     const [locations, setLocations] = useState<LocationView[]>([]);
     const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
     const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
+    const itemsPerPage = 6;
 
     const onFilterChange = <K extends keyof Filter>(
         field: K,
@@ -63,15 +64,15 @@ const LocationList: React.FC = () => {
     }, []);
 
     const {
-        data: data,
-        loading: loading,
-        error: error,
-        refetch: refetch
+        data,
+        loading,
+        error,
+        refetch
     } = useQuery<SearchLocationResult>(SEARCH_LOCATIONS, {
         variables: {
             filter: filters,
             count: 0,
-            offset: currentPage * 6,
+            offset: currentPage * itemsPerPage,
             sort: sort
         }
     });
@@ -79,7 +80,7 @@ const LocationList: React.FC = () => {
     useEffect(() => {
         if (data?.searchLocations) {
             setLocations(data.searchLocations.content);
-            setHasMore(data.searchLocations.content.length >= 6);
+            setHasMore(data.searchLocations.content.length >= itemsPerPage);
         }
     }, [data]);
 
@@ -89,7 +90,7 @@ const LocationList: React.FC = () => {
         refetch({
             filter: filters,
             count: 0,
-            offset: currentPage * 6,
+            offset: currentPage * itemsPerPage,
             sort: sort
         });
     };
@@ -98,7 +99,6 @@ const LocationList: React.FC = () => {
         const nextPage = currentPage + 1;
         setCurrentPage(nextPage);
 
-        const itemsPerPage = 6;
         const totalItems = locations.length;
         const displayedItems = (nextPage + 1) * itemsPerPage;
 

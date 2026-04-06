@@ -1,7 +1,6 @@
 package com.avatar.pandora.product.controllers;
 
 import com.avatar.pandora.product.models.Filter;
-import com.avatar.pandora.product.models.location.LocationSort;
 import com.avatar.pandora.product.models.pitch.PitchProperty;
 import com.avatar.pandora.product.models.pitch.PitchSort;
 import com.avatar.pandora.product.models.pitch.PitchView;
@@ -12,15 +11,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.graphql.test.autoconfigure.tester.AutoConfigureGraphQlTester;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -61,21 +59,21 @@ class QueryPitchesControllerTest {
                 .get();
 
         Assertions.assertEquals(expected, pitches.size());
-        if(pitches.isEmpty()) return;
-        
+        if (pitches.isEmpty()) return;
+
         // Validate search term in all results
-        if(!searchTerm.isBlank()) {
+        if (!searchTerm.isBlank()) {
             Assertions.assertTrue(pitches.stream().allMatch(pitch -> pitch.name().contains(searchTerm)),
                     "Not all pitches contain search term: " + searchTerm);
         }
-        
+
         // Validate that ALL pitches contain ALL filtered properties
-        if(!propertiesNames.isEmpty()) {
+        if (!propertiesNames.isEmpty()) {
             Set<PitchProperty> filterProperties = propertiesNames.stream()
                     .map(PitchProperty::valueOf)
                     .collect(java.util.stream.Collectors.toSet());
-            Assertions.assertTrue(pitches.stream().allMatch(pitch -> 
-                    pitch.properties().containsAll(filterProperties)),
+            Assertions.assertTrue(pitches.stream().allMatch(pitch ->
+                            pitch.properties().containsAll(filterProperties)),
                     "Not all pitches contain all the filtered properties");
         }
     }

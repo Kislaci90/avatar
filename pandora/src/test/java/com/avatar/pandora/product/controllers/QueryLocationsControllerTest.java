@@ -1,7 +1,9 @@
 package com.avatar.pandora.product.controllers;
 
 import com.avatar.pandora.product.models.Filter;
-import com.avatar.pandora.product.models.location.*;
+import com.avatar.pandora.product.models.location.LocationProperty;
+import com.avatar.pandora.product.models.location.LocationSort;
+import com.avatar.pandora.product.models.location.LocationView;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,9 +11,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.graphql.test.autoconfigure.tester.AutoConfigureGraphQlTester;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -57,24 +59,24 @@ class QueryLocationsControllerTest {
                 .get();
 
         Assertions.assertEquals(expected, locations.size());
-        if(locations.isEmpty()) return;
-        
+        if (locations.isEmpty()) return;
+
         // Validate search term in all results
-        if(!searchTerm.isBlank()) {
+        if (!searchTerm.isBlank()) {
             Assertions.assertTrue(locations.stream().allMatch(loc -> loc.name().contains(searchTerm)),
                     "Not all locations contain search term: " + searchTerm);
         }
-        
+
         // Validate cities in all results
-        if(!cities.isEmpty()) {
+        if (!cities.isEmpty()) {
             Assertions.assertTrue(locations.stream().allMatch(loc -> cities.contains(loc.address().getCity())),
                     "Not all locations are in the filtered cities");
         }
-        
+
         // Validate that ALL locations contain ALL filtered properties
-        if(!locationProperties.isEmpty()) {
-            Assertions.assertTrue(locations.stream().allMatch(loc -> 
-                    loc.properties().containsAll(locationProperties)),
+        if (!locationProperties.isEmpty()) {
+            Assertions.assertTrue(locations.stream().allMatch(loc ->
+                            loc.properties().containsAll(locationProperties)),
                     "Not all locations contain all the filtered properties");
         }
     }
