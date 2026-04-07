@@ -12,14 +12,16 @@ import ViewToggle from "../components/location/ViewToggle";
 import LocationsMap from "../components/location/map/LocationsMap";
 import theme from "../theme/theme.ts";
 import {type Filter, handleFilterChange} from "../services/filters";
+import {useSearchParams} from "react-router-dom";
 
 const LocationList: React.FC = () => {
     const {t} = useTranslation();
+    const [searchParams] = useSearchParams()
     const [view, setView] = useState<'grid' | 'map'>('grid');
     const [filters, setFilters] = useState<Filter>({
         searchTerm: '',
         locationProperties: [],
-        cities: [],
+        cities: searchParams.get('cities') ? searchParams.get('cities')!.split(',') : [],
         properties: [],
         surfaceTypes: [],
         pitchTypes: [],

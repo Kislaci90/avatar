@@ -5,8 +5,6 @@ import {
     Chip,
     Collapse,
     FormControl,
-    FormControlLabel,
-    FormGroup,
     FormLabel,
     Grid,
     InputAdornment,
@@ -18,6 +16,8 @@ import {
     Select,
     Stack,
     TextField,
+    ToggleButton,
+    ToggleButtonGroup,
     Typography
 } from "@mui/material";
 import {ArrowDownward, ArrowUpward, Search, Tune} from "@mui/icons-material";
@@ -54,11 +54,11 @@ const MenuProps = {
 };
 
 export function SearchHeader({
-                                         filters,
-                                         handleSearch,
-                                         handleFilterChange,
-                                         setSort
-                                     }: Readonly<SearchHeaderProps<Filter>>) {
+                                 filters,
+                                 handleSearch,
+                                 handleFilterChange,
+                                 setSort
+                             }: Readonly<SearchHeaderProps<Filter>>) {
 
     const {t} = useTranslation();
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
@@ -191,12 +191,13 @@ export function SearchHeader({
                                     labelId="cities-multiple-checkbox-label"
                                     id="cities-multiple-checkbox"
                                     multiple
+                                    size="small"
                                     value={filters.cities}
                                     onChange={e => handleFilterChange('cities', e.target.value)}
                                     input={<OutlinedInput label={t('locations.cities')}/>}
                                     renderValue={(selected) => selected.join(', ')}
                                     MenuProps={MenuProps}
-                                    sx={{borderRadius: 2, backgroundColor: 'white'}}
+                                    sx={{borderRadius: 2, backgroundColor: 'white', '& .MuiOutlinedInput-input': {py: 2}}}
                                 >
                                     {searchFilters?.cities.map((city) => (
                                         <MenuItem key={city} value={city}>
@@ -214,9 +215,10 @@ export function SearchHeader({
                                 <Select
                                     labelId="sort-multiple-checkbox-label"
                                     id="sort-multiple-checkbox"
+                                    size="small"
                                     onChange={e => setSort(String(e.target.value))}
                                     input={<OutlinedInput label={t('locations.locationSort')}/>}
-                                    sx={{borderRadius: 2, backgroundColor: 'white'}}
+                                    sx={{borderRadius: 2, backgroundColor: 'white', '& .MuiOutlinedInput-input': {py: 2}}}
                                 >
                                     {sort.map((sort) => (
                                         <MenuItem key={sort.value} value={sort.value}>
@@ -229,105 +231,117 @@ export function SearchHeader({
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid size={{xs: 12}}>
-                            <FormLabel>{t('locations.locationProperty')}</FormLabel>
-                            <FormGroup row sx={{
-                                mt: 2,
-                                flexWrap: 'wrap',
-                                gap: 2,
-                                justifyContent: 'space-between',
-                                backgroundColor: 'white',
-                                borderRadius: 2,
-                                padding: 2
-                            }}>
+                        <Grid size={{xs: 8}}>
+                            <FormLabel sx={{fontWeight: 600, mb: 2, display: 'block'}}>{t('locations.locationProperty')}</FormLabel>
+                            <ToggleButtonGroup
+                                value={filters.locationProperties}
+                                size="small"
+                                color="secondary"
+                                onChange={(_, newValue) => handleFilterChange('locationProperties', newValue)}
+                            >
                                 {searchFilters?.locationProperties.map((property) => (
-                                    <FormControlLabel key={property} control={
-                                        <Checkbox checked={filters.locationProperties.includes(property)}
-                                                  value={property}
-                                                  onChange={e => handleFilterChange('locationProperties', e.target.value, e.target.checked)}/>}
-                                                      label={
-                                                          <Stack direction="row" spacing={1} alignItems="center">
-                                                              {locationPropertyIconMap[property]}
-                                                              {t('locations.property.'+property)}
-                                                          </Stack>
-                                                      }/>
+                                    <ToggleButton
+                                        key={property}
+                                        value={property}
+                                    >
+                                        <Stack direction="row" spacing={1} alignItems="center">
+                                            {locationPropertyIconMap[property]}
+                                            {t('locations.property.'+property)}
+                                        </Stack>
+                                    </ToggleButton>
                                 ))}
-                            </FormGroup>
+                            </ToggleButtonGroup>
                         </Grid>
                         <Grid size={{xs: 4}}>
-                            <FormLabel>{t('pitches.properties')}</FormLabel>
-                            <FormGroup sx={{
-                                mt: 2,
-                                flexWrap: 'wrap',
-                                gap: 2,
-                                justifyContent: 'space-between',
-                                backgroundColor: 'white',
-                                borderRadius: 2,
-                                padding: 2
-                            }}>
+                            <FormLabel sx={{fontWeight: 600, mb: 2, display: 'block'}}>{t('pitches.properties')}</FormLabel>
+                            <ToggleButtonGroup
+                                value={filters.properties}
+                                size="small"
+                                color="secondary"
+                                onChange={(_, newValue) => handleFilterChange('properties', newValue)}
+                            >
                                 {searchFilters?.pitchProperties.map((property) => (
-                                    <FormControlLabel key={property} control={
-                                        <Checkbox checked={filters.properties.includes(property)}
-                                                  value={property}
-                                                  onChange={e => handleFilterChange('properties', e.target.value, e.target.checked)}/>}
-                                                      label={
-                                                          <Stack direction="row" spacing={1} alignItems="center">
-                                                              {pitchPropertyIconMap[property]}
-                                                              {t('pitches.pitchPropertyOptions.'+property)}
-                                                          </Stack>
-                                                      }/>
+                                    <ToggleButton
+                                        key={property}
+                                        value={property}
+                                    >
+                                        <Stack direction="row" spacing={1} alignItems="center">
+                                            {pitchPropertyIconMap[property]}
+                                            {t('pitches.pitchPropertyOptions.'+property)}
+                                        </Stack>
+                                    </ToggleButton>
                                 ))}
-                            </FormGroup>
+                            </ToggleButtonGroup>
                         </Grid>
-                        <Grid size={{xs: 4}}>
-                            <FormLabel>{t('pitches.surfaceType')}</FormLabel>
-                            <FormGroup sx={{
-                                mt: 2,
-                                flexWrap: 'wrap',
-                                gap: 2,
-                                justifyContent: 'space-between',
-                                backgroundColor: 'white',
-                                borderRadius: 2,
-                                padding: 2
-                            }}>
+                        <Grid size={{xs: 6}}>
+                            <FormLabel sx={{fontWeight: 600, mb: 2, display: 'block'}}>{t('pitches.surfaceType')}</FormLabel>
+                            <ToggleButtonGroup
+                                value={filters.surfaceTypes}
+                                size="small"
+                                onChange={(_, newValue) => handleFilterChange('surfaceTypes', newValue)}
+                            >
                                 {searchFilters?.surfaceTypes.map((surfaceType) => (
-                                    <FormControlLabel key={surfaceType} control={
-                                        <Checkbox checked={filters.surfaceTypes.includes(surfaceType)}
-                                                  sx={{color: getSurfaceTypeColor(surfaceType), '&.Mui-checked': {color: getSurfaceTypeColor(surfaceType)}}}
-                                                  value={surfaceType}
-                                                  onChange={e => handleFilterChange('surfaceTypes', e.target.value, e.target.checked)}/>}
-                                                      label={
-                                                          <Stack direction="row" spacing={1} alignItems="center">
-                                                              {t('pitches.surfaceTypeOptions.'+surfaceType)}
-                                                          </Stack>
-                                                      }/>
+                                    <ToggleButton
+                                        key={surfaceType}
+                                        value={surfaceType}
+                                        sx={{
+                                            color: getSurfaceTypeColor(surfaceType),
+                                            '&.Mui-selected': {
+                                                backgroundColor: getSurfaceTypeColor(surfaceType),
+                                                color: 'white',
+                                                borderColor: getSurfaceTypeColor(surfaceType),
+                                                '&:hover': {
+                                                    backgroundColor: getSurfaceTypeColor(surfaceType),
+                                                    opacity: 0.8
+                                                }
+                                            },
+                                            '&:hover': {
+                                                backgroundColor: `${getSurfaceTypeColor(surfaceType)}20`,
+                                                borderColor: getSurfaceTypeColor(surfaceType)
+                                            }
+                                        }}
+                                    >
+                                        <Stack direction="row" spacing={1} alignItems="center">
+                                            {t('pitches.surfaceTypeOptions.'+surfaceType)}
+                                        </Stack>
+                                    </ToggleButton>
                                 ))}
-                            </FormGroup>
+                            </ToggleButtonGroup>
                         </Grid>
-                        <Grid size={{xs: 4}}>
-                            <FormLabel>{t('pitches.pitchType')}</FormLabel>
-                            <FormGroup sx={{
-                                mt: 2,
-                                flexWrap: 'wrap',
-                                gap: 2,
-                                justifyContent: 'space-between',
-                                backgroundColor: 'white',
-                                borderRadius: 2,
-                                padding: 2
-                            }}>
-                                {searchFilters?.pitchTypes.map((type) => (
-                                    <FormControlLabel key={type} control={
-                                        <Checkbox checked={filters.pitchTypes.includes(type)}
-                                                  value={type}
-                                                  sx={{color: getPitchTypeColor(type), '&.Mui-checked': {color: getPitchTypeColor(type)}}}
-                                                  onChange={e => handleFilterChange('pitchTypes', e.target.value, e.target.checked)}/>}
-                                                      label={
-                                                          <Stack direction="row" spacing={1} alignItems="center">
-                                                              {t('pitches.pitchTypeOptions.'+type)}
-                                                          </Stack>
-                                                      }/>
+                        <Grid size={{xs: 6}}>
+                            <FormLabel sx={{fontWeight: 600, mb: 2, display: 'block'}}>{t('pitches.pitchType')}</FormLabel>
+                            <ToggleButtonGroup
+                                value={filters.pitchTypes}
+                                size="small"
+                                onChange={(_, newValue) => handleFilterChange('pitchTypes', newValue)}
+                            >
+                                {searchFilters?.pitchTypes.map((pitchType) => (
+                                    <ToggleButton
+                                        key={pitchType}
+                                        value={pitchType}
+                                        sx={{
+                                            color: getPitchTypeColor(pitchType),
+                                            '&.Mui-selected': {
+                                                backgroundColor: getPitchTypeColor(pitchType),
+                                                color: 'white',
+                                                borderColor: getPitchTypeColor(pitchType),
+                                                '&:hover': {
+                                                    backgroundColor: getPitchTypeColor(pitchType),
+                                                    opacity: 0.8
+                                                }
+                                            },
+                                            '&:hover': {
+                                                backgroundColor: `${getPitchTypeColor(pitchType)}20`,
+                                                borderColor: getPitchTypeColor(pitchType)
+                                            }
+                                        }}
+                                    >
+                                        <Stack direction="row" spacing={1} alignItems="center">
+                                            {t('pitches.pitchTypeOptions.'+pitchType)}
+                                        </Stack>
+                                    </ToggleButton>
                                 ))}
-                            </FormGroup>
+                            </ToggleButtonGroup>
                         </Grid>
                     </Grid>
                 </Box>

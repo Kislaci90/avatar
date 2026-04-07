@@ -87,16 +87,6 @@ export function LocationCardImage({location}: Readonly<LocationCardImageProps>) 
                 />
             </Box>
 
-            <Box sx={{
-                position: 'absolute',
-                bottom: 12,
-                right: 12,
-                p: 0.8,
-                borderRadius: 1,
-                backdropFilter: "blur(2px)",
-            }}>
-            </Box>
-
 
         </Box>
     );

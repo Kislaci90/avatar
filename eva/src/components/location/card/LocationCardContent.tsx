@@ -1,16 +1,15 @@
-import {Box, CardContent, Checkbox, Chip, Divider, Link, Stack, Tooltip, Typography} from "@mui/material";
+import {Box, CardContent, Checkbox, Chip, Divider, Stack, Tooltip, Typography} from "@mui/material";
 import {type LocationView} from "../../../services/location.ts";
 import {locationPropertyIconMap} from "../../PropertyMap.tsx";
-import {useNavigate} from "react-router-dom";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
 import {useTranslation} from "react-i18next";
+import {CityLink} from "../../CityLink.tsx";
 
 interface LocationCardContentProps {
     location: LocationView
 }
 
 export function LocationCardContent({location}: Readonly<LocationCardContentProps>) {
-    const navigate = useNavigate()
     const {t} = useTranslation()
 
     return (
@@ -31,11 +30,8 @@ export function LocationCardContent({location}: Readonly<LocationCardContentProp
             </Box>
 
             <Box sx={{justifyContent: "space-between", alignItems: "center", display: "flex"}}>
-                <Typography variant="body1" sx={{mb: 1}}>
-                    <Link component="button" underline="none" onClick={() => {
-                        navigate(`/locations/${location.id}`)
-                    }}>{location.address.city}</Link>
-                </Typography>
+                <CityLink city={location.address.city}/>
+
                 <Box>
                     <Chip sx={{border: "none"}} size="small" color="primary" variant="outlined"
                           label={`${location.pitches?.length || 0} Pitches`}/>
