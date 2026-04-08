@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Transactional
 @DisplayName("Home Controller Tests")
-public class FilterControllerTest {
+class FilterControllerTest {
 
     @Autowired
     private GraphQlTester httpGraphQlTester;
