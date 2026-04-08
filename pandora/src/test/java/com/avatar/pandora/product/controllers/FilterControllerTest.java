@@ -2,14 +2,13 @@ package com.avatar.pandora.product.controllers;
 
 import com.avatar.pandora.product.models.location.LocationProperty;
 import com.avatar.pandora.product.models.location.SearchFilter;
-import com.avatar.pandora.product.models.stats.HomeStatView;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureGraphQlTester;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.graphql.test.autoconfigure.tester.AutoConfigureGraphQlTester;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -23,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Transactional
 @DisplayName("Home Controller Tests")
-public class FilterControllerTest {
+class FilterControllerTest {
 
     @Autowired
     private GraphQlTester httpGraphQlTester;

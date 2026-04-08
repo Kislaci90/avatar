@@ -40,7 +40,7 @@ public interface PitchRepository extends JpaRepository<Pitch, Long> {
                                  WHERE p2.id = p.id AND prop IN (:properties)))
             """
     )
-    Page<Pitch> searchByPitchFiler(@NotNull Pageable pageable,
+    Page<Pitch> searchByPitchFiler(Pageable pageable,
                                          String searchTerm,
                                          Set<PitchProperty> properties,
                                          Boolean propertiesIsEmpty,

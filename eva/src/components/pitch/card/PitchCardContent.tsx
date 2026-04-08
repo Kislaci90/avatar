@@ -1,18 +1,17 @@
-import {Box, CardContent, Chip, Divider, Link, Stack, Tooltip, Typography} from "@mui/material";
+import {Box, CardContent, Checkbox, Chip, Divider, Stack, Tooltip, Typography} from "@mui/material";
 import {pitchPropertyIconMap} from "../../PropertyMap.tsx";
 import type {PitchView} from "../../../services/location.ts";
-import {useNavigate} from "react-router-dom";
+import {Favorite, FavoriteBorder} from "@mui/icons-material";
+import {CityLink} from "../../CityLink.tsx";
 
 interface PitchCardContentProps {
     pitch: PitchView
 }
 
 export function PitchCardContent({pitch}: Readonly<PitchCardContentProps>) {
-    const navigate = useNavigate()
-
     return (
         <CardContent sx={{flexGrow: 1, p: 3}}>
-            <Box sx={{justifyContent: "left", alignItems: "center", display: "flex"}}>
+            <Box sx={{justifyContent: "space-between", alignItems: "center", display: "flex"}}>
                 <Typography
                     variant="h6"
                     color="text.primary"
@@ -22,19 +21,13 @@ export function PitchCardContent({pitch}: Readonly<PitchCardContentProps>) {
                 >
                     {pitch.name}
                 </Typography>
+                <Box>
+                    <Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} color="secondary"/>
+                </Box>
             </Box>
 
             <Box sx={{justifyContent: "space-between", alignItems: "center", display: "flex"}}>
-                <Typography variant="body1" sx={{mb: 1}}>
-                    <Link component="button" underline="none" onClick={() => {
-                        navigate(`/pitches/${pitch.id}`)
-                    }}>{pitch.location.address.city}</Link>
-                </Typography>
-                <Typography variant="body1" sx={{mb: 1}}>
-                    <Link component="button" underline="none" onClick={() => {
-                        navigate(`/locations/${pitch.location.id}`)
-                    }}>{pitch.location.name}</Link>
-                </Typography>
+                <CityLink city={pitch.location.address.city}/>
             </Box>
 
             <Divider sx={{mb: 3}}/>

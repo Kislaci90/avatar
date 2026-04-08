@@ -1,5 +1,5 @@
 import {Box, CardMedia, Chip, useTheme} from "@mui/material";
-import {Favorite, LocationOn} from "@mui/icons-material";
+import {LocationOn} from "@mui/icons-material";
 import type {PitchView} from "../../../services/location.ts";
 import {LocationDistance} from "../../location/LocationDistance.tsx";
 import {type UserLocation} from "../../../services/distance.ts";
@@ -74,17 +74,6 @@ export function PitchCardImage({pitch, userLocation}: Readonly<PitchCardImagePro
                 backdropFilter: "blur(2px)",
             }}>
                 <LocationDistance userLocation={userLocation} geom={pitch.location.geom}></LocationDistance>
-            </Box>
-
-            <Box sx={{
-                position: 'absolute',
-                top: 12,
-                right: 12,
-                p: 0.8,
-                borderRadius: 1,
-                backdropFilter: "blur(2px)",
-            }}>
-                <Favorite color="secondary"></Favorite>
             </Box>
 
 

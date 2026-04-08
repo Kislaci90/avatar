@@ -48,7 +48,7 @@ public interface LocationRepository extends
                                          WHERE l2 = l AND p IN (:locationProperties)))
             """
     )
-    Page<Location> searchByLocationFilter(@NotNull Pageable pageable,
+    Page<Location> searchByLocationFilter(Pageable pageable,
                                           String searchTerm,
                                           Set<String> cities,
                                           Boolean citiesIsEmpty,
