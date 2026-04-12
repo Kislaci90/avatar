@@ -36,7 +36,7 @@ const LocationsMap: React.FC<LocationsMapProps> = ({ locations }) => {
                 style={{height: '100%', width: '100%'}}
             >
                 <TileLayer
-                    url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+                    url="https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.png"
                     attribution="&copy; OpenStreetMap & CARTO"
                 />
                 

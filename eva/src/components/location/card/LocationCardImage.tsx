@@ -6,8 +6,6 @@ import {MapContainer, Marker, TileLayer} from "react-leaflet";
 import L from "leaflet";
 import 'leaflet/dist/leaflet.css';
 
-// Fix for default marker icons
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
@@ -29,10 +27,10 @@ export function LocationCardImage({location}: Readonly<LocationCardImageProps>) 
     ];
 
     return (
-        <Box sx={{position: 'relative', overflow: 'hidden', height: 300, m: 0.5, borderRadius: 1.5}}>
+        <Box sx={{position: 'relative', overflow: 'hidden', height: 300, m: 0.5, borderRadius: 1.5, border: `2px solid ${theme.palette.divider}`}}>
             <MapContainer
                 center={mapCenter}
-                zoom={13}
+                zoom={10}
                 style={{height: '100%', width: '100%'}}
                 dragging={false}
                 doubleClickZoom={false}
@@ -41,7 +39,7 @@ export function LocationCardImage({location}: Readonly<LocationCardImageProps>) 
                 zoomControl={false}
             >
                 <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    url="https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.png"
                 />
                 <Marker position={mapCenter} />
             </MapContainer>

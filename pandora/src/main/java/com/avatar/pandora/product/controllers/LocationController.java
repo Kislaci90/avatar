@@ -1,6 +1,6 @@
 package com.avatar.pandora.product.controllers;
 
-import com.avatar.pandora.product.models.Filter;
+import com.avatar.pandora.product.models.filter.Filter;
 import com.avatar.pandora.product.models.location.LocationForm;
 import com.avatar.pandora.product.models.location.LocationView;
 import com.avatar.pandora.product.services.LocationService;

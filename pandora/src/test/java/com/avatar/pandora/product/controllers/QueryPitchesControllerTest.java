@@ -1,6 +1,6 @@
 package com.avatar.pandora.product.controllers;
 
-import com.avatar.pandora.product.models.Filter;
+import com.avatar.pandora.product.models.filter.Filter;
 import com.avatar.pandora.product.models.pitch.PitchProperty;
 import com.avatar.pandora.product.models.pitch.PitchSort;
 import com.avatar.pandora.product.models.pitch.PitchView;

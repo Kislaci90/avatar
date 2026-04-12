@@ -39,6 +39,7 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'io.soabase.record-builder:record-builder-processor:47'
+    annotationProcessor 'org.hibernate:hibernate-jpamodelgen:7.3.0.Final'
     compileOnly 'io.soabase.record-builder:record-builder-core:47'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework:spring-webflux'
