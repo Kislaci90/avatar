@@ -1,46 +1,61 @@
 package com.avatar.pandora.product.services;
 
 import com.avatar.pandora.configuration.JwtService;
+import com.avatar.pandora.product.exceptions.DuplicateEmailException;
 import com.avatar.pandora.product.models.user.*;
 import com.avatar.pandora.product.repositories.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UserConverter userConverter;
+    private final EmailVerificationService emailVerificationService;
 
     public AuthenticationService(
             UserRepository userRepository,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
-            JwtService jwtService, UserService userService, UserConverter userConverter) {
+            JwtService jwtService,
+            UserConverter userConverter,
+            EmailVerificationService emailVerificationService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.userConverter = userConverter;
+        this.emailVerificationService = emailVerificationService;
     }
 
     public RegisterResponse signup(RegisterUserInput input) {
+        if (userRepository.existsByEmail(input.email().trim())) {
+            throw new DuplicateEmailException("Email already registered");
+        }
+
         User user = new User();
-        user.setFirstName(input.firstName());
-        user.setLastName(input.lastName());
-        user.setEmail(input.email());
+        user.setFirstName(input.firstName().trim());
+        user.setLastName(input.lastName().trim());
+        user.setEmail(input.email().trim().toLowerCase());
         user.setPassword(passwordEncoder.encode(input.password()));
+        user.setEmailVerified(false);
 
         User savedUser = userRepository.save(user);
+
+        // Create and send verification token
+        emailVerificationService.createAndSendVerificationToken(savedUser);
 
         LoginResponse loginResponse = getLoginResponseFrom(savedUser);
         UserView userView = userConverter.convertToView(savedUser);
 
-        return new RegisterResponse("", true, loginResponse, userView);
+        return new RegisterResponse("User registered successfully. Please verify your email.", true, loginResponse, userView);
     }
 
     public User authenticate(String username, String password) {
@@ -59,5 +74,10 @@ public class AuthenticationService {
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
         return new LoginResponse(jwtToken, jwtService.getExpirationTime());
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 }

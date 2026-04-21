@@ -7,3 +7,9 @@ services:
       - 'POSTGRES_USER=admin'
       - 'POSTGRES_DB=avatar'
       - 'POSTGRES_PASSWORD=admin'
+  mailserver:
+    image: mailhog/mailhog
+    restart: always
+    ports:
+      - '1025:1025'
+      - '8025:8025'

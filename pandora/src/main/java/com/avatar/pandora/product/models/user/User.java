@@ -3,6 +3,7 @@ package com.avatar.pandora.product.models.user;
 import com.avatar.pandora.product.models.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "users")
+@Table(name = "users", indexes = {
+        @Index(name = "idx_users_email", columnList = "email")
+})
 @Entity
 public class User extends BaseEntity implements UserDetails {
 
@@ -30,6 +33,10 @@ public class User extends BaseEntity implements UserDetails {
     @Getter
     @Column(unique = true, length = 100, nullable = false)
     private String email;
+
+    @Getter
+    @Setter
+    private Boolean emailVerified;
 
     @Getter
     @Setter

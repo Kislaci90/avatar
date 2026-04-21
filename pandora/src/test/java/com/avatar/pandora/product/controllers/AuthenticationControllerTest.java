@@ -88,7 +88,7 @@ class AuthenticationControllerTest {
 
         assertNotNull(loginResponse);
         assertNotNull(loginResponse.token());
-        assertTrue(loginResponse.token().length() > 0);
+        assertFalse(loginResponse.token().isEmpty());
         assertTrue(loginResponse.expiresIn() > 0);
     }
 
@@ -118,7 +118,6 @@ class AuthenticationControllerTest {
                 .get();
 
         assertNotNull(token);
-        // JWT tokens have 3 parts separated by dots
         String[] parts = token.split("\\.");
         assertEquals(3, parts.length, "JWT should have 3 parts (header.payload.signature)");
     }
@@ -130,7 +129,6 @@ class AuthenticationControllerTest {
         String password = "expiryPassword123!";
         RegisterUserInput input = new RegisterUserInput("Expiry","Test User", email, password);
 
-        // Register user
         httpGraphQlTester
                 .documentName("registerUser")
                 .variable("registerUserInput", toMap(input))
@@ -138,7 +136,6 @@ class AuthenticationControllerTest {
                 .path("data.register.user.id")
                 .hasValue();
 
-        // Login and check expiration
         var expiresIn = httpGraphQlTester
                 .documentName("loginUser")
                 .variable("username", email)
@@ -160,7 +157,6 @@ class AuthenticationControllerTest {
         String wrongPassword = "wrongPassword123!";
         RegisterUserInput input = new RegisterUserInput("Test","User", email, password);
 
-        // Register user
         httpGraphQlTester
                 .documentName("registerUser")
                 .variable("registerUserInput", toMap(input))
@@ -168,7 +164,6 @@ class AuthenticationControllerTest {
                 .path("data.register.user.id")
                 .hasValue();
 
-        // Try to login with wrong password
         httpGraphQlTester
                 .documentName("loginUser")
                 .variable("username", email)
@@ -201,7 +196,7 @@ class AuthenticationControllerTest {
         String[] lastNames = {"One", "Two", "Three"};
 
         for (int i = 0; i < emails.length; i++) {
-            RegisterUserInput input = new RegisterUserInput(firstNames[i], lastNames[i], emails[i], "password" + i + "!");
+            RegisterUserInput input = new RegisterUserInput(firstNames[i], lastNames[i], emails[i], "Password" + i + "!");
             
             var user = httpGraphQlTester
                     .documentName("registerUser")

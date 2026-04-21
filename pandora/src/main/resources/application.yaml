@@ -1,6 +1,4 @@
 spring:
-  thymeleaf:
-    enabled: false
   graphql:
     graphiql:
       enabled: true
@@ -29,15 +27,24 @@ spring:
   sql:
     init:
       mode: always
-logging:
-  level:
-    web: debug
-    graphql: debug
-    hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.hibernate.orm.jdbc.bind: TRACE
+  mail:
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:1025}
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
 
 security:
   jwt:
     secret-key: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
     expiration-time: 3600000
+
+app:
+  mail:
+    from: noreply@avatar.local
+  email-verification:
+    url: http://localhost:3000/verify-email
+    expiry-hours: 24
