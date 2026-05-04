@@ -53,7 +53,7 @@ public class AuthenticationController {
         log.info("Resending verification email to: {}", email);
         User user = authenticationService.getUserByEmail(email);
 
-        if (user.getEmailVerified()) {
+        if (Boolean.TRUE.equals(user.getEmailVerified())) {
             throw new IllegalArgumentException("Email already verified");
         }
 

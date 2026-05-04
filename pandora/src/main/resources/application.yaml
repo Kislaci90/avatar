@@ -13,8 +13,8 @@ spring:
       enabled: true
   datasource:
     url: jdbc:postgresql://localhost:5432/avatar
-    username: admin
-    password: admin
+    username: ${DB_USER:admin}
+    password: ${DB_PASSWORD:admin}
   jpa:
     hibernate:
       ddl-auto: create
@@ -39,7 +39,7 @@ spring:
 
 security:
   jwt:
-    secret-key: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
+    secret-key: ${JWT_SECRET_KEY:test-secret-key-32-chars-minimum-12345678}
     expiration-time: 3600000
 
 app:
@@ -48,3 +48,4 @@ app:
   email-verification:
     url: http://localhost:3000/verify-email
     expiry-hours: 24
+
