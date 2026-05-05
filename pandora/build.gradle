@@ -51,16 +51,14 @@ dependencies {
     testImplementation 'org.hibernate.orm:hibernate-spatial:7.3.0.Final'
     testImplementation("org.hamcrest:hamcrest:3.0")
     testImplementation "org.testcontainers:testcontainers:2.0.2"
-    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-graphql-test'
+    testImplementation 'io.cucumber:cucumber-java:7.14.0'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.14.0'
+    testImplementation 'org.junit.platform:junit-platform-suite:1.10.0'
+    testImplementation 'org.junit.platform:junit-platform-engine:1.10.0'
 }
 
 test {
     useJUnitPlatform()
-    
-    // Ensure Spring Boot test profile is activated
     systemProperty 'spring.profiles.active', 'test'
-    
-    // Ensure test resources are available on classpath
     shouldRunAfter processTestResources
 }

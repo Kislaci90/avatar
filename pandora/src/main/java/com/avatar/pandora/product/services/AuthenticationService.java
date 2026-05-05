@@ -49,7 +49,6 @@ public class AuthenticationService {
 
         User savedUser = userRepository.save(user);
 
-        // Create and send verification token
         emailVerificationService.createAndSendVerificationToken(savedUser);
 
         LoginResponse loginResponse = getLoginResponseFrom(savedUser);

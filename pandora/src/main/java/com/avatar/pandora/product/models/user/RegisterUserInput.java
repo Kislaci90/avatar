@@ -21,8 +21,8 @@ public record RegisterUserInput(
     @NotBlank(message = "Password is required")
     @Size(min = 8, max = 128, message = "Password must be 8-128 characters")
     @Pattern(
-        regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]).+$",
-        message = "Password must contain uppercase, lowercase, number, and special character"
+        regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$",
+        message = "Password must contain uppercase, lowercase, number"
     )
     String password
 ) {
