@@ -62,3 +62,7 @@ test {
     systemProperty 'spring.profiles.active', 'test'
     shouldRunAfter processTestResources
 }
+
+dependencyLocking {
+    lockAllConfigurations()
+}
