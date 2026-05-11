@@ -44,7 +44,6 @@ dependencies {
     compileOnly 'io.soabase.record-builder:record-builder-core:47'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework:spring-webflux'
-    testImplementation 'org.springframework.graphql:spring-graphql-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.testcontainers:junit-jupiter:1.20.0'
     testImplementation 'org.testcontainers:postgresql:1.20.0'
@@ -53,8 +52,7 @@ dependencies {
     testImplementation "org.testcontainers:testcontainers:2.0.2"
     testImplementation 'io.cucumber:cucumber-java:7.14.0'
     testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.14.0'
-    testImplementation 'org.junit.platform:junit-platform-suite:1.10.0'
-    testImplementation 'org.junit.platform:junit-platform-engine:1.10.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-graphql-test'
 }
 
 test {

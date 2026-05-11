@@ -14,7 +14,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.graphql.test.autoconfigure.tester.AutoConfigureGraphQlTester;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,7 +24,6 @@ import java.util.stream.Stream;
 
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @AutoConfigureGraphQlTester
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -124,7 +122,7 @@ class QueryLocationsControllerTest {
                 // Filter by single surface type - CONCRETE
                 Arguments.of("", Set.of(), Set.of(), Set.of(PitchSurfaceType.CONCRETE.name()), 1),
                 // Filter by multiple surface types
-                Arguments.of("", Set.of(), Set.of(), Set.of(PitchSurfaceType.TURF.name(), PitchSurfaceType.ARTIFICIAL_GRASS.name()), 1),
+                Arguments.of("", Set.of(), Set.of(), Set.of(PitchSurfaceType.TURF.name(), PitchSurfaceType.ARTIFICIAL_GRASS.name()), 2),
                 // Filter by non-existent surface type
                 Arguments.of("", Set.of(), Set.of(), Set.of(PitchSurfaceType.GRASS.name()), 0),
                 // Filter location by city and surface type

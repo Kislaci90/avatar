@@ -1,6 +1,5 @@
 package com.avatar.pandora.product.specifications;
 
-import com.avatar.pandora.product.models.location.LocationProperty;
 import com.avatar.pandora.product.models.pitch.Pitch;
 import com.avatar.pandora.product.models.pitch.PitchProperty;
 import com.avatar.pandora.product.models.pitch.PitchSurfaceType;
@@ -52,7 +51,7 @@ public class PitchSpecification implements Specification {
 
             Subquery<Long> subquery = builder.createQuery().subquery(Long.class);
             Root<Pitch> subRoot = subquery.from(ENTITY_CLASS);
-            Join<Pitch, LocationProperty> propertiesJoin = subRoot.join(attributeName);
+            Join<Pitch, PitchProperty> propertiesJoin = subRoot.join(attributeName);
 
             subquery.select(subRoot.get("id"))
                     .where(
@@ -69,7 +68,7 @@ public class PitchSpecification implements Specification {
 
     private static <V> PredicateSpecification<Pitch> in(Set<V> values, String attributeName) {
         return (from, builder) -> {
-            if (values == null) {
+            if (values == null || values.isEmpty()) {
                 return null;
             }
             return builder.in(from.get(attributeName)).value(values);

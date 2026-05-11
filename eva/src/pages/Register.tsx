@@ -123,13 +123,19 @@ const Register: React.FC = () => {
     const validateFirstName = (firstName: string) => {
         if (!firstName) {
             setFirstNameError('Please enter first name');
+            return false
         }
+        setFirstNameError('')
+        return true
     }
 
     const validateLastName = (lastName: string) => {
         if (!lastName) {
             setLastNameError('Please enter last name');
+            return false
         }
+        setLastNameError('')
+        return true
     }
 
     const handleClickShowPassword = () => {

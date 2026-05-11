@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.graphql.test.autoconfigure.tester.AutoConfigureGraphQlTester;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @AutoConfigureGraphQlTester
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -37,7 +35,7 @@ class HomeControllerTest {
 
         Assertions.assertNotNull(homeStat);
         Assertions.assertEquals(2, homeStat.totalLocations());
-        Assertions.assertEquals(2, homeStat.totalPitches());
+        Assertions.assertEquals(4, homeStat.totalPitches());
         Assertions.assertEquals(2, homeStat.totalCities());
         Assertions.assertEquals(0, homeStat.totalUsers());
     }

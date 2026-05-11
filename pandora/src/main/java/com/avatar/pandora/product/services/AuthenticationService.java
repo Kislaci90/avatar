@@ -36,7 +36,7 @@ public class AuthenticationService {
     }
 
     public RegisterResponse signup(RegisterUserInput input) {
-        if (userRepository.existsByEmail(input.email().trim())) {
+        if (userRepository.existsByEmail(input.email().trim().toLowerCase())) {
             throw new DuplicateEmailException("Email already registered");
         }
 
@@ -76,7 +76,7 @@ public class AuthenticationService {
     }
 
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmail(email.trim().toLowerCase())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 }

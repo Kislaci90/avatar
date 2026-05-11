@@ -29,13 +29,11 @@ public class AuthenticationController {
 
     @MutationMapping
     public RegisterResponse register(@Argument("registerUserInput") @Valid RegisterUserInput registerInput) {
-        log.info("Received registration request for email: {}", registerInput.email());
         return authenticationService.signup(registerInput);
     }
 
     @MutationMapping
     public LoginResponse login(@Argument("username") String username, @Argument("password") String password) {
-        log.info("Received login request for username/email: {}", username);
         User authenticatedUser = authenticationService.authenticate(username, password);
 
         return authenticationService.getLoginResponseFrom(authenticatedUser);
@@ -50,7 +48,6 @@ public class AuthenticationController {
 
     @MutationMapping
     public Boolean resendVerificationEmail(@Argument("email") String email) {
-        log.info("Resending verification email to: {}", email);
         User user = authenticationService.getUserByEmail(email);
 
         if (Boolean.TRUE.equals(user.getEmailVerified())) {

@@ -30,7 +30,7 @@ public class LocationSpecification implements Specification {
     }
 
     public static PredicateSpecification<Location> pitchesPropertiesIn(Set<PitchProperty> set) {
-        return in(set, "property");
+        return in(set, "properties");
     }
 
     private static <S> PredicateSpecification<Location> in(Set<S> set, String property) {
@@ -46,10 +46,7 @@ public class LocationSpecification implements Specification {
                     .where(
                             pitchJoin.get(property).in(set)
                     )
-                    .groupBy(subRoot.get("id"))
-                    .having(
-                            builder.equal(builder.countDistinct(pitchJoin.get(property)), (long) set.size())
-                    );
+                    .groupBy(subRoot.get("id"));
 
             return from.get("id").in(subquery);
         };

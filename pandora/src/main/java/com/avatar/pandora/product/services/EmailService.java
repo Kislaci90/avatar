@@ -19,6 +19,9 @@ public class EmailService {
     @Value("${app.email-verification.url:http://localhost:3000/verify-email}")
     private String verificationUrl;
 
+    @Value("${app.email-verification.expiry-hours:24}")
+    private String emailVerificationExpiryHours;
+
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
@@ -63,7 +66,7 @@ public class EmailService {
         return "Hello " + firstName + ",\n\n" +
                 "Welcome to Avatar! Please verify your email address by clicking the link below:\n\n" +
                 verificationLink + "\n\n" +
-                "This link will expire in 24 hours.\n\n" +
+                "This link will expire in " + emailVerificationExpiryHours + " hours.\n\n" +
                 "If you did not create this account, please ignore this email.\n\n" +
                 "Best regards,\n" +
                 "Avatar Team";

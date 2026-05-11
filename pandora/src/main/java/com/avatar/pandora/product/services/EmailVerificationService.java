@@ -4,6 +4,7 @@ import com.avatar.pandora.product.models.user.EmailVerificationToken;
 import com.avatar.pandora.product.models.user.User;
 import com.avatar.pandora.product.repositories.EmailVerificationTokenRepository;
 import com.avatar.pandora.product.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class EmailVerificationService {
         this.emailService = emailService;
     }
 
+    @Transactional
     public void createAndSendVerificationToken(User user) {
         String token = UUID.randomUUID().toString();
 
@@ -43,6 +45,7 @@ public class EmailVerificationService {
         emailService.sendVerificationEmail(user, token);
     }
 
+    @Transactional
     public void verifyEmail(String token) {
         EmailVerificationToken verificationToken = tokenRepository.findByToken(token)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid verification token"));
