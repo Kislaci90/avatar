@@ -5,6 +5,9 @@ import com.avatar.pandora.product.models.user.RegisterResponse;
 import com.avatar.pandora.product.models.user.RegisterUserInput;
 import com.avatar.pandora.product.models.user.User;
 import com.avatar.pandora.product.services.AuthenticationService;
+import com.avatar.pandora.product.services.EmailVerificationService;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,15 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/auth")
 @RestController
+@Slf4j
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
+    private final EmailVerificationService emailVerificationService;
 
-    public AuthenticationController(AuthenticationService authenticationService) {
+    public AuthenticationController(
+            AuthenticationService authenticationService,
+            EmailVerificationService emailVerificationService) {
         this.authenticationService = authenticationService;
+        this.emailVerificationService = emailVerificationService;
     }
 
     @MutationMapping
-    public RegisterResponse register(@Argument("registerUserInput") RegisterUserInput registerInput) {
+    public RegisterResponse register(@Argument("registerUserInput") @Valid RegisterUserInput registerInput) {
         return authenticationService.signup(registerInput);
     }
 
@@ -29,6 +37,25 @@ public class AuthenticationController {
         User authenticatedUser = authenticationService.authenticate(username, password);
 
         return authenticationService.getLoginResponseFrom(authenticatedUser);
+    }
+
+    @MutationMapping
+    public Boolean verifyEmail(@Argument("token") String token) {
+        log.info("Received email verification request");
+        emailVerificationService.verifyEmail(token);
+        return true;
+    }
+
+    @MutationMapping
+    public Boolean resendVerificationEmail(@Argument("email") String email) {
+        User user = authenticationService.getUserByEmail(email);
+
+        if (Boolean.TRUE.equals(user.getEmailVerified())) {
+            throw new IllegalArgumentException("Email already verified");
+        }
+
+        emailVerificationService.createAndSendVerificationToken(user);
+        return true;
     }
 
 }

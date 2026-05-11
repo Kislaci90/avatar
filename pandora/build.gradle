@@ -27,6 +27,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'io.micrometer:micrometer-tracing-bridge-brave'
     implementation 'io.jsonwebtoken:jjwt:0.13.0'
     implementation 'org.postgresql:postgresql'
@@ -39,26 +40,27 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'io.soabase.record-builder:record-builder-processor:47'
+    annotationProcessor 'org.hibernate:hibernate-jpamodelgen:7.3.0.Final'
     compileOnly 'io.soabase.record-builder:record-builder-core:47'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework:spring-webflux'
-    testImplementation 'org.springframework.graphql:spring-graphql-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation 'org.testcontainers:junit-jupiter:1.20.0'
     testImplementation 'org.testcontainers:postgresql:1.20.0'
     testImplementation 'org.hibernate.orm:hibernate-spatial:7.3.0.Final'
     testImplementation("org.hamcrest:hamcrest:3.0")
     testImplementation "org.testcontainers:testcontainers:2.0.2"
-    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation 'io.cucumber:cucumber-java:7.14.0'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.14.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-graphql-test'
 }
 
 test {
     useJUnitPlatform()
-    
-    // Ensure Spring Boot test profile is activated
     systemProperty 'spring.profiles.active', 'test'
-    
-    // Ensure test resources are available on classpath
     shouldRunAfter processTestResources
+}
+
+dependencyLocking {
+    lockAllConfigurations()
 }

@@ -1,4 +1,4 @@
-package com.avatar.pandora.product.models;
+package com.avatar.pandora.product.models.filter;
 
 import java.util.Map;
 

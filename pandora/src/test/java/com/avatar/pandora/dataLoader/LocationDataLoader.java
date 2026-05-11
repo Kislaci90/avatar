@@ -94,7 +94,25 @@ public class LocationDataLoader implements CommandLineRunner {
          location.setGeom(point);
          location.setProperties(Set.of(LocationProperty.SHOWER, LocationProperty.CHANGING_ROOM, LocationProperty.FREE_PARKING, LocationProperty.CAFE));
 
-         locationRepository.save(location);
-     }
+         Location savedLocation = locationRepository.save(location);
+
+         Pitch pitch3 = new Pitch();
+         pitch3.setLocation(savedLocation);
+         pitch3.setDescription(faker.lorem().paragraph(1));
+         pitch3.setType(PitchType.HALF_SIZE);
+         pitch3.setSurfaceType(PitchSurfaceType.ARTIFICIAL_GRASS);
+         pitch3.setProperties(Set.of(PitchProperty.LIGHTING));
+         pitch3.setName("Pitch 3");
+
+         Pitch pitch4 = new Pitch();
+         pitch4.setLocation(savedLocation);
+         pitch4.setDescription(faker.lorem().paragraph(1));
+         pitch4.setType(PitchType.FULL_SIZE);
+         pitch4.setSurfaceType(PitchSurfaceType.CONCRETE);
+         pitch4.setProperties(Set.of());
+         pitch4.setName("Pitch 4");
+
+         pitchRepository.saveAll(Set.of(pitch3, pitch4));
+    }
 
 }

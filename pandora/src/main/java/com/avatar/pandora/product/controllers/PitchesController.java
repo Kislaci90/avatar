@@ -1,9 +1,8 @@
 package com.avatar.pandora.product.controllers;
 
-import com.avatar.pandora.product.models.Filter;
+import com.avatar.pandora.product.models.filter.Filter;
 import com.avatar.pandora.product.models.pitch.PitchView;
 import com.avatar.pandora.product.services.PitchService;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;

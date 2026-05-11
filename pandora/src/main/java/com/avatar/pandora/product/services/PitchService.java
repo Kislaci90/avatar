@@ -1,15 +1,14 @@
 package com.avatar.pandora.product.services;
 
-import com.avatar.pandora.product.models.Filter;
+import com.avatar.pandora.product.models.filter.Filter;
 import com.avatar.pandora.product.models.pitch.*;
 import com.avatar.pandora.product.repositories.PitchRepository;
+import com.avatar.pandora.product.specifications.PitchSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -30,13 +29,17 @@ public class PitchService {
 
     public Page<PitchView> searchPitches(Integer count, Integer offset, Filter filter, String sort) {
         PitchSort pitchSort = PitchSort.valueOf(Optional.ofNullable(sort).orElse(PitchSort.DISTANCE_ASC.name()));
-        PageRequest pageable = PageRequest.of(count, offset, pitchSort.getDirection(), pitchSort.getField());
-        Set<PitchProperty> properties = filter.getProperties().stream().map(PitchProperty::valueOf).collect(Collectors.toSet());
-        return pitchRepository.searchByPitchFiler(pageable,
-                filter.getSearchTerm(),
-                properties,
-                properties.isEmpty(),
-                properties.size()).map(pitchConverter::convertToView);
+        PageRequest pageRequest = PageRequest.of(count, offset, pitchSort.getDirection(), pitchSort.getField());
+
+        var specification =
+                PitchSpecification
+                        .nameContains(filter.getSearchTerm())
+                        .and(PitchSpecification.surfaceTypeIn(filter.getPitchSurfaceTypes())
+                        .and(PitchSpecification.propertiesIn(filter.getProperties()))
+                        .and(PitchSpecification.typeIn(filter.getPitchTypes())));
+
+        return pitchRepository.findBy(specification, q -> q.page(pageRequest))
+                .map(pitchConverter::convertToView);
     }
 
     public PitchView getById(Long id) {

@@ -1,11 +1,12 @@
 package com.avatar.pandora.product.services;
 
-import com.avatar.pandora.product.models.Filter;
+import com.avatar.pandora.product.models.filter.Filter;
 import com.avatar.pandora.product.models.location.*;
 import com.avatar.pandora.product.models.pitch.PitchProperty;
 import com.avatar.pandora.product.models.pitch.PitchSurfaceType;
 import com.avatar.pandora.product.models.pitch.PitchType;
 import com.avatar.pandora.product.repositories.LocationRepository;
+import com.avatar.pandora.product.specifications.LocationSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.avatar.pandora.product.specifications.LocationSpecification.*;
 
 @Service
 public class LocationService {
@@ -31,13 +34,17 @@ public class LocationService {
         LocationSort locationSort = LocationSort.valueOf(Optional.ofNullable(sort).orElse(LocationSort.DISTANCE_ASC.name()));
         PageRequest pageRequest = PageRequest.of(count, offset, locationSort.getDirection(), locationSort.getField());
 
-        return locationRepository.searchByLocationFilter(pageRequest,
-                Optional.of(filter.getSearchTerm()).orElse(""),
-                filter.getCities(),
-                filter.getCities().isEmpty(),
-                filter.getLocationProperties().stream().map(LocationProperty::valueOf).collect(Collectors.toSet()),
-                filter.getLocationProperties().isEmpty(),
-                filter.getLocationProperties().size()).map(locationConverter::convertToView);
+        var specification =
+                LocationSpecification.nameContains(filter.getSearchTerm())
+                        .and(LocationSpecification.inCities(filter.getCities()))
+                        .and(pitchesPropertiesIn(filter.getProperties()))
+                        .and(pitchesTypesIn(filter.getPitchTypes()))
+                        .and(pitchesSurfaceTypesIn(filter.getPitchSurfaceTypes()))
+                        .and(itHasLocationProperties(filter.getLocationProperties()));
+
+        return locationRepository.findBy(specification, q -> q.page(pageRequest))
+                .map(locationConverter::convertToView);
+
     }
 
     public LocationView getById(Long id) {
@@ -72,6 +79,6 @@ public class LocationService {
                 EnumSet.allOf(PitchProperty.class).stream().map(Enum::name).collect(Collectors.toSet()),
                 EnumSet.allOf(PitchSurfaceType.class).stream().map(Enum::name).collect(Collectors.toSet()),
                 EnumSet.allOf(PitchType.class).stream().map(Enum::name).collect(Collectors.toSet())
-                );
+        );
     }
 }

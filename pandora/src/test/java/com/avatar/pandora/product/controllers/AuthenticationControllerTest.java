@@ -1,12 +1,14 @@
 package com.avatar.pandora.product.controllers;
 
-import com.avatar.pandora.product.models.user.*;
-import org.junit.jupiter.api.Test;
+import com.avatar.pandora.product.models.user.LoginResponse;
+import com.avatar.pandora.product.models.user.RegisterResponse;
+import com.avatar.pandora.product.models.user.RegisterUserInput;
+import com.avatar.pandora.product.models.user.UserView;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.graphql.test.autoconfigure.tester.AutoConfigureGraphQlTester;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.graphql.test.tester.GraphQlTester;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -18,7 +20,6 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @AutoConfigureGraphQlTester
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -88,7 +89,7 @@ class AuthenticationControllerTest {
 
         assertNotNull(loginResponse);
         assertNotNull(loginResponse.token());
-        assertTrue(loginResponse.token().length() > 0);
+        assertFalse(loginResponse.token().isEmpty());
         assertTrue(loginResponse.expiresIn() > 0);
     }
 
@@ -118,7 +119,6 @@ class AuthenticationControllerTest {
                 .get();
 
         assertNotNull(token);
-        // JWT tokens have 3 parts separated by dots
         String[] parts = token.split("\\.");
         assertEquals(3, parts.length, "JWT should have 3 parts (header.payload.signature)");
     }
@@ -130,7 +130,6 @@ class AuthenticationControllerTest {
         String password = "expiryPassword123!";
         RegisterUserInput input = new RegisterUserInput("Expiry","Test User", email, password);
 
-        // Register user
         httpGraphQlTester
                 .documentName("registerUser")
                 .variable("registerUserInput", toMap(input))
@@ -138,7 +137,6 @@ class AuthenticationControllerTest {
                 .path("data.register.user.id")
                 .hasValue();
 
-        // Login and check expiration
         var expiresIn = httpGraphQlTester
                 .documentName("loginUser")
                 .variable("username", email)
@@ -160,7 +158,6 @@ class AuthenticationControllerTest {
         String wrongPassword = "wrongPassword123!";
         RegisterUserInput input = new RegisterUserInput("Test","User", email, password);
 
-        // Register user
         httpGraphQlTester
                 .documentName("registerUser")
                 .variable("registerUserInput", toMap(input))
@@ -168,7 +165,6 @@ class AuthenticationControllerTest {
                 .path("data.register.user.id")
                 .hasValue();
 
-        // Try to login with wrong password
         httpGraphQlTester
                 .documentName("loginUser")
                 .variable("username", email)
@@ -201,7 +197,7 @@ class AuthenticationControllerTest {
         String[] lastNames = {"One", "Two", "Three"};
 
         for (int i = 0; i < emails.length; i++) {
-            RegisterUserInput input = new RegisterUserInput(firstNames[i], lastNames[i], emails[i], "password" + i + "!");
+            RegisterUserInput input = new RegisterUserInput(firstNames[i], lastNames[i], emails[i], "Password" + i + "!");
             
             var user = httpGraphQlTester
                     .documentName("registerUser")

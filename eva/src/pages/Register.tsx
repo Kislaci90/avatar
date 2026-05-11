@@ -40,12 +40,16 @@ const Register: React.FC = () => {
     })
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [passwordError, setPasswordError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [firstNameError, setFirstNameError] = useState('');
+    const [lastNameError, setLastNameError] = useState('');
 
     const [register, {loading}] = useMutation<RegisterResult>(REGISTER_MUTATION, {
         onCompleted: (data) => {
             localStorage.setItem('token', data.register.loginResponse.token);
             navigate('/');
-            window.location.reload();
+            globalThis.location.reload();
         },
         onError: (error) => {
             setError(error.message);
@@ -55,7 +59,6 @@ const Register: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-        console.log(registerUserInput);
         register({
             variables: {
                 registerUserInput: registerUserInput
@@ -64,12 +67,76 @@ const Register: React.FC = () => {
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.name, e.target.value);
         setRegisterUserInput({
             ...registerUserInput,
             [e.target.name]: e.target.value
         });
+
+        if (e.target.name === 'password') {
+            validatePassword(e.target.value);
+        }
+
+        if (e.target.name === 'email') {
+            validateEmail(e.target.value);
+        }
+
+        if (e.target.name === 'firstName') {
+            validateFirstName(e.target.value);
+        }
+
+        if (e.target.name === 'lastName') {
+            validateLastName(e.target.value);
+        }
     };
+
+    const validatePassword = (password: string) => {
+        if (password.length < 8) {
+            setPasswordError('Password must be at least 8 characters');
+            return false;
+        }
+        if (!/[A-Z]/.test(password)) {
+            setPasswordError('Password must contain at least one uppercase letter');
+            return false;
+        }
+        if (!/[a-z]/.test(password)) {
+            setPasswordError('Password must contain at least one lowercase letter');
+            return false;
+        }
+        if (!/\d/.test(password)) {
+            setPasswordError('Password must contain at least one number');
+            return false;
+        }
+        setPasswordError('');
+        return true;
+    };
+
+    const validateEmail = (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setEmailError('Please enter a valid email address');
+            return false;
+        }
+        setEmailError('');
+        return true;
+    };
+
+    const validateFirstName = (firstName: string) => {
+        if (!firstName) {
+            setFirstNameError('Please enter first name');
+            return false
+        }
+        setFirstNameError('')
+        return true
+    }
+
+    const validateLastName = (lastName: string) => {
+        if (!lastName) {
+            setLastNameError('Please enter last name');
+            return false
+        }
+        setLastNameError('')
+        return true
+    }
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -124,6 +191,8 @@ const Register: React.FC = () => {
                         <Grid container spacing={2} sx={{mt: 0}}>
                             <Grid size={{xs: 12, sm: 6}}>
                                 <TextField
+                                    error={!!firstNameError}
+                                    helperText={firstNameError}
                                     margin="normal"
                                     fullWidth
                                     id="firstName"
@@ -136,6 +205,8 @@ const Register: React.FC = () => {
                             </Grid>
                             <Grid size={{xs: 12, sm: 6}}>
                                 <TextField
+                                    error={!!lastNameError}
+                                    helperText={lastNameError}
                                     margin="normal"
                                     fullWidth
                                     id="lastName"
@@ -149,6 +220,8 @@ const Register: React.FC = () => {
                         </Grid>
 
                         <TextField
+                            error={!!emailError}
+                            helperText={emailError}
                             margin="normal"
                             required
                             fullWidth
@@ -159,12 +232,16 @@ const Register: React.FC = () => {
                             type="email"
                             value={registerUserInput.email}
                             onChange={handleChange}
-                            InputProps={{
-                                startAdornment: <Email sx={{mr: 1, color: 'text.secondary'}}/>,
+                            slotProps={{
+                                input: {
+                                    startAdornment: <Email sx={{mr: 1, color: 'text.secondary'}}/>
+                                }
                             }}
                         />
 
                         <TextField
+                            error={!!passwordError}
+                            helperText={passwordError}
                             margin="normal"
                             required
                             fullWidth
@@ -175,16 +252,18 @@ const Register: React.FC = () => {
                             autoComplete="new-password"
                             value={registerUserInput.password}
                             onChange={handleChange}
-                            InputProps={{
-                                startAdornment: <Lock sx={{mr: 1, color: 'text.secondary'}}/>,
-                                endAdornment: (
-                                    <Button
-                                        onClick={handleClickShowPassword}
-                                        sx={{minWidth: 'auto', p: 0.5}}
-                                    >
-                                        {showPassword ? <VisibilityOff/> : <Visibility/>}
-                                    </Button>
-                                ),
+                            slotProps={{
+                                input: {
+                                    startAdornment: <Lock sx={{mr: 1, color: 'text.secondary'}}/>,
+                                    endAdornment: (
+                                        <Button
+                                            onClick={handleClickShowPassword}
+                                            sx={{minWidth: 'auto', p: 0.5}}
+                                        >
+                                            {showPassword ? <VisibilityOff/> : <Visibility/>}
+                                        </Button>
+                                    )
+                                }
                             }}
                         />
 
