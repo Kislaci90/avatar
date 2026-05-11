@@ -40,6 +40,7 @@ export function LocationCardImage({location}: Readonly<LocationCardImageProps>) 
             >
                 <TileLayer
                     url="https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.png"
+                    attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank" rel="noopener noreferrer">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank" rel="noopener noreferrer">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank" rel="noopener noreferrer">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 />
                 <Marker position={mapCenter} />
             </MapContainer>
