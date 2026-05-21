@@ -1,0 +1,75 @@
+package com.avatar.pandora.user.models.user;
+
+import com.avatar.pandora.shared.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
+
+@Table(name = "users", indexes = {
+        @Index(name = "idx_users_email", columnList = "email")
+})
+@Entity
+public class User extends BaseEntity implements UserDetails {
+
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private String firstName;
+
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private String lastName;
+
+    @Setter
+    @Getter
+    @Column(unique = true, length = 100, nullable = false)
+    private String email;
+
+    @Getter
+    @Setter
+    private Boolean emailVerified;
+
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private String password;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+}

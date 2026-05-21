@@ -15,7 +15,7 @@ import {
     ListItemText,
     Typography,
 } from '@mui/material';
-import type {GetLocationResult, PitchView} from "../services/location.ts";
+import type {GetLocationResult, VenueView} from "../services/location.ts";
 import theme from "../theme/theme.ts";
 import {Email, Favorite, Home, LocationOn, Person, Phone, SportsSoccer} from "@mui/icons-material";
 import {locationPropertyIconMap} from "../components/PropertyMap.tsx";
@@ -43,13 +43,13 @@ const GET_LOCATION_DETAIL = gql`
                 x
                 y
             }
-            properties
-            pitches {
+            amenities
+            venues {
                 id
                 name
                 surfaceType
                 description
-                pitchType
+                venueType
                 properties
                 location {
                     name
@@ -58,7 +58,7 @@ const GET_LOCATION_DETAIL = gql`
                         postalCode
                         city
                     }
-                    properties
+                    amenities
                 }
             }
         }
@@ -197,7 +197,7 @@ const LocationDetail: React.FC = () => {
                                                 <SportsSoccer color="primary"/>
                                             </ListItemIcon>
                                             <ListItemText
-                                                primary={location.pitches.length}
+                                                primary={location.venues.length}
                                                 secondary={t('locations.pitches')}
                                             />
                                         </ListItem>
@@ -234,13 +234,13 @@ const LocationDetail: React.FC = () => {
                         </Box>
                         <Box>
                             <List dense>
-                                {location.properties.map((property) => (
-                                    <ListItem key={property}>
+                                {location.amenities.map((amenity) => (
+                                    <ListItem key={amenity}>
                                         <ListItemIcon>
-                                            {locationPropertyIconMap[property]}
+                                            {locationPropertyIconMap[amenity]}
                                         </ListItemIcon>
                                         <ListItemText
-                                            primary={property}
+                                            primary={amenity}
                                             secondary="Description for property"
                                         />
                                     </ListItem>
@@ -252,12 +252,12 @@ const LocationDetail: React.FC = () => {
                         <LocationDetailSendMessage />
                     </Grid>
                 </Grid>
-                {location.pitches.length > 0 && (
+                {location.venues.length > 0 && (
                     <Typography variant="h5" component="h1" sx={{pt: 5}}>
                         Pitches
                     </Typography>
                 )}
-                {location.pitches.map((pitch: PitchView) => (
+                {location.venues.map((pitch: VenueView) => (
                     <Box sx={{my: 3}} key={pitch.id}>
                         <LocationDetailPitchCard pitch={pitch} />
                     </Box>))}

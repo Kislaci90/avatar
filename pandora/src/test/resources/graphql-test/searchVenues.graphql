@@ -1,0 +1,20 @@
+query searchVenues($count: Int!, $offset: Int!, $filter: VenueFilter!, $sort: String) {
+    searchVenues(count: $count, offset: $offset, filter: $filter, sort:  $sort) {
+        total
+        pageable {
+            pageNumber
+            pageSize
+        }
+        content {
+            id
+            name
+            properties
+            venueType
+            surfaceType
+            location {
+                id
+                name
+            }
+        }
+    }
+}

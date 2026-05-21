@@ -4,10 +4,10 @@ export const GET_SEARCH_FILTERS = gql`
     query GetSearchFilters {
         getSearchFilters {
             cities
-            locationProperties
+            locationAmenities
             surfaceTypes
-            pitchTypes
-            pitchProperties
+            venueTypes
+            venueProperties
         }
     }
 `;
@@ -18,9 +18,9 @@ export type GetLocationSearchFilterResult = {
 
 export type LocationSearchFilter = {
     cities: string[],
-    locationProperties: string[],
-    pitchProperties: string[],
-    pitchTypes: string[],
+    locationAmenities: string[],
+    venueProperties: string[],
+    venueTypes: string[],
     surfaceTypes: string[],
 }
 
@@ -61,11 +61,11 @@ export const SEARCH_LOCATIONS = gql`
                     x
                     y
                 }
-                properties
-                pitches {
+                amenities
+                venues {
                     id
                     name
-                    pitchType
+                    venueType
                     surfaceType
                     properties
                 }
@@ -99,8 +99,8 @@ export type LocationView = {
     geom: PointView,
     address: Address,
     contact: Contact,
-    properties: [string],
-    pitches: [PitchView]
+    amenities: [string],
+    venues: [VenueView]
 }
 
 export type LazyLocationView = {
@@ -111,7 +111,7 @@ export type LazyLocationView = {
     geom: PointView,
     address: Address,
     contact: Contact,
-    properties: [string],
+    amenities: [string],
 }
 
 export type PointView = {
@@ -131,11 +131,11 @@ export type Address = {
     postalCode: string,
 }
 
-export type PitchView = {
+export type VenueView = {
     id: number,
     description: string,
     name: string,
-    pitchType: string,
+    venueType: string,
     surfaceType: string,
     properties: [string],
     location: LazyLocationView,

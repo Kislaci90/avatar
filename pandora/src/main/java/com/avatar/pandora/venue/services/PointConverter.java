@@ -1,0 +1,32 @@
+package com.avatar.pandora.venue.services;
+
+import com.avatar.pandora.shared.Converter;
+import com.avatar.pandora.venue.models.point.PointForm;
+import com.avatar.pandora.venue.models.point.PointView;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
+import org.springframework.stereotype.Service;
+
+@Service
+public class PointConverter implements Converter<Point, PointView, PointForm> {
+
+    @Override
+    public PointView convertToView(Point geom) {
+        return new PointView(geom.getY(), geom.getX());
+    }
+
+    @Override
+    public Point convertToEntity(Point point, PointForm geom) {
+        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+        return geometryFactory.createPoint(new Coordinate(geom.x(),geom.y()));
+    }
+
+    @Override
+    public Point convertToNewEntity(PointForm pointForm) {
+        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+        return geometryFactory.createPoint(new Coordinate(pointForm.x(), pointForm.y()));
+    }
+
+}

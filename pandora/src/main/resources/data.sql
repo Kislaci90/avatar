@@ -56,7 +56,7 @@ FROM location l
 ) p ON random() < 0.4
 WHERE l.id >= 100;
 
-INSERT INTO pitch (
+INSERT INTO venue (
     id,
     name,
     location_id,
@@ -69,7 +69,7 @@ SELECT
     2000 + gs AS id,
     'Pitch ' || gs AS name,
     loc_array[1 + floor(random() * array_length(loc_array, 1))::int] AS location_id,
-    'Generated pitch ' || gs AS description,
+    'Generated venue ' || gs AS description,
     surface_array[floor(random() * array_length(surface_array,1) + 1)::int] AS surface_type,
     type_array[floor(random() * array_length(type_array,1) + 1)::int] AS type,
     CURRENT_TIMESTAMP AS created_date
@@ -82,7 +82,7 @@ INSERT INTO pitch_properties (pitch_id, properties)
 SELECT
     p.id,
     prop.property
-FROM pitch p
+FROM venue p
          JOIN (
     SELECT unnest(ARRAY[
         'LIGHTING',

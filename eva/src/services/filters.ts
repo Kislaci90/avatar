@@ -1,10 +1,10 @@
 export type Filter = {
     properties: string[];
     searchTerm: string;
-    locationProperties: string[];
+    locationAmenities: string[];
     cities: string[];
     surfaceTypes: string[];
-    pitchTypes: string[];
+    venueTypes: string[];
 };
 
 export const handleFilterChange = <K extends keyof Filter>(

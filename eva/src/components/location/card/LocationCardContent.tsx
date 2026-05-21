@@ -34,7 +34,7 @@ export function LocationCardContent({location}: Readonly<LocationCardContentProp
 
                 <Box>
                     <Chip sx={{border: "none"}} size="small" color="primary" variant="outlined"
-                          label={`${location.pitches?.length || 0} Pitches`}/>
+                          label={`${location.venues?.length || 0} Pitches`}/>
                 </Box>
             </Box>
 
@@ -56,7 +56,7 @@ export function LocationCardContent({location}: Readonly<LocationCardContentProp
                 <Stack direction="row" spacing={1}
                        useFlexGap
                        sx={{flexWrap: 'wrap', justifyContent: "flex-start"}}>
-                    {location.properties.map((property: string) => (
+                    {location.amenities.map((property: string) => (
                         <Tooltip title={property} key={property} placement="top">
                             <Chip size="small"
                                   variant="outlined"

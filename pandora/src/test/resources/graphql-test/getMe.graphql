@@ -2,6 +2,5 @@ query getMe {
     getMe {
         id
         email
-        fullName
     }
 }

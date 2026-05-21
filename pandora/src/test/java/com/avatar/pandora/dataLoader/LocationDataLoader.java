@@ -1,15 +1,12 @@
 package com.avatar.pandora.dataLoader;
 
-import com.avatar.pandora.product.models.address.Address;
-import com.avatar.pandora.product.models.contact.Contact;
-import com.avatar.pandora.product.models.location.Location;
-import com.avatar.pandora.product.models.location.LocationProperty;
-import com.avatar.pandora.product.models.pitch.Pitch;
-import com.avatar.pandora.product.models.pitch.PitchProperty;
-import com.avatar.pandora.product.models.pitch.PitchSurfaceType;
-import com.avatar.pandora.product.models.pitch.PitchType;
-import com.avatar.pandora.product.repositories.LocationRepository;
-import com.avatar.pandora.product.repositories.PitchRepository;
+import com.avatar.pandora.venue.models.address.Address;
+import com.avatar.pandora.venue.models.contact.Contact;
+import com.avatar.pandora.venue.models.location.Location;
+import com.avatar.pandora.venue.models.location.LocationAmenity;
+import com.avatar.pandora.venue.models.venue.*;
+import com.avatar.pandora.venue.repositories.LocationRepository;
+import com.avatar.pandora.venue.repositories.VenueRepository;
 import net.datafaker.Faker;
 import org.jspecify.annotations.NonNull;
 import org.locationtech.jts.geom.Coordinate;
@@ -28,11 +25,11 @@ import java.util.Set;
 public class LocationDataLoader implements CommandLineRunner {
 
     private final LocationRepository locationRepository;
-    private final PitchRepository pitchRepository;
+    private final VenueRepository venueRepository;
 
-    public LocationDataLoader(LocationRepository locationRepository, PitchRepository pitchRepository) {
+    public LocationDataLoader(LocationRepository locationRepository, VenueRepository venueRepository) {
         this.locationRepository = locationRepository;
-        this.pitchRepository = pitchRepository;
+        this.venueRepository = venueRepository;
     }
 
     @Override
@@ -61,27 +58,27 @@ public class LocationDataLoader implements CommandLineRunner {
          location.setAddress(address);
          location.setContact(contact);
          location.setGeom(point);
-         location.setProperties(Set.of(LocationProperty.SHOWER, LocationProperty.CHANGING_ROOM, LocationProperty.FREE_PARKING));
+         location.setAmenities(Set.of(LocationAmenity.SHOWER, LocationAmenity.CHANGING_ROOM, LocationAmenity.FREE_PARKING));
 
          Location savedLocation = locationRepository.save(location);
 
-         Pitch pitch = new Pitch();
-         pitch.setLocation(savedLocation);
-         pitch.setDescription(faker.lorem().paragraph(1));
-         pitch.setType(PitchType.FULL_SIZE);
-         pitch.setSurfaceType(PitchSurfaceType.TURF);
-         pitch.setProperties(Set.of(PitchProperty.COVERED, PitchProperty.LIGHTING));
-         pitch.setName("Pitch 1");
+         Venue venue = new Venue();
+         venue.setLocation(savedLocation);
+         venue.setDescription(faker.lorem().paragraph(1));
+         venue.setType(VenueType.FULL_SIZE);
+         venue.setSurfaceType(VenueSurfaceType.TURF);
+         venue.setProperties(Set.of(VenueProperty.COVERED, VenueProperty.LIGHTING));
+         venue.setName("Pitch 1");
 
-         Pitch pitch2 = new Pitch();
-         pitch2.setLocation(savedLocation);
-         pitch2.setDescription(faker.lorem().paragraph(1));
-         pitch2.setType(PitchType.FULL_SIZE);
-         pitch2.setSurfaceType(PitchSurfaceType.TURF);
-         pitch2.setProperties(Set.of(PitchProperty.COVERED));
-         pitch2.setName("Pitch 2");
+         Venue venue2 = new Venue();
+         venue2.setLocation(savedLocation);
+         venue2.setDescription(faker.lorem().paragraph(1));
+         venue2.setType(VenueType.FULL_SIZE);
+         venue2.setSurfaceType(VenueSurfaceType.TURF);
+         venue2.setProperties(Set.of(VenueProperty.COVERED));
+         venue2.setName("Pitch 2");
 
-         pitchRepository.saveAll(Set.of(pitch, pitch2));
+         venueRepository.saveAll(Set.of(venue, venue2));
      }
 
     private void addSecondLocation(Faker faker, Address address, Contact contact, Point point) {
@@ -92,27 +89,27 @@ public class LocationDataLoader implements CommandLineRunner {
          location.setAddress(address);
          location.setContact(contact);
          location.setGeom(point);
-         location.setProperties(Set.of(LocationProperty.SHOWER, LocationProperty.CHANGING_ROOM, LocationProperty.FREE_PARKING, LocationProperty.CAFE));
+         location.setAmenities(Set.of(LocationAmenity.SHOWER, LocationAmenity.CHANGING_ROOM, LocationAmenity.FREE_PARKING, LocationAmenity.CAFE));
 
          Location savedLocation = locationRepository.save(location);
 
-         Pitch pitch3 = new Pitch();
-         pitch3.setLocation(savedLocation);
-         pitch3.setDescription(faker.lorem().paragraph(1));
-         pitch3.setType(PitchType.HALF_SIZE);
-         pitch3.setSurfaceType(PitchSurfaceType.ARTIFICIAL_GRASS);
-         pitch3.setProperties(Set.of(PitchProperty.LIGHTING));
-         pitch3.setName("Pitch 3");
+         Venue venue3 = new Venue();
+         venue3.setLocation(savedLocation);
+         venue3.setDescription(faker.lorem().paragraph(1));
+         venue3.setType(VenueType.HALF_SIZE);
+         venue3.setSurfaceType(VenueSurfaceType.ARTIFICIAL_GRASS);
+         venue3.setProperties(Set.of(VenueProperty.LIGHTING));
+         venue3.setName("Pitch 3");
 
-         Pitch pitch4 = new Pitch();
-         pitch4.setLocation(savedLocation);
-         pitch4.setDescription(faker.lorem().paragraph(1));
-         pitch4.setType(PitchType.FULL_SIZE);
-         pitch4.setSurfaceType(PitchSurfaceType.CONCRETE);
-         pitch4.setProperties(Set.of());
-         pitch4.setName("Pitch 4");
+         Venue venue4 = new Venue();
+         venue4.setLocation(savedLocation);
+         venue4.setDescription(faker.lorem().paragraph(1));
+         venue4.setType(VenueType.FULL_SIZE);
+         venue4.setSurfaceType(VenueSurfaceType.CONCRETE);
+         venue4.setProperties(Set.of());
+         venue4.setName("Pitch 4");
 
-         pitchRepository.saveAll(Set.of(pitch3, pitch4));
+         venueRepository.saveAll(Set.of(venue3, venue4));
     }
 
 }

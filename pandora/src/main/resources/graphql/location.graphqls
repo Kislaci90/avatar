@@ -7,10 +7,10 @@ type Query {
 input LocationFilter {
     searchTerm: String,
     properties: [String],
-    locationProperties: [String],
+    locationAmenities: [String],
     cities: [String],
     surfaceTypes: [String],
-    pitchTypes: [String]
+    venueTypes: [String]
 }
 
 type LocationPage {
@@ -32,8 +32,8 @@ type LocationView {
     geom: PointView!
     address: Address!
     contact: Contact!
-    properties: [String]
-    pitches: [PitchView]
+    amenities: [String]
+    venues: [PitchView]
 }
 
 type PointView {
@@ -55,8 +55,8 @@ type Contact {
 
 type SearchFilter {
     cities: [String]
-    locationProperties: [String]
-    pitchProperties: [String]
+    locationAmenities: [String]
+    venueProperties: [String]
     surfaceTypes: [String]
-    pitchTypes: [String]
+    venueTypes: [String]
 }

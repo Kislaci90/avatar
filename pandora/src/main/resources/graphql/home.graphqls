@@ -4,7 +4,7 @@ extend type Query {
 
 type HomeStatView {
     totalLocations: Int!
-    totalPitches: Int!
+    totalVenues: Int!
     totalCities: Int!
     totalUsers: Int!
 }

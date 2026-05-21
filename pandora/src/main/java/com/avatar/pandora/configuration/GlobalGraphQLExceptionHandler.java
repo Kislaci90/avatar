@@ -1,6 +1,6 @@
 package com.avatar.pandora.configuration;
 
-import com.avatar.pandora.product.exceptions.DuplicateEmailException;
+import com.avatar.pandora.shared.DuplicateEmailException;
 import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;
 import graphql.schema.DataFetchingEnvironment;

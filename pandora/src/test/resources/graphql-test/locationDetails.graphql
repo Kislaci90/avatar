@@ -16,12 +16,12 @@ query locationDetails($id: Int!) {
             x
             y
         }
-        properties
-        pitches {
+        amenities
+        venues {
             id
             name
             surfaceType
-            pitchType
+            venueType
             properties
         }
     }

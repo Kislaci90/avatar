@@ -1,0 +1,40 @@
+extend type Query {
+    getVenue(id: Int!): PitchView
+    searchVenues(count:Int, offset:Int, filter: VenueFilter, sort: String): PitchPage
+}
+
+type PitchPage {
+    content: [PitchView]
+    pageable: Pageable!
+    total: Int!
+}
+
+input VenueFilter {
+    searchTerm: String,
+    properties: [String],
+    locationAmenities: [String],
+    cities: [String],
+    surfaceTypes: [String],
+    venueTypes: [String]
+}
+
+type LazyLocationView {
+    id : ID!
+    name: String!
+    description: String!
+    website: String
+    geom: PointView!
+    address: Address!
+    contact: Contact!
+    amenities: [String]
+}
+
+type PitchView {
+    id: ID!
+    name: String!
+    description: String!
+    venueType: String!
+    surfaceType: String!
+    properties: [String]
+    location: LazyLocationView!
+}

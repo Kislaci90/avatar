@@ -31,7 +31,7 @@ import {
 import theme from "../theme/theme.ts";
 import type {Filter} from "../services/filters.ts";
 import {useQuery} from "@apollo/client/react";
-import {getPitchTypeColor, getSurfaceTypeColor} from "../services/pitches.ts";
+import {getVenueTypeColor, getSurfaceTypeColor} from "../services/venues.ts";
 
 interface SearchHeaderProps<F extends Filter> {
     filters: F,
@@ -62,10 +62,10 @@ export function SearchHeader({
     const {t} = useTranslation();
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
     const [searchFilters, setSearchFilters] = useState<LocationSearchFilter>({
-        locationProperties: [],
+        locationAmenities: [],
         cities: [],
-        pitchProperties: [],
-        pitchTypes: [],
+        venueProperties: [],
+        venueTypes: [],
         surfaceTypes: [],
     });
 
@@ -169,10 +169,10 @@ export function SearchHeader({
                             variant="outlined"
                         />
                     )}
-                    {filters.locationProperties && filters.locationProperties.length > 0 && (
+                    {filters.locationAmenities && filters.locationAmenities.length > 0 && (
                         <Chip
-                            label={`${t('locations.locationProperty')}: ${filters.locationProperties.map((p: string) => t('locations.property.' + p)).join(', ')}`}
-                            onDelete={() => handleFilterChange('locationProperties', [])}
+                            label={`${t('locations.locationProperty')}: ${filters.locationAmenities.map((p: string) => t('locations.property.' + p)).join(', ')}`}
+                            onDelete={() => handleFilterChange('locationAmenities', [])}
                             color="primary"
                             variant="outlined"
                         />
@@ -245,12 +245,12 @@ export function SearchHeader({
                                 display: 'block'
                             }}>{t('locations.locationProperty')}</FormLabel>
                             <ToggleButtonGroup
-                                value={filters.locationProperties}
+                                value={filters.locationAmenities}
                                 size="small"
                                 color="secondary"
-                                onChange={(_, newValue) => handleFilterChange('locationProperties', newValue)}
+                                onChange={(_, newValue) => handleFilterChange('locationAmenities', newValue)}
                             >
-                                {searchFilters?.locationProperties.map((property) => (
+                                {searchFilters?.locationAmenities.map((property) => (
                                     <ToggleButton
                                         key={property}
                                         value={property}
@@ -271,7 +271,7 @@ export function SearchHeader({
                                 color="secondary"
                                 onChange={(_, newValue) => handleFilterChange('properties', newValue)}
                             >
-                                {searchFilters?.pitchProperties.map((property) => (
+                                {searchFilters?.venueProperties.map((property) => (
                                     <ToggleButton
                                         key={property}
                                         value={property}
@@ -323,28 +323,28 @@ export function SearchHeader({
                             <FormLabel
                                 sx={{fontWeight: 600, mb: 2, display: 'block'}}>{t('pitches.pitchType')}</FormLabel>
                             <ToggleButtonGroup
-                                value={filters.pitchTypes}
+                                value={filters.venueTypes}
                                 size="small"
-                                onChange={(_, newValue) => handleFilterChange('pitchTypes', newValue)}
+                                onChange={(_, newValue) => handleFilterChange('venueTypes', newValue)}
                             >
-                                {searchFilters?.pitchTypes.map((pitchType) => (
+                                {searchFilters?.venueTypes.map((pitchType) => (
                                     <ToggleButton
                                         key={pitchType}
                                         value={pitchType}
                                         sx={{
-                                            color: getPitchTypeColor(pitchType),
+                                            color: getVenueTypeColor(pitchType),
                                             '&.Mui-selected': {
-                                                backgroundColor: getPitchTypeColor(pitchType),
+                                                backgroundColor: getVenueTypeColor(pitchType),
                                                 color: 'white',
-                                                borderColor: getPitchTypeColor(pitchType),
+                                                borderColor: getVenueTypeColor(pitchType),
                                                 '&:hover': {
-                                                    backgroundColor: getPitchTypeColor(pitchType),
+                                                    backgroundColor: getVenueTypeColor(pitchType),
                                                     opacity: 0.8
                                                 }
                                             },
                                             '&:hover': {
-                                                backgroundColor: `${getPitchTypeColor(pitchType)}20`,
-                                                borderColor: getPitchTypeColor(pitchType)
+                                                backgroundColor: `${getVenueTypeColor(pitchType)}20`,
+                                                borderColor: getVenueTypeColor(pitchType)
                                             }
                                         }}
                                     >

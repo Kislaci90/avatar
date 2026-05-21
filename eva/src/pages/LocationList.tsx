@@ -20,11 +20,11 @@ const LocationList: React.FC = () => {
     const [view, setView] = useState<'grid' | 'map'>('grid');
     const [filters, setFilters] = useState<Filter>({
         searchTerm: '',
-        locationProperties: [],
+        locationAmenities: [],
         cities: searchParams.get('cities') ? searchParams.get('cities')!.split(',') : [],
         properties: [],
         surfaceTypes: [],
-        pitchTypes: [],
+        venueTypes: [],
     });
     const [sort, setSort] = useState<string>('DISTANCE_ASC');
     const [currentPage, setCurrentPage] = useState(1);

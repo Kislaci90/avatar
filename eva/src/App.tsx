@@ -7,8 +7,8 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
-import PitchList from './pages/PitchList';
-import PitchDetail from './pages/PitchDetail.tsx';
+import VenueList from './pages/VenueList';
+import VenueDetail from './pages/VenueDetail.tsx';
 import LocationList from './pages/LocationList';
 import LocationDetail from './pages/LocationDetail';
 import {ThemeProvider} from "@mui/material";
@@ -48,8 +48,8 @@ function App() {
                             <Route path="/login" element={<Login/>}/>
                             <Route path="/register" element={<Register/>}/>
                             <Route path="/verify-email" element={<VerifyEmail/>}/>
-                            <Route path="/pitches" element={<PitchList/>}/>
-                            <Route path="/pitches/:id" element={<PitchDetail/>}/>
+                            <Route path="/pitches" element={<VenueList/>}/>
+                            <Route path="/pitches/:id" element={<VenueDetail/>}/>
                             <Route path="/locations" element={<LocationList/>}/>
                             <Route path="/locations/:id" element={<LocationDetail/>}/>
                         </Routes>

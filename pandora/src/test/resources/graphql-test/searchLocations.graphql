@@ -24,11 +24,11 @@ query searchLocation($count: Int!, $offset: Int!, $filter: LocationFilter!, $sor
                 x
                 y
             }
-            properties
-            pitches {
+            amenities
+            venues {
                 id
                 name
-                pitchType
+                venueType
                 surfaceType
                 properties
             }

@@ -3,7 +3,7 @@ export type HomeStatResult = {
 };
 
 export type HomeStat = {
-    totalPitches: number,
+    totalVenues: number,
     totalLocations: number,
     totalCities: number,
     totalUsers: number,

@@ -1,0 +1,22 @@
+query VenueDetails($id: Int!) {
+    getVenue(id: $id) {
+        id
+        name
+        surfaceType
+        venueType
+        properties
+        location {
+            name
+            address {
+                addressLine
+                postalCode
+                city
+            }
+            contact {
+                contactName
+                email
+                phoneNumber
+            }
+        }
+    }
+}

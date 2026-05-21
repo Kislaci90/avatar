@@ -1,24 +1,24 @@
 import {Box, Card, CardContent, CardMedia, Chip, Stack, Tooltip, Typography} from "@mui/material";
-import {getPitchTypeColor, getSurfaceTypeColor} from "../../../services/pitches.ts";
+import {getVenueTypeColor, getSurfaceTypeColor} from "../../../services/venues.ts";
 import {pitchPropertyIconMap} from "../../PropertyMap.tsx";
-import type {PitchView} from "../../../services/location.ts";
+import type {VenueView} from "../../../services/location.ts";
 
 interface LocationDetailPitchCardProps {
-    pitch: PitchView
+    pitch: VenueView
 }
 
-export function LocationDetailPitchCard({pitch}: Readonly<LocationDetailPitchCardProps>) {
+export function LocationDetailPitchCard({pitch: venue}: Readonly<LocationDetailPitchCardProps>) {
     return (
         <Card sx={{display: "flex"}}>
             <CardMedia
                 component="img"
-                image={`/pitches/${pitch.surfaceType.toLowerCase()}.png`}
+                image={`/pitches/${venue.surfaceType.toLowerCase()}.png`}
                 sx={{
                     height: 200,
                     width: 150,
                     objectFit: "cover",
                 }}
-                alt={pitch.name}
+                alt={venue.name}
             />
 
             <CardContent
@@ -33,32 +33,32 @@ export function LocationDetailPitchCard({pitch}: Readonly<LocationDetailPitchCar
                     <Typography
                         sx={{fontWeight: 700}}
                         variant="body1"
-                        color={getSurfaceTypeColor(pitch.surfaceType)}
+                        color={getSurfaceTypeColor(venue.surfaceType)}
                     >
-                        {pitch.surfaceType}
+                        {venue.surfaceType}
                     </Typography>
                     |
                     <Typography
                         sx={{fontWeight: 700}}
                         variant="body1"
-                        color={getPitchTypeColor(pitch.pitchType)}
+                        color={getVenueTypeColor(venue.venueType)}
                     >
-                        {pitch.pitchType}
+                        {venue.venueType}
                     </Typography>
                 </Box>
 
                 <Typography variant="h6">
-                    {pitch.name}
+                    {venue.name}
                 </Typography>
 
                 <Typography variant="body2" color="text.secondary">
-                    {pitch.description}
+                    {venue.description}
                 </Typography>
 
                 <Box sx={{mt: "auto"}}>
                     <Stack direction="row" spacing={1} useFlexGap
                            sx={{flexWrap: 'wrap', justifyContent: "flex-start"}}>
-                    {pitch.properties.map((property: string) => (
+                    {venue.properties.map((property: string) => (
                         <Tooltip title={property} key={property} placement="top">
                             <Chip
                                 size="small"

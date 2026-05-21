@@ -19,7 +19,7 @@ import type {HomeStatResult} from "../services/home.ts";
 const GET_HOME_STAT = gql`
     query GetHomeStat {
         getHomeStat {
-            totalPitches
+            totalVenues
             totalLocations
             totalCities
             totalUsers
@@ -34,7 +34,7 @@ const Home: React.FC = () => {
     const {data} = useQuery<HomeStatResult>(GET_HOME_STAT);
 
     let homeStat = {
-        totalPitches: 0,
+        totalVenues: 0,
         totalLocations: 0,
         totalCities: 0,
         totalUsers: 0,
@@ -63,7 +63,7 @@ const Home: React.FC = () => {
     ];
 
     const stats = [
-        {number: homeStat.totalPitches, label: t('home.activePitches'), icon: <SportsSoccer/>},
+        {number: homeStat.totalVenues, label: t('home.activePitches'), icon: <SportsSoccer/>},
         {number: homeStat.totalLocations, label: t('navigation.locations'), icon: <LocationOn/>},
         {number: homeStat.totalCities, label: t('home.citiesCovered'), icon: <LocationCity/>},
         {number: homeStat.totalUsers, label: t('home.happyPlayers'), icon: <People/>},

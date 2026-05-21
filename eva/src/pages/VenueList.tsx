@@ -1,0 +1,183 @@
+import React, {useEffect, useState} from 'react';
+import {gql} from '@apollo/client';
+import {useQuery} from "@apollo/client/react";
+import {Alert, Box, CircularProgress, Container, Grid, Typography} from '@mui/material';
+import {useTranslation} from 'react-i18next';
+import type {VenueView} from "../services/location.ts";
+import type {SearchVenuesResult} from "../services/venues.ts";
+import {VenueCard} from "../components/venue/card/VenueCard.tsx";
+import {LoadMoreButton} from "../components/location/LoadMoreButton.tsx";
+import theme from "../theme/theme.ts";
+import type {UserLocation} from "../services/distance.ts";
+import {SearchHeader} from "../components/SearchHeader.tsx";
+import {type Filter, handleFilterChange} from "../services/filters";
+
+const SEARCH_PITCHES = gql`
+    query searchVenues(
+        $filter: VenueFilter!,
+        $count:Int!,
+        $offset:Int!,
+        $sort:String!,
+    ) {
+        searchVenues(
+            filter: $filter,
+            count: $count,
+            offset: $offset,
+            sort: $sort,
+        ) {
+            content {
+                id
+                name
+                properties
+                venueType
+                surfaceType
+                location {
+                    id
+                    name
+                    amenities
+                    address {
+                        addressLine
+                        city
+                        postalCode
+                    }
+                    geom {
+                        x
+                        y
+                    }
+                }
+            }
+        }
+    }
+`;
+
+const VenueList: React.FC = () => {
+    const {t} = useTranslation();
+    const [filters, setFilters] = useState<Filter>({
+        searchTerm: '',
+        locationAmenities: [],
+        cities: [],
+        properties: [],
+        surfaceTypes: [],
+        venueTypes: [],
+    });
+    const [sort, setSort] = useState<string>('DISTANCE_ASC');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [pitches, setPitches] = useState<VenueView[]>([]);
+    const [userLocation] = useState<UserLocation | null>(null);
+    const itemsPerPage = 6;
+
+    const {loading, error, data, refetch} = useQuery<SearchVenuesResult>(SEARCH_PITCHES, {
+        variables: {
+            filter: filters,
+            count: 0,
+            offset: currentPage * itemsPerPage,
+            sort: sort
+        }
+    });
+
+    useEffect(() => {
+        if (data?.searchVenues) {
+            setPitches(data.searchVenues.content);
+            setHasMore(data.searchVenues.content.length >= itemsPerPage);
+        }
+    }, [data]);
+
+    const onFilterChange = <K extends keyof Filter>(
+        field: K,
+        value: string | string[],
+        checked?: boolean
+    ) => {
+        setFilters(prev => handleFilterChange(prev, field, value, checked));
+    };
+
+    const handleSearch = () => {
+        setCurrentPage(1);
+        setHasMore(true);
+        refetch({
+            filter: filters,
+            count: 0,
+            offset: currentPage * itemsPerPage,
+            sort: sort,
+        });
+    };
+
+    const handleLoadMore = () => {
+        const nextPage = currentPage + 1;
+        setCurrentPage(nextPage);
+
+        const totalItems = pitches.length;
+        const displayedItems = (nextPage + 1) * itemsPerPage;
+
+        setHasMore(displayedItems < totalItems);
+    };
+
+    return (
+        <Box sx={{minHeight: '100vh'}}>
+            <Box sx={{
+                pyb: 1,
+                borderBottom: `1px solid ${theme.palette.divider}`,
+                background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.primary.main}15 100%)`
+            }}>
+                <Container maxWidth="lg">
+                    <SearchHeader filters={filters} handleSearch={handleSearch}
+                                  setSort={setSort} handleFilterChange={onFilterChange}/>
+                </Container>
+            </Box>
+
+            <Container maxWidth="lg" sx={{py: 4}}>
+
+                {/* Results Section */}
+                {loading && (
+                    <Box textAlign="center" py={6}>
+                        <CircularProgress/>
+                    </Box>
+                )}
+                {error && (
+                    <Alert severity="error" sx={{mb: 4}}>
+                        {error.message}
+                    </Alert>
+                )}
+                {pitches.length === 0 && !loading && (
+                    <Alert severity="info" sx={{mb: 4}}>
+                        {t('pitches.noResults')}
+                    </Alert>
+                )}
+
+                {/* Pitch Cards Grid */}
+                {pitches.length > 0 && (
+                    <Box sx={{mb: 6}}>
+                        <Grid container spacing={3}>
+                            {pitches.map((pitch: VenueView, index: number) => (
+                                <Grid size={{xs: 12, sm: 6, lg: 4}} key={index}>
+                                    <VenueCard pitch={pitch} userLocation={userLocation}/>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Box>
+                )}
+
+                {/* Load More Button */}
+                {hasMore && pitches.length > 0 && (
+                    <Box sx={{display: 'flex', justifyContent: 'center', mt: 6}}>
+                        <LoadMoreButton loading={loading} onClick={handleLoadMore}/>
+                    </Box>
+                )}
+
+                {/* No More Results */}
+                {!hasMore && pitches.length > 0 && (
+                    <Box sx={{textAlign: 'center', mt: 6, py: 4}}>
+                        <Typography variant="h6" color="text.secondary" sx={{mb: 2}}>
+                            {t('pitches.allPitches')}
+                        </Typography>
+                        <Typography variant="body1" color="text.secondary">
+                            {t('pitches.tryAdjusting')}
+                        </Typography>
+                    </Box>
+                )}
+            </Container>
+        </Box>
+    );
+};
+
+export default VenueList;
