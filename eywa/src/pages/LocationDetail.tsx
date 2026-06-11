@@ -205,6 +205,7 @@ const LocationDetail: React.FC = () => {
                                 </Grid>
                             </Grid>
                         </Box>
+
                         <Box sx={{
                             display: 'flex',
                             justifyContent: 'left',
@@ -216,6 +217,7 @@ const LocationDetail: React.FC = () => {
                                 {t('locations.description')}
                             </Typography>
                         </Box>
+
                         <Box sx={{display: 'flex', justifyContent: 'left', mt: 2}}>
                             <Typography variant="body1" component="p">
                                 {location.description}
@@ -254,7 +256,7 @@ const LocationDetail: React.FC = () => {
                 </Grid>
                 {location.venues.length > 0 && (
                     <Typography variant="h5" component="h1" sx={{pt: 5}}>
-                        Pitches
+                        Venues
                     </Typography>
                 )}
                 {location.venues.map((pitch: VenueView) => (

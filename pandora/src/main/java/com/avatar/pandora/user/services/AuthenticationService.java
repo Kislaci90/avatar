@@ -1,6 +1,6 @@
 package com.avatar.pandora.user.services;
 
-import com.avatar.pandora.configuration.JwtService;
+import com.avatar.pandora.security.JwtService;
 import com.avatar.pandora.user.models.user.*;
 import com.avatar.pandora.user.repositories.UserRepository;
 import com.avatar.pandora.shared.DuplicateEmailException;

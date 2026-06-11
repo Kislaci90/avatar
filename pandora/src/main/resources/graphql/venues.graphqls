@@ -1,10 +1,10 @@
 extend type Query {
-    getVenue(id: Int!): PitchView
-    searchVenues(count:Int, offset:Int, filter: VenueFilter, sort: String): PitchPage
+    getVenue(id: Int!): VenueView
+    searchVenues(count:Int, offset:Int, filter: VenueFilter, sort: String): VenuePage
 }
 
-type PitchPage {
-    content: [PitchView]
+type VenuePage {
+    content: [VenueView]
     pageable: Pageable!
     total: Int!
 }
@@ -29,7 +29,7 @@ type LazyLocationView {
     amenities: [String]
 }
 
-type PitchView {
+type VenueView {
     id: ID!
     name: String!
     description: String!

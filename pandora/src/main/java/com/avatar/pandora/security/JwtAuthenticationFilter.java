@@ -1,4 +1,4 @@
-package com.avatar.pandora.configuration;
+package com.avatar.pandora.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

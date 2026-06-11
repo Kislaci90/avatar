@@ -33,7 +33,7 @@ type LocationView {
     address: Address!
     contact: Contact!
     amenities: [String]
-    venues: [PitchView]
+    venues: [VenueView]
 }
 
 type PointView {

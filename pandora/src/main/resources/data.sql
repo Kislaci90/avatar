@@ -40,10 +40,10 @@ FROM generate_series(1,100) gs,
         'Sopron','Eger','Dunaújváros','Veszprém'
         ] AS cities_array) ca;
 
-INSERT INTO location_properties (location_id, properties)
+INSERT INTO location_amenities (location_id, amenities)
 SELECT
     l.id,
-    p.property
+    p.amenity
 FROM location l
          JOIN (
     SELECT unnest(ARRAY[
@@ -52,7 +52,7 @@ FROM location l
         'CAFE',
         'CHANGING_ROOM',
         'EQUIPMENT_RENTAL'
-        ]) property
+        ]) amenity
 ) p ON random() < 0.4
 WHERE l.id >= 100;
 
@@ -67,7 +67,7 @@ INSERT INTO venue (
 )
 SELECT
     2000 + gs AS id,
-    'Pitch ' || gs AS name,
+    'Venue ' || gs AS name,
     loc_array[1 + floor(random() * array_length(loc_array, 1))::int] AS location_id,
     'Generated venue ' || gs AS description,
     surface_array[floor(random() * array_length(surface_array,1) + 1)::int] AS surface_type,
@@ -78,7 +78,7 @@ FROM generate_series(1,300) gs,
      LATERAL (SELECT ARRAY['ARTIFICIAL_GRASS','TURF','CONCRETE','HARDCOURT','GRASS','ASPHALT'] AS surface_array) sa,
      LATERAL (SELECT ARRAY['FIVE_A_SIDE','SEVEN_A_SIDE','FULL_SIZE','HALF_SIZE','INDOOR','OUTDOOR'] AS type_array) ta;
 
-INSERT INTO pitch_properties (pitch_id, properties)
+INSERT INTO venue_properties (venue_id, properties)
 SELECT
     p.id,
     prop.property
