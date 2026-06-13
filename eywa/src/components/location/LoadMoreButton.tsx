@@ -1,4 +1,5 @@
 import {Box, Button, CircularProgress} from "@mui/material";
+import theme from "../../theme/theme.ts";
 
 interface LoadMoreButtonProps {
     loading: boolean,
@@ -15,11 +16,10 @@ export function LoadMoreButton({loading, onClick}: Readonly<LoadMoreButtonProps>
             sx={{
                 px: 6,
                 py: 2,
-                borderRadius: 3,
-                fontSize: '1.1rem',
-                fontWeight: 600,
-                textTransform: 'none',
-                borderWidth: 2,
+                borderRadius: 2,
+                backgroundColor: theme.palette.secondary.main,
+                color: "white",
+                borderColor: theme.palette.secondary.main,
             }}
         >
             {loading ? (

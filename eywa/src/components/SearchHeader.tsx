@@ -1,12 +1,15 @@
 import {
+    Badge,
     Box,
     Button,
     Checkbox,
     Chip,
     Collapse,
+    Drawer,
     FormControl,
     FormLabel,
     Grid,
+    IconButton,
     InputAdornment,
     InputLabel,
     ListItemText,
@@ -18,12 +21,13 @@ import {
     TextField,
     ToggleButton,
     ToggleButtonGroup,
-    Typography
+    Typography,
+    useMediaQuery,
+    useTheme
 } from "@mui/material";
-import {ArrowDownward, ArrowUpward, Search, Tune} from "@mui/icons-material";
+import {ArrowDownward, ArrowUpward, Close, Search, Tune} from "@mui/icons-material";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import theme from "../theme/theme.ts";
 import type {Filter} from "../services/filters.ts";
 import {useQuery} from "@apollo/client/react";
 import {getSurfaceTypeColor, getVenueTypeColor} from "../services/venues.ts";
@@ -69,7 +73,10 @@ export function SearchHeader({
                              }: Readonly<SearchHeaderProps<Filter>>) {
 
     const {t} = useTranslation();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+    const [showFilterDrawer, setShowFilterDrawer] = useState(false);
     const [searchFilters, setSearchFilters] = useState<GetSearchFiltersQuery>({
         getSearchFilters: {
             cities: [],
@@ -118,13 +125,20 @@ export function SearchHeader({
                 </Typography>
             </Box>
 
-            <Box sx={{display: "flex", mb: 1, gap: 2}}>
+            <Box sx={{
+                display: "flex",
+                mb: 1,
+                gap: 2,
+                flexDirection: {xs: 'column', sm: 'row'},
+                alignItems: {xs: 'stretch', sm: 'flex-end'}
+            }}>
                 <TextField
                     fullWidth
                     placeholder={t('locations.searchPlaceholder')}
                     value={filters.searchTerm}
                     onChange={e => handleFilterChange('searchTerm', e.target.value)}
                     variant="outlined"
+                    size="medium"
                     slotProps={{
                         input: {
                             startAdornment: (
@@ -138,62 +152,89 @@ export function SearchHeader({
                 />
                 <Button
                     variant="contained"
-                    size="large"
+                    size="medium"
                     onClick={handleSearch}
                     sx={{
-                        px: 4,
+                        px: {xs: 2, sm: 4},
+                        py: 1.75,
                         borderRadius: 2,
                         backgroundColor: theme.palette.secondary.main,
+                        whiteSpace: 'nowrap',
+                        minWidth: {xs: '100%', sm: 'auto'},
+                        height: {xs: '56px', sm: 'auto'}
                     }}
                 >
                     {t('locations.searchButton')}
                 </Button>
-                <Button
-                    variant="outlined"
-                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                    sx={{
-                        borderRadius: 2,
-                        backgroundColor: 'white',
-                    }}
-                >
-                    <Tune/>
-                </Button>
+                {isMobile ? (
+                    <Badge
+                        badgeContent={getActiveFiltersCount()}
+                        color="secondary"
+                        sx={{
+                            '& .MuiBadge-badge': {
+                                fontWeight: 700,
+                                fontSize: '0.75rem'
+                            }
+                        }}
+                    >
+                        <Button
+                            variant="outlined"
+                            size="medium"
+                            onClick={() => setShowFilterDrawer(true)}
+                            sx={{
+                                px: 2,
+                                py: 1.75,
+                                borderRadius: 2,
+                                backgroundColor: 'white',
+                                transition: 'all 0.3s ease',
+                                minWidth: {xs: '100%', sm: 'auto'},
+                                height: {xs: '56px', sm: 'auto'},
+                                '&:hover': {
+                                    backgroundColor: 'white',
+                                }
+                            }}
+                        >
+                            <Tune/>
+                        </Button>
+                    </Badge>
+                ) : (
+                    <Badge
+                        badgeContent={getActiveFiltersCount()}
+                        color="secondary"
+                        sx={{
+                            '& .MuiBadge-badge': {
+                                fontWeight: 700,
+                                fontSize: '0.75rem'
+                            }
+                        }}
+                    >
+                        <Button
+                            variant="outlined"
+                            size="medium"
+                            onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                            sx={{
+                                px: 2,
+                                py: 1.75,
+                                borderRadius: 2,
+                                backgroundColor: 'white',
+                                transition: 'all 0.3s ease',
+                                height: {xs: '56px', sm: 'auto'},
+                                '&:hover': {
+                                    backgroundColor: 'white',
+                                    transform: showAdvancedFilters ? 'scale(1.05)' : 'scale(1)',
+                                }
+                            }}
+                        >
+                            <Tune/>
+                        </Button>
+                    </Badge>
+                )}
             </Box>
-
-            {/* Active Filters Display */}
-            {getActiveFiltersCount() > 0 && (
-                <Box sx={{display: "flex", mb: 3, gap: 1, flexWrap: "wrap"}}>
-                    {filters.searchTerm && (
-                        <Chip
-                            label={`${t('locations.search')}: ${filters.searchTerm}`}
-                            onDelete={() => handleFilterChange('searchTerm', '')}
-                            color="primary"
-                            variant="outlined"
-                        />
-                    )}
-                    {filters.cities && filters.cities.length > 0 && (
-                        <Chip
-                            label={`${t('locations.cities')}: ${filters.cities.join(', ')}`}
-                            onDelete={() => handleFilterChange('cities', [])}
-                            color="primary"
-                            variant="outlined"
-                        />
-                    )}
-                    {filters.locationAmenities && filters.locationAmenities.length > 0 && (
-                        <Chip
-                            label={`${t('locations.locationProperty')}: ${filters.locationAmenities.map((p: string) => t('locations.property.' + p)).join(', ')}`}
-                            onDelete={() => handleFilterChange('locationAmenities', [])}
-                            color="primary"
-                            variant="outlined"
-                        />
-                    )}
-                </Box>
-            )}
 
             <Collapse in={showAdvancedFilters} sx={{borderRadius: 2, backgroundColor: 'white', p: 3}}>
                 <Box sx={{flexGrow: 1,}}>
-                    <Grid container spacing={4}>
-                        <Grid size={{xs: 6}}>
+                    <Grid container spacing={3}>
+                        <Grid size={{xs: 12, sm: 6}}>
                             <FormControl fullWidth sx={{mb: 2}}>
                                 <InputLabel id="cities-multiple-checkbox-label">{t('locations.cities')}</InputLabel>
                                 <Select
@@ -222,7 +263,7 @@ export function SearchHeader({
                             </FormControl>
                         </Grid>
 
-                        <Grid size={{xs: 6}}>
+                        <Grid size={{xs: 12, sm: 6}}>
                             <FormControl fullWidth>
                                 <InputLabel id="sort-multiple-checkbox-label">{t('locations.locationSort')}</InputLabel>
                                 <Select
@@ -248,58 +289,314 @@ export function SearchHeader({
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid size={{xs: 8}}>
+                        <Grid size={{xs: 12}}>
                             <FormLabel sx={{
                                 fontWeight: 600,
                                 mb: 2,
-                                display: 'block'
+                                display: 'block',
+                                fontSize: '0.95rem',
+                                color: 'text.primary'
                             }}>{t('locations.locationProperty')}</FormLabel>
+                            <Box sx={{
+                                display: 'flex',
+                                gap: 1.5,
+                                flexWrap: 'wrap',
+                                alignItems: 'center'
+                            }}>
+                                {searchFilters.getSearchFilters.locationAmenities.map((property) => {
+                                    const isSelected = filters.locationAmenities.includes(property);
+                                    return (
+                                        <Chip
+                                            key={property}
+                                            label={t('locations.property.' + property)}
+                                            onClick={() => {
+                                                const newValue = filters.locationAmenities.includes(property)
+                                                    ? filters.locationAmenities.filter(p => p !== property)
+                                                    : [...filters.locationAmenities, property];
+                                                handleFilterChange('locationAmenities', newValue);
+                                            }}
+                                            variant={isSelected ? "filled" : "outlined"}
+                                            color="primary"
+                                            sx={{
+                                                borderRadius: '20px',
+                                                fontWeight: 500,
+                                                fontSize: '0.9rem',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.15s ease',
+                                                backgroundColor: isSelected ? 'primary.main' : 'transparent',
+                                                color: isSelected ? 'white' : 'primary.main',
+                                                border: isSelected ? 'none' : '1px solid',
+                                                borderColor: isSelected ? 'primary.main' : 'primary.main',
+                                                '&:hover': {
+                                                    boxShadow: isSelected ? '0 2px 8px rgba(18, 18, 18, 0.15)' : '0 2px 8px rgba(18, 18, 18, 0.08)',
+                                                    backgroundColor: isSelected ? 'primary.main' : 'rgba(18, 18, 18, 0.03)'
+                                                }
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </Box>
+                        </Grid>
+                        <Grid size={{xs: 12}}>
+                            <FormLabel
+                                sx={{fontWeight: 600, mb: 2, display: 'block', fontSize: '0.95rem', color: 'text.primary'}}>{t('pitches.properties')}</FormLabel>
+                            <Box sx={{
+                                display: 'flex',
+                                gap: 1.5,
+                                flexWrap: 'wrap',
+                                alignItems: 'center'
+                            }}>
+                                {searchFilters.getSearchFilters.venueProperties.map((property) => {
+                                    const isSelected = filters.properties.includes(property);
+                                    return (
+                                        <Chip
+                                            key={property}
+                                            label={t('pitches.pitchPropertyOptions.' + property)}
+                                            onClick={() => {
+                                                const newValue = filters.properties.includes(property)
+                                                    ? filters.properties.filter(p => p !== property)
+                                                    : [...filters.properties, property];
+                                                handleFilterChange('properties', newValue);
+                                            }}
+                                            variant={isSelected ? "filled" : "outlined"}
+                                            color="secondary"
+                                            sx={{
+                                                borderRadius: '20px',
+                                                fontWeight: 500,
+                                                fontSize: '0.9rem',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.15s ease',
+                                                backgroundColor: isSelected ? 'secondary.main' : 'transparent',
+                                                color: isSelected ? 'white' : 'secondary.main',
+                                                border: isSelected ? 'none' : '1px solid',
+                                                borderColor: isSelected ? 'secondary.main' : 'secondary.main',
+                                                '&:hover': {
+                                                    boxShadow: isSelected ? '0 2px 8px rgba(255, 111, 0, 0.15)' : '0 2px 8px rgba(255, 111, 0, 0.08)',
+                                                    backgroundColor: isSelected ? 'secondary.main' : 'rgba(255, 111, 0, 0.03)'
+                                                }
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </Box>
+                        </Grid>
+                        <Grid size={{xs: 12}}>
+                            <FormLabel
+                                sx={{fontWeight: 600, mb: 2, display: 'block', fontSize: '0.95rem', color: 'text.primary'}}>{t('pitches.surfaceType')}</FormLabel>
+                            <Box sx={{
+                                display: 'flex',
+                                gap: 1.5,
+                                flexWrap: 'wrap',
+                                alignItems: 'center'
+                            }}>
+                                {searchFilters?.getSearchFilters.surfaceTypes.map((surfaceType) => {
+                                    const isSelected = filters.surfaceTypes.includes(surfaceType);
+                                    const typeColor = getSurfaceTypeColor(surfaceType);
+                                    return (
+                                        <Chip
+                                            key={surfaceType}
+                                            label={t('pitches.surfaceTypeOptions.' + surfaceType)}
+                                            onClick={() => {
+                                                const newValue = filters.surfaceTypes.includes(surfaceType)
+                                                    ? filters.surfaceTypes.filter(s => s !== surfaceType)
+                                                    : [...filters.surfaceTypes, surfaceType];
+                                                handleFilterChange('surfaceTypes', newValue);
+                                            }}
+                                            variant={isSelected ? "filled" : "outlined"}
+                                            sx={{
+                                                borderRadius: '20px',
+                                                fontWeight: 500,
+                                                fontSize: '0.9rem',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.15s ease',
+                                                backgroundColor: isSelected ? typeColor : 'transparent',
+                                                color: isSelected ? 'white' : typeColor,
+                                                border: isSelected ? 'none' : `1px solid`,
+                                                borderColor: typeColor,
+                                                '&:hover': {
+                                                    boxShadow: isSelected ? `0 2px 8px ${typeColor}30` : `0 2px 8px ${typeColor}15`,
+                                                    backgroundColor: isSelected ? typeColor : `${typeColor}08`
+                                                }
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </Box>
+                        </Grid>
+                        <Grid size={{xs: 12}}>
+                            <FormLabel
+                                sx={{fontWeight: 600, mb: 2, display: 'block', fontSize: '0.95rem', color: 'text.primary'}}>{t('pitches.pitchType')}</FormLabel>
+                            <Box sx={{
+                                display: 'flex',
+                                gap: 1.5,
+                                flexWrap: 'wrap',
+                                alignItems: 'center'
+                            }}>
+                                {searchFilters?.getSearchFilters.venueTypes.map((pitchType) => {
+                                    const isSelected = filters.venueTypes.includes(pitchType);
+                                    const typeColor = getVenueTypeColor(pitchType);
+                                    return (
+                                        <Chip
+                                            key={pitchType}
+                                            label={t('pitches.pitchTypeOptions.' + pitchType)}
+                                            onClick={() => {
+                                                const newValue = filters.venueTypes.includes(pitchType)
+                                                    ? filters.venueTypes.filter(p => p !== pitchType)
+                                                    : [...filters.venueTypes, pitchType];
+                                                handleFilterChange('venueTypes', newValue);
+                                            }}
+                                            variant={isSelected ? "filled" : "outlined"}
+                                            sx={{
+                                                borderRadius: '20px',
+                                                fontWeight: 500,
+                                                fontSize: '0.9rem',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.15s ease',
+                                                backgroundColor: isSelected ? typeColor : 'transparent',
+                                                color: isSelected ? 'white' : typeColor,
+                                                border: isSelected ? 'none' : `1px solid`,
+                                                borderColor: typeColor,
+                                                '&:hover': {
+                                                    boxShadow: isSelected ? `0 2px 8px ${typeColor}30` : `0 2px 8px ${typeColor}15`,
+                                                    backgroundColor: isSelected ? typeColor : `${typeColor}08`
+                                                }
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Collapse>
+
+            {/* Mobile Filter Drawer */}
+            <Drawer
+                anchor="bottom"
+                open={showFilterDrawer}
+                onClose={() => setShowFilterDrawer(false)}
+                sx={{
+                    '& .MuiDrawer-paper': {
+                        borderTopLeftRadius: 16,
+                        borderTopRightRadius: 16,
+                    }
+                }}
+            >
+                <Box sx={{p: 3}}>
+                    {/* Header with Close Button */}
+                    <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2}}>
+                        <Typography variant="h6" sx={{fontWeight: 600}}>
+                            {t('locations.filterButton')}
+                        </Typography>
+                        <IconButton onClick={() => setShowFilterDrawer(false)} size="small">
+                            <Close/>
+                        </IconButton>
+                    </Box>
+
+                    {/* Filter Content */}
+                    <Stack spacing={3}>
+                        {/* Cities */}
+                        <FormControl fullWidth>
+                            <InputLabel id="mobile-cities-label">{t('locations.cities')}</InputLabel>
+                            <Select
+                                labelId="mobile-cities-label"
+                                id="mobile-cities"
+                                multiple
+                                size="small"
+                                value={filters.cities}
+                                onChange={e => handleFilterChange('cities', e.target.value)}
+                                input={<OutlinedInput label={t('locations.cities')}/>}
+                                renderValue={(selected) => selected.join(', ')}
+                            >
+                                {searchFilters?.getSearchFilters.cities.map((city) => (
+                                    <MenuItem key={city} value={city}>
+                                        <Checkbox checked={filters.cities.includes(city)}/>
+                                        <ListItemText primary={city}/>
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
+                        {/* Sort */}
+                        <FormControl fullWidth>
+                            <InputLabel id="mobile-sort-label">{t('locations.locationSort')}</InputLabel>
+                            <Select
+                                labelId="mobile-sort-label"
+                                id="mobile-sort"
+                                size="small"
+                                onChange={e => setSort(String(e.target.value))}
+                                input={<OutlinedInput label={t('locations.locationSort')}/>}
+                            >
+                                {sort.map((sortOption) => (
+                                    <MenuItem key={sortOption.value} value={sortOption.value}>
+                                        <Stack direction="row" spacing={1} sx={{alignItems: "center"}}>
+                                            {sortOption.icon}
+                                            {sortOption.label}
+                                        </Stack>
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
+                        {/* Location Properties */}
+                        <Box>
+                            <FormLabel sx={{fontWeight: 600, mb: 2, display: 'block'}}>
+                                {t('locations.locationProperty')}
+                            </FormLabel>
                             <ToggleButtonGroup
                                 value={filters.locationAmenities}
                                 size="small"
                                 color="secondary"
                                 onChange={(_, newValue) => handleFilterChange('locationAmenities', newValue)}
+                                orientation="vertical"
+                                fullWidth
                             >
                                 {searchFilters.getSearchFilters.locationAmenities.map((property) => (
                                     <ToggleButton
                                         key={property}
                                         value={property}
                                     >
-                                        <Stack direction="row" spacing={1} sx={{alignItems:"center"}}>
-                                            {t('locations.property.' + property)}
-                                        </Stack>
+                                        {t('locations.property.' + property)}
                                     </ToggleButton>
                                 ))}
                             </ToggleButtonGroup>
-                        </Grid>
-                        <Grid size={{xs: 4}}>
-                            <FormLabel
-                                sx={{fontWeight: 600, mb: 2, display: 'block'}}>{t('pitches.properties')}</FormLabel>
+                        </Box>
+
+                        {/* Venue Properties */}
+                        <Box>
+                            <FormLabel sx={{fontWeight: 600, mb: 2, display: 'block'}}>
+                                {t('pitches.properties')}
+                            </FormLabel>
                             <ToggleButtonGroup
                                 value={filters.properties}
                                 size="small"
                                 color="secondary"
                                 onChange={(_, newValue) => handleFilterChange('properties', newValue)}
+                                orientation="vertical"
+                                fullWidth
                             >
                                 {searchFilters.getSearchFilters.venueProperties.map((property) => (
                                     <ToggleButton
                                         key={property}
                                         value={property}
                                     >
-                                        <Stack direction="row" spacing={1} sx={{alignItems:"center"}}>
-                                            {t('pitches.pitchPropertyOptions.' + property)}
-                                        </Stack>
+                                        {t('pitches.pitchPropertyOptions.' + property)}
                                     </ToggleButton>
                                 ))}
                             </ToggleButtonGroup>
-                        </Grid>
-                        <Grid size={{xs: 6}}>
-                            <FormLabel
-                                sx={{fontWeight: 600, mb: 2, display: 'block'}}>{t('pitches.surfaceType')}</FormLabel>
+                        </Box>
+
+                        {/* Surface Types */}
+                        <Box>
+                            <FormLabel sx={{fontWeight: 600, mb: 2, display: 'block'}}>
+                                {t('pitches.surfaceType')}
+                            </FormLabel>
                             <ToggleButtonGroup
                                 value={filters.surfaceTypes}
                                 size="small"
                                 onChange={(_, newValue) => handleFilterChange('surfaceTypes', newValue)}
+                                orientation="vertical"
+                                fullWidth
                             >
                                 {searchFilters?.getSearchFilters.surfaceTypes.map((surfaceType) => (
                                     <ToggleButton
@@ -322,20 +619,23 @@ export function SearchHeader({
                                             }
                                         }}
                                     >
-                                        <Stack direction="row" spacing={1} sx={{alignItems:"center"}}>
-                                            {t('pitches.surfaceTypeOptions.' + surfaceType)}
-                                        </Stack>
+                                        {t('pitches.surfaceTypeOptions.' + surfaceType)}
                                     </ToggleButton>
                                 ))}
                             </ToggleButtonGroup>
-                        </Grid>
-                        <Grid size={{xs: 6}}>
-                            <FormLabel
-                                sx={{fontWeight: 600, mb: 2, display: 'block'}}>{t('pitches.pitchType')}</FormLabel>
+                        </Box>
+
+                        {/* Venue Types */}
+                        <Box>
+                            <FormLabel sx={{fontWeight: 600, mb: 2, display: 'block'}}>
+                                {t('pitches.pitchType')}
+                            </FormLabel>
                             <ToggleButtonGroup
                                 value={filters.venueTypes}
                                 size="small"
                                 onChange={(_, newValue) => handleFilterChange('venueTypes', newValue)}
+                                orientation="vertical"
+                                fullWidth
                             >
                                 {searchFilters?.getSearchFilters.venueTypes.map((pitchType) => (
                                     <ToggleButton
@@ -358,16 +658,41 @@ export function SearchHeader({
                                             }
                                         }}
                                     >
-                                        <Stack direction="row" spacing={1} sx={{alignItems:"center"}}>
-                                            {t('pitches.pitchTypeOptions.' + pitchType)}
-                                        </Stack>
+                                        {t('pitches.pitchTypeOptions.' + pitchType)}
                                     </ToggleButton>
                                 ))}
                             </ToggleButtonGroup>
-                        </Grid>
-                    </Grid>
+                        </Box>
+
+                        {/* Action Buttons */}
+                        <Box sx={{display: "flex", gap: 2, mt: 2}}>
+                            <Button
+                                variant="contained"
+                                fullWidth
+                                onClick={() => setShowFilterDrawer(false)}
+                                sx={{borderRadius: 2}}
+                            >
+                                {t('locations.searchButton')}
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                fullWidth
+                                onClick={() => {
+                                    handleFilterChange('searchTerm', '');
+                                    handleFilterChange('cities', []);
+                                    handleFilterChange('locationAmenities', []);
+                                    handleFilterChange('properties', []);
+                                    handleFilterChange('surfaceTypes', []);
+                                    handleFilterChange('venueTypes', []);
+                                }}
+                                sx={{borderRadius: 2}}
+                            >
+                                {t('locations.clearAll')}
+                            </Button>
+                        </Box>
+                    </Stack>
                 </Box>
-            </Collapse>
+            </Drawer>
 
         </Paper>
     );

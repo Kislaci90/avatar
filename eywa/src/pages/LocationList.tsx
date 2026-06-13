@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useQuery} from "@apollo/client/react";
-import {Alert, Box, Container, Grid, Typography} from '@mui/material';
+import {Alert, Box, Container, Grid, Typography, Chip, Badge} from '@mui/material';
+import {LocationOn} from '@mui/icons-material';
 import {useTranslation} from 'react-i18next';
 import {LoadMoreButton} from "../components/location/LoadMoreButton";
 import {LocationCard} from "../components/location/card/LocationCard.tsx";
@@ -202,9 +203,39 @@ const LocationList: React.FC = () => {
             </Box>
             <Container maxWidth="lg" sx={{py: 4}}>
                 {/* View Toggle */}
-                <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
-                    <Typography variant="h5"
-                                sx={{mb: 2}}>{t('locations.total')}: {data?.searchLocations?.total}</Typography>
+                <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, gap: 2, flexWrap: 'wrap'}}>
+                    <Badge
+                        badgeContent={data?.searchLocations?.total || 0}
+                        color="primary"
+                        max={999999}
+                        sx={{
+                            '& .MuiBadge-badge': {
+                                fontSize: '1rem',
+                                fontWeight: 700,
+                                padding: '4px 8px',
+                                borderRadius: '8px',
+                                backgroundColor: theme.palette.secondary.main,
+                                color: 'white'
+                            }
+                        }}
+                    >
+                        <Chip
+                            icon={<LocationOn />}
+                            label={t('locations.total')}
+                            variant="outlined"
+                            sx={{
+                                fontWeight: 600,
+                                fontSize: '1rem',
+                                padding: '4px 8px',
+                                borderColor: theme.palette.primary.main,
+                                color: theme.palette.primary.main,
+                                '& .MuiChip-icon': {
+                                    color: theme.palette.secondary.main,
+                                    marginRight: '4px'
+                                }
+                            }}
+                        />
+                    </Badge>
                     <ViewToggle currentView={view} onViewChange={handleViewChange}/>
                 </Box>
 
