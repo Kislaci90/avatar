@@ -1,19 +1,5 @@
-import type {VenueView} from "./location.ts";
 import theme from "../theme/theme.ts";
-
-export type SearchVenuesResult = {
-    searchVenues: SearchVenues,
-}
-
-export type SearchVenues = {
-    total: number,
-    content: VenueView[],
-}
-
-
-export type GetVenueResult = {
-    getVenue: VenueView,
-}
+export type {VenueView} from "../generated/graphql-schema";
 
 export function getSurfaceTypeColor (surfaceType: string){
     const colors: { [key: string]: string } = {

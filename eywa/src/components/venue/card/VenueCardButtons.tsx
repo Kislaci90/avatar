@@ -1,6 +1,6 @@
 import {Box, Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import type {VenueView} from "../../../services/location.ts";
+import type {VenueView} from "../../../generated/graphql-schema.ts";
 
 interface PitchCardButtonsProps {
     pitch: VenueView

@@ -23,15 +23,24 @@ import {
 import {ArrowDownward, ArrowUpward, Search, Tune} from "@mui/icons-material";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {
-    GET_SEARCH_FILTERS,
-    type GetLocationSearchFilterResult,
-    type LocationSearchFilter,
-} from "../services/location.ts";
 import theme from "../theme/theme.ts";
 import type {Filter} from "../services/filters.ts";
 import {useQuery} from "@apollo/client/react";
-import {getVenueTypeColor, getSurfaceTypeColor} from "../services/venues.ts";
+import {getSurfaceTypeColor, getVenueTypeColor} from "../services/venues.ts";
+import {graphql} from "../generated";
+import {GetSearchFiltersDocument, type GetSearchFiltersQuery,} from "../generated/graphql.ts";
+
+graphql(`
+    query GetSearchFilters {
+        getSearchFilters {
+            cities
+            locationAmenities
+            surfaceTypes
+            venueTypes
+            venueProperties
+        }
+    }
+`);
 
 interface SearchHeaderProps<F extends Filter> {
     filters: F,
@@ -43,11 +52,11 @@ interface SearchHeaderProps<F extends Filter> {
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 
-const MenuProps = {
+const selectMenuProps = {
     PaperProps: {
         style: {
             maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
+            minWidth: 250,
         },
     },
 };
@@ -61,26 +70,26 @@ export function SearchHeader({
 
     const {t} = useTranslation();
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-    const [searchFilters, setSearchFilters] = useState<LocationSearchFilter>({
-        locationAmenities: [],
-        cities: [],
-        venueProperties: [],
-        venueTypes: [],
-        surfaceTypes: [],
-    });
+    const [searchFilters, setSearchFilters] = useState<GetSearchFiltersQuery>({
+        getSearchFilters: {
+            cities: [],
+            locationAmenities: [],
+            surfaceTypes: [],
+            venueTypes: [],
+            venueProperties: [],
+        }
+    } as GetSearchFiltersQuery);
 
     const sort = [
         {value: "DISTANCE_ASC", label: t('locations.nearestLocation'), icon: <ArrowUpward/>},
         {value: "DISTANCE_DESC", label: t('locations.farthestLocation'), icon: <ArrowDownward/>},
     ]
 
-    const {
-        data: searchFiltersData,
-    } = useQuery<GetLocationSearchFilterResult>(GET_SEARCH_FILTERS);
+    const {data: searchFiltersData} = useQuery(GetSearchFiltersDocument);
 
     useEffect(() => {
         if (searchFiltersData?.getSearchFilters) {
-            setSearchFilters(searchFiltersData.getSearchFilters);
+            setSearchFilters(searchFiltersData);
         }
     }, [searchFiltersData]);
 
@@ -102,13 +111,14 @@ export function SearchHeader({
             background: 'transparent',
             boxShadow: 'none',
         }}>
-            <Box display="flex" alignItems="center" justifyContent="center" mb={3} sx={{borderBottom: 1}}>
-                <Typography variant="h4" fontWeight={700} color="primary.main">
+            <Box
+                sx={{display: "flex", alignItems: "center", justifyContent: "center", mb: 3, borderBottom: 1}}>
+                <Typography variant="h4" color="primary.main" sx={{fontWeight: 700}}>
                     {t('locations.searchHeader')}
                 </Typography>
             </Box>
 
-            <Box display="flex" gap={2} mb={1}>
+            <Box sx={{display: "flex", mb: 1, gap: 2}}>
                 <TextField
                     fullWidth
                     placeholder={t('locations.searchPlaceholder')}
@@ -152,7 +162,7 @@ export function SearchHeader({
 
             {/* Active Filters Display */}
             {getActiveFiltersCount() > 0 && (
-                <Box display="flex" gap={1} flexWrap="wrap" mb={3}>
+                <Box sx={{display: "flex", mb: 3, gap: 1, flexWrap: "wrap"}}>
                     {filters.searchTerm && (
                         <Chip
                             label={`${t('locations.search')}: ${filters.searchTerm}`}
@@ -195,14 +205,14 @@ export function SearchHeader({
                                     onChange={e => handleFilterChange('cities', e.target.value)}
                                     input={<OutlinedInput label={t('locations.cities')}/>}
                                     renderValue={(selected) => selected.join(', ')}
-                                    MenuProps={MenuProps}
+                                    MenuProps={selectMenuProps as any}
                                     sx={{
                                         borderRadius: 2,
                                         backgroundColor: 'white',
                                         '& .MuiOutlinedInput-input': {py: 2}
                                     }}
                                 >
-                                    {searchFilters?.cities.map((city) => (
+                                    {searchFilters?.getSearchFilters.cities.map((city) => (
                                         <MenuItem key={city} value={city}>
                                             <Checkbox checked={filters.cities.includes(city)}/>
                                             <ListItemText primary={city}/>
@@ -229,7 +239,7 @@ export function SearchHeader({
                                 >
                                     {sort.map((sort) => (
                                         <MenuItem key={sort.value} value={sort.value}>
-                                            <Stack direction="row" spacing={1} alignItems="center">
+                                            <Stack direction="row" spacing={1} sx={{alignItems: "center"}}>
                                                 {sort.icon}
                                                 {sort.label}
                                             </Stack>
@@ -250,12 +260,12 @@ export function SearchHeader({
                                 color="secondary"
                                 onChange={(_, newValue) => handleFilterChange('locationAmenities', newValue)}
                             >
-                                {searchFilters?.locationAmenities.map((property) => (
+                                {searchFilters.getSearchFilters.locationAmenities.map((property) => (
                                     <ToggleButton
                                         key={property}
                                         value={property}
                                     >
-                                        <Stack direction="row" spacing={1} alignItems="center">
+                                        <Stack direction="row" spacing={1} sx={{alignItems:"center"}}>
                                             {t('locations.property.' + property)}
                                         </Stack>
                                     </ToggleButton>
@@ -271,12 +281,12 @@ export function SearchHeader({
                                 color="secondary"
                                 onChange={(_, newValue) => handleFilterChange('properties', newValue)}
                             >
-                                {searchFilters?.venueProperties.map((property) => (
+                                {searchFilters.getSearchFilters.venueProperties.map((property) => (
                                     <ToggleButton
                                         key={property}
                                         value={property}
                                     >
-                                        <Stack direction="row" spacing={1} alignItems="center">
+                                        <Stack direction="row" spacing={1} sx={{alignItems:"center"}}>
                                             {t('pitches.pitchPropertyOptions.' + property)}
                                         </Stack>
                                     </ToggleButton>
@@ -291,7 +301,7 @@ export function SearchHeader({
                                 size="small"
                                 onChange={(_, newValue) => handleFilterChange('surfaceTypes', newValue)}
                             >
-                                {searchFilters?.surfaceTypes.map((surfaceType) => (
+                                {searchFilters?.getSearchFilters.surfaceTypes.map((surfaceType) => (
                                     <ToggleButton
                                         key={surfaceType}
                                         value={surfaceType}
@@ -312,7 +322,7 @@ export function SearchHeader({
                                             }
                                         }}
                                     >
-                                        <Stack direction="row" spacing={1} alignItems="center">
+                                        <Stack direction="row" spacing={1} sx={{alignItems:"center"}}>
                                             {t('pitches.surfaceTypeOptions.' + surfaceType)}
                                         </Stack>
                                     </ToggleButton>
@@ -327,7 +337,7 @@ export function SearchHeader({
                                 size="small"
                                 onChange={(_, newValue) => handleFilterChange('venueTypes', newValue)}
                             >
-                                {searchFilters?.venueTypes.map((pitchType) => (
+                                {searchFilters?.getSearchFilters.venueTypes.map((pitchType) => (
                                     <ToggleButton
                                         key={pitchType}
                                         value={pitchType}
@@ -348,7 +358,7 @@ export function SearchHeader({
                                             }
                                         }}
                                     >
-                                        <Stack direction="row" spacing={1} alignItems="center">
+                                        <Stack direction="row" spacing={1} sx={{alignItems:"center"}}>
                                             {t('pitches.pitchTypeOptions.' + pitchType)}
                                         </Stack>
                                     </ToggleButton>

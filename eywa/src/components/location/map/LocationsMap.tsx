@@ -3,9 +3,9 @@ import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
 import {Box} from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import 'leaflet/dist/leaflet.css';
-import type {LocationView} from "../../../services/location.ts";
 import {LocationCard} from "../card/LocationCard.tsx";
 import type {UserLocation} from "../../../services/distance.ts";
+import type {LocationView} from "../../../generated/graphql-schema.ts";
 interface LocationsMapProps {
     locations: LocationView[];
 }

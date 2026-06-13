@@ -1,7 +1,7 @@
 import {GpsFixed} from "@mui/icons-material";
 import {Chip} from "@mui/material";
 import {calculateDistance, formatDistance, type UserLocation} from "../../services/distance.ts";
-import type {PointView} from "../../services/location.ts";
+import type {PointView} from "../../generated/graphql-schema.ts";
 
 interface LocationDistanceProps {
     userLocation: UserLocation | null,

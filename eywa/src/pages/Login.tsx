@@ -1,19 +1,19 @@
 import React, {useState} from 'react';
-import {gql} from '@apollo/client';
 import {useMutation} from '@apollo/client/react';
 import {Link, useNavigate} from 'react-router-dom';
 import {Alert, Box, Button, CircularProgress, Container, Divider, Paper, TextField, Typography} from '@mui/material';
 import {LockOutlined, Person, Visibility, VisibilityOff} from '@mui/icons-material';
-import type {LoginResult} from "../services/users.ts";
+import {graphql} from "../generated";
+import {LoginDocument} from "../generated/graphql.ts";
 
-const LOGIN_MUTATION = gql`
+graphql(`
     mutation Login($username: String!, $password: String!) {
         login(username: $username, password: $password) {
             token
             expiresIn
         }
     }
-`;
+`);
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Login: React.FC = () => {
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
-    const [login, {loading}] = useMutation<LoginResult>(LOGIN_MUTATION, {
+    const [login, {loading}] = useMutation(LoginDocument, {
         onCompleted: (data) => {
             localStorage.setItem('token', data.login.token);
             navigate('/');

@@ -1,8 +1,8 @@
 import {Box, CardMedia, Chip, useTheme} from "@mui/material";
 import {LocationOn} from "@mui/icons-material";
-import type {VenueView} from "../../../services/location.ts";
 import {LocationDistance} from "../../location/LocationDistance.tsx";
 import {type UserLocation} from "../../../services/distance.ts";
+import type {VenueView} from "../../../generated/graphql-schema.ts";
 
 
 interface PitchCardImageProps {

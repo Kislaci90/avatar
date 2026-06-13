@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link, useParams} from 'react-router-dom';
-import {gql} from '@apollo/client';
 import {useQuery} from "@apollo/client/react";
 import {useTranslation} from 'react-i18next';
 import {
@@ -17,12 +16,14 @@ import {
     Typography,
 } from '@mui/material';
 import {Email, Favorite, LocationOn, SportsSoccer, Terrain} from '@mui/icons-material';
-import {getSurfaceTypeColor, type GetVenueResult} from "../services/venues.ts";
+import {getSurfaceTypeColor} from "../services/venues.ts";
 import {locationPropertyIconMap, pitchPropertyIconMap} from "../components/PropertyMap.tsx";
 import PitchSvg from "../components/PitchSvg.tsx";
 import theme from "../theme/theme.ts";
+import {graphql} from "../generated";
+import {GetVenueDocument} from "../generated/graphql.ts";
 
-const GET_PITCH = gql`
+graphql(`
     query GetVenue($id: Int!) {
         getVenue(id: $id) {
             id
@@ -47,13 +48,13 @@ const GET_PITCH = gql`
             }
         }
     }
-`;
+`);
 
 const VenueDetail: React.FC = () => {
     const { t } = useTranslation();
     const {id} = useParams<{ id: string }>();
-    const numericId = id ? Number.parseInt(id, 10) : null;
-    const {loading, error, data} = useQuery<GetVenueResult>(GET_PITCH, {variables: {id: numericId}});
+    const numericId = id ? Number.parseInt(id, 10) : 0;
+    const {loading, error, data} = useQuery(GetVenueDocument, {variables: {id: numericId}, skip: !numericId});
 
     if (loading) return (
         <Box sx={{minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>

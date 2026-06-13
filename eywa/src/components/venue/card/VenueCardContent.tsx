@@ -1,8 +1,8 @@
 import {Box, CardContent, Checkbox, Chip, Divider, Stack, Tooltip, Typography} from "@mui/material";
 import {pitchPropertyIconMap} from "../../PropertyMap.tsx";
-import type {VenueView} from "../../../services/location.ts";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
 import {CityLink} from "../../CityLink.tsx";
+import type {VenueView} from "../../../generated/graphql-schema.ts";
 
 interface PitchCardContentProps {
     pitch: VenueView

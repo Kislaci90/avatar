@@ -1,6 +1,5 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
-import {gql} from '@apollo/client';
 import {useQuery} from "@apollo/client/react";
 import { useTranslation } from 'react-i18next';
 import {
@@ -15,14 +14,16 @@ import {
     ListItemText,
     Typography,
 } from '@mui/material';
-import type {GetLocationResult, VenueView} from "../services/location.ts";
 import theme from "../theme/theme.ts";
 import {Email, Favorite, Home, LocationOn, Person, Phone, SportsSoccer} from "@mui/icons-material";
 import {locationPropertyIconMap} from "../components/PropertyMap.tsx";
 import {LocationDetailPitchCard} from "../components/location/detail/LocationDetailPitchCard.tsx";
 import {LocationDetailSendMessage} from "../components/location/detail/LocationDetailSendMessage.tsx";
+import {graphql} from "../generated";
+import {GetLocationDocument} from "../generated/graphql.ts";
+import type {VenueView} from "../generated/graphql-schema.ts";
 
-const GET_LOCATION_DETAIL = gql`
+graphql(`
     query GetLocation($id: Int!) {
         getLocation(id: $id) {
             id
@@ -52,32 +53,45 @@ const GET_LOCATION_DETAIL = gql`
                 venueType
                 properties
                 location {
+                    id
                     name
+                    description
+                    website
+                    contact {
+                        contactName
+                        email
+                        phoneNumber
+                    }
                     address {
                         addressLine
                         postalCode
                         city
+                    }
+                    geom {
+                        x
+                        y
                     }
                     amenities
                 }
             }
         }
     }
-`;
+`);
 
 const LocationDetail: React.FC = () => {
     const { t } = useTranslation();
     const {id} = useParams<{ id: string }>();
 
-    const numericId = id ? parseInt(id, 10) : null;
+    const numericId = id ? Number.parseInt(id, 10) : 0;
 
-    const {loading, error, data} = useQuery<GetLocationResult>(GET_LOCATION_DETAIL, {
+    const {loading, error, data} = useQuery(GetLocationDocument, {
         variables: {id: numericId},
+        skip: !numericId,
     });
 
     if (loading) {
         return (
-            <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+            <Box>
                 <CircularProgress size={60}/>
             </Box>
         );
@@ -259,9 +273,9 @@ const LocationDetail: React.FC = () => {
                         Venues
                     </Typography>
                 )}
-                {location.venues.map((pitch: VenueView) => (
-                    <Box sx={{my: 3}} key={pitch.id}>
-                        <LocationDetailPitchCard pitch={pitch} />
+                {location.venues.map((venue: VenueView) => (
+                    <Box sx={{my: 3}} key={venue.id}>
+                        <LocationDetailPitchCard venue={venue} />
                     </Box>))}
 
             </Container>

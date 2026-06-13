@@ -11,12 +11,12 @@ import {
     VerifiedUser
 } from '@mui/icons-material';
 import {Link as RouterLink} from 'react-router-dom';
-import {gql} from "@apollo/client";
 import {useQuery} from "@apollo/client/react";
 import {useTranslation} from 'react-i18next';
-import type {HomeStatResult} from "../services/home.ts";
+import {GetHomeStatDocument} from "../generated/graphql.ts";
+import {graphql} from "../generated";
 
-const GET_HOME_STAT = gql`
+graphql(`
     query GetHomeStat {
         getHomeStat {
             totalVenues
@@ -25,13 +25,13 @@ const GET_HOME_STAT = gql`
             totalUsers
         }
     }
-`
+`);
 
 const Home: React.FC = () => {
     const theme = useTheme();
     const { t } = useTranslation();
 
-    const {data} = useQuery<HomeStatResult>(GET_HOME_STAT);
+    const {data} = useQuery(GetHomeStatDocument);
 
     let homeStat = {
         totalVenues: 0,
@@ -92,11 +92,10 @@ const Home: React.FC = () => {
                 }}
             >
                 <Container maxWidth="lg">
-                    <Grid container spacing={6} alignItems="center">
+                    <Grid container spacing={6}>
                         <Grid size={{xs:12, md:6}}>
                             <Typography
                                 variant="h2"
-                                fontWeight={800}
                                 color="primary.main"
                                 gutterBottom
                                 sx={{
@@ -112,7 +111,6 @@ const Home: React.FC = () => {
                             <Typography
                                 variant="h5"
                                 color="text.secondary"
-                                mb={4}
                                 sx={{lineHeight: 1.6, fontWeight: 400}}
                             >
                                 {t('home.description')}
@@ -181,10 +179,10 @@ const Home: React.FC = () => {
                                 >
                                     <Box sx={{textAlign: 'center', mb: 3}}>
                                         <SportsSoccer sx={{fontSize: 64, color: 'primary.main', mb: 2}}/>
-                                        <Typography variant="h4" fontWeight={700} gutterBottom>
+                                        <Typography variant="h4" gutterBottom>
                                             {t('home.readyToPlay')}
                                         </Typography>
-                                        <Typography variant="body1" color="text.secondary" mb={3}>
+                                        <Typography variant="body1" color="text.secondary">
                                             {t('home.readyToPlayDesc')}
                                         </Typography>
                                         <Button
@@ -213,8 +211,8 @@ const Home: React.FC = () => {
 
             {/* Statistics Section */}
             <Container maxWidth="lg" sx={{py: 8}}>
-                <Box textAlign="center" mb={6}>
-                    <Typography variant="h3" fontWeight={700} gutterBottom>
+                <Box>
+                    <Typography variant="h3" gutterBottom>
                         {t('home.trustedByPlayers')}
                     </Typography>
                     <Typography variant="h6" color="text.secondary">
@@ -240,7 +238,7 @@ const Home: React.FC = () => {
                                 <Box sx={{color: 'primary.main', mb: 2}}>
                                     {stat.icon}
                                 </Box>
-                                <Typography variant="h3" fontWeight={800} color="primary.main" gutterBottom>
+                                <Typography variant="h3" color="primary.main" gutterBottom>
                                     {stat.number}
                                 </Typography>
                                 <Typography variant="h6" color="text.secondary">
@@ -255,8 +253,8 @@ const Home: React.FC = () => {
             {/* Features Section */}
             <Box sx={{bgcolor: 'background.paper', py: 8}}>
                 <Container maxWidth="lg">
-                    <Box textAlign="center" mb={6}>
-                        <Typography variant="h3" fontWeight={700} gutterBottom>
+                    <Box>
+                        <Typography variant="h3" gutterBottom>
                             {t('home.whyChoose')}
                         </Typography>
                         <Typography variant="h6" color="text.secondary">
@@ -282,7 +280,7 @@ const Home: React.FC = () => {
                                         <Box sx={{color: 'primary.main', mb: 2}}>
                                             {React.cloneElement(feature.icon, {sx: {fontSize: 48}})}
                                         </Box>
-                                        <Typography variant="h6" fontWeight={600} gutterBottom>
+                                        <Typography variant="h6" gutterBottom>
                                             {feature.title}
                                         </Typography>
                                         <Typography color="text.secondary" sx={{lineHeight: 1.6}}>
@@ -298,8 +296,8 @@ const Home: React.FC = () => {
 
             {/* Pitch Types Section */}
             <Container maxWidth="lg" sx={{py: 8}}>
-                <Box textAlign="center" mb={6}>
-                    <Typography variant="h3" fontWeight={700} gutterBottom>
+                <Box>
+                    <Typography variant="h3" gutterBottom>
                         {t('home.pitchTypes')}
                     </Typography>
                     <Typography variant="h6" color="text.secondary">
@@ -327,7 +325,7 @@ const Home: React.FC = () => {
                                 <Box sx={{color: type.color, mb: 2}}>
                                     <SportsSoccer sx={{fontSize: 48}}/>
                                 </Box>
-                                <Typography variant="h5" fontWeight={600} gutterBottom>
+                                <Typography variant="h5" gutterBottom>
                                     {type.name}
                                 </Typography>
                                 <Typography color="text.secondary">
@@ -357,7 +355,7 @@ const Home: React.FC = () => {
                         textAlign: 'center'
                     }}
                 >
-                    <Typography variant="h3" fontWeight={700} gutterBottom>
+                    <Typography variant="h3" gutterBottom>
                         {t('home.readyToStart')}
                     </Typography>
                     <Typography variant="h6" sx={{mb: 4, opacity: 0.9}}>

@@ -1,9 +1,9 @@
 import {Card, useTheme} from "@mui/material";
-import type {VenueView} from "../../../services/location.ts";
 import {VenueCardContent} from "./VenueCardContent.tsx";
 import {VenueCardButtons} from "./VenueCardButtons.tsx";
 import {VenueCardImage} from "./VenueCardImage.tsx";
 import type {UserLocation} from "../../../services/distance.ts";
+import type {VenueView} from "../../../generated/graphql-schema.ts";
 
 interface PitchCardProps {
     pitch: VenueView,

@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {gql} from '@apollo/client';
 import {useMutation} from "@apollo/client/react";
 import {Link, useNavigate} from 'react-router-dom';
 import {
@@ -15,9 +14,11 @@ import {
     Typography
 } from '@mui/material';
 import {Email, Lock, PersonAdd, Visibility, VisibilityOff} from '@mui/icons-material';
-import type {RegisterResult, RegisterUserInput} from "../services/users.ts";
+import type {RegisterUserInput} from "../services/users.ts";
+import {graphql} from "../generated";
+import {RegisterDocument} from "../generated/graphql.ts";
 
-const REGISTER_MUTATION = gql`
+graphql(`
     mutation Register($registerUserInput: RegisterUserInput!) {
         register(registerUserInput: $registerUserInput) {
             success
@@ -28,7 +29,7 @@ const REGISTER_MUTATION = gql`
             }
         }
     }
-`;
+`);
 
 const Register: React.FC = () => {
     const navigate = useNavigate();
@@ -45,7 +46,7 @@ const Register: React.FC = () => {
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
 
-    const [register, {loading}] = useMutation<RegisterResult>(REGISTER_MUTATION, {
+    const [register, {loading}] = useMutation(RegisterDocument, {
         onCompleted: (data) => {
             localStorage.setItem('token', data.register.loginResponse.token);
             navigate('/');

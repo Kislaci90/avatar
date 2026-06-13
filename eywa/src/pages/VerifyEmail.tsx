@@ -3,13 +3,14 @@ import {useNavigate, useSearchParams} from 'react-router-dom';
 import {useMutation} from '@apollo/client/react';
 import {Box, Button, CircularProgress, Container, Paper, Typography} from '@mui/material';
 import {CheckCircle, Error} from '@mui/icons-material';
-import {gql} from "@apollo/client";
+import {graphql} from "../generated";
+import {VerifyEmailDocument} from "../generated/graphql.ts";
 
-const VERIFY_EMAIL_MUTATION = gql`
+graphql(`
     mutation VerifyEmail($token: String!) {
         verifyEmail(token: $token)
     }
-`;
+`);
 
 const VerifyEmail: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -17,7 +18,7 @@ const VerifyEmail: React.FC = () => {
     const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
     const [message, setMessage] = useState('Verifying your email...');
 
-    const [verifyEmail] = useMutation(VERIFY_EMAIL_MUTATION, {
+    const [verifyEmail] = useMutation(VerifyEmailDocument, {
         onCompleted: () => {
             setStatus('success');
             setMessage('Email verified successfully! Redirecting to home...');

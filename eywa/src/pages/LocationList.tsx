@@ -6,13 +6,65 @@ import {LoadMoreButton} from "../components/location/LoadMoreButton";
 import {LocationCard} from "../components/location/card/LocationCard.tsx";
 import type {UserLocation} from "../services/distance";
 import {SearchHeader} from "../components/SearchHeader.tsx";
-import {type LocationView, SEARCH_LOCATIONS, type SearchLocationResult} from "../services/location.ts";
 import {LocationPermission} from "../components/LocationPermission.tsx";
 import ViewToggle from "../components/location/ViewToggle";
 import LocationsMap from "../components/location/map/LocationsMap";
 import theme from "../theme/theme.ts";
 import {type Filter, handleFilterChange} from "../services/filters";
 import {useSearchParams} from "react-router-dom";
+import {SearchLocationsDocument} from "../generated/graphql.ts";
+import {graphql} from "../generated";
+import type {LocationView} from "../generated/graphql-schema.ts";
+
+graphql(`
+    query SearchLocations(
+        $filter: LocationFilter!,
+        $count:Int!,
+        $offset:Int!,
+        $sort:String!,
+    ) {
+        searchLocations(
+            filter: $filter,
+            count: $count,
+            offset: $offset,
+            sort: $sort,
+        ) {
+            total
+            pageable {
+                pageNumber
+                pageSize
+            }
+            content {
+                id
+                name
+                description
+                website
+                address {
+                    addressLine
+                    postalCode
+                    city
+                }
+                contact {
+                    contactName
+                    email
+                    phoneNumber
+                }
+                geom {
+                    x
+                    y
+                }
+                amenities
+                venues {
+                    id
+                    name
+                    venueType
+                    surfaceType
+                    properties
+                }
+            }
+        }
+    }
+`);
 
 const LocationList: React.FC = () => {
     const {t} = useTranslation();
@@ -70,7 +122,7 @@ const LocationList: React.FC = () => {
         loading,
         error,
         refetch
-    } = useQuery<SearchLocationResult>(SEARCH_LOCATIONS, {
+    } = useQuery(SearchLocationsDocument, {
         variables: {
             filter: filters,
             count: 0,
@@ -80,9 +132,10 @@ const LocationList: React.FC = () => {
     });
 
     useEffect(() => {
-        if (data?.searchLocations) {
-            setLocations(data.searchLocations.content);
-            setHasMore(data.searchLocations.content.length >= itemsPerPage);
+        if (data?.searchLocations?.content) {
+            const content = (data.searchLocations.content.filter(Boolean) as LocationView[]);
+            setLocations(content);
+            setHasMore(content.length >= itemsPerPage);
         }
     }, [data]);
 
@@ -151,7 +204,7 @@ const LocationList: React.FC = () => {
                 {/* View Toggle */}
                 <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
                     <Typography variant="h5"
-                                sx={{mb: 2}}>{t('locations.total')}: {data?.searchLocations.total}</Typography>
+                                sx={{mb: 2}}>{t('locations.total')}: {data?.searchLocations?.total}</Typography>
                     <ViewToggle currentView={view} onViewChange={handleViewChange}/>
                 </Box>
 

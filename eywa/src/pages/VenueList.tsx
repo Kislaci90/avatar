@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {gql} from '@apollo/client';
 import {useQuery} from "@apollo/client/react";
 import {Alert, Box, CircularProgress, Container, Grid, Typography} from '@mui/material';
 import {useTranslation} from 'react-i18next';
-import type {VenueView} from "../services/location.ts";
-import type {SearchVenuesResult} from "../services/venues.ts";
 import {VenueCard} from "../components/venue/card/VenueCard.tsx";
 import {LoadMoreButton} from "../components/location/LoadMoreButton.tsx";
 import theme from "../theme/theme.ts";
 import type {UserLocation} from "../services/distance.ts";
 import {SearchHeader} from "../components/SearchHeader.tsx";
 import {type Filter, handleFilterChange} from "../services/filters";
+import {graphql} from "../generated";
+import type {VenueView} from "../generated/graphql-schema.ts";
+import {SearchVenuesDocument} from "../generated/graphql.ts";
 
-const SEARCH_PITCHES = gql`
+graphql(`
     query searchVenues(
         $filter: VenueFilter!,
         $count:Int!,
@@ -28,6 +28,7 @@ const SEARCH_PITCHES = gql`
             content {
                 id
                 name
+                description
                 properties
                 venueType
                 surfaceType
@@ -35,6 +36,13 @@ const SEARCH_PITCHES = gql`
                     id
                     name
                     amenities
+                    description
+                    website
+                    contact {
+                        contactName
+                        email
+                        phoneNumber
+                    }
                     address {
                         addressLine
                         city
@@ -48,7 +56,7 @@ const SEARCH_PITCHES = gql`
             }
         }
     }
-`;
+`);
 
 const VenueList: React.FC = () => {
     const {t} = useTranslation();
@@ -67,7 +75,7 @@ const VenueList: React.FC = () => {
     const [userLocation] = useState<UserLocation | null>(null);
     const itemsPerPage = 6;
 
-    const {loading, error, data, refetch} = useQuery<SearchVenuesResult>(SEARCH_PITCHES, {
+    const {loading, error, data, refetch} = useQuery(SearchVenuesDocument, {
         variables: {
             filter: filters,
             count: 0,
@@ -129,7 +137,7 @@ const VenueList: React.FC = () => {
 
                 {/* Results Section */}
                 {loading && (
-                    <Box textAlign="center" py={6}>
+                    <Box>
                         <CircularProgress/>
                     </Box>
                 )}

@@ -10,7 +10,7 @@ export function Footer() {
             <Container maxWidth="lg">
                 <Grid container spacing={4}>
                     <Grid size={{xs: 6}}>
-                        <Typography variant="h6" fontWeight={600} gutterBottom>
+                        <Typography variant="h6" gutterBottom>
                             Quick Links
                         </Typography>
                         <List dense>
@@ -65,7 +65,7 @@ export function Footer() {
                         </List>
                     </Grid>
                     <Grid size={{xs: 6}}>
-                        <Typography variant="h6" fontWeight={600} gutterBottom>
+                        <Typography variant="h6" gutterBottom>
                             Contact & Support
                         </Typography>
                         <Box sx={{display: 'flex', flexDirection: 'column', gap: 1}}>

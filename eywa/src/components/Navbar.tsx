@@ -1,14 +1,14 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {gql} from '@apollo/client';
 import {useQuery} from '@apollo/client/react';
 import {AppBar, Avatar, Box, Button, IconButton, Menu, MenuItem, Toolbar, Typography} from '@mui/material';
 import {ExitToApp, LocationOn, Login, Person, PersonAdd, Search} from '@mui/icons-material';
-import type {GetMeResult} from "../services/users.ts";
 import LanguageSwitcher from './LanguageSwitcher';
 import {useTranslation} from "react-i18next";
+import {graphql} from "../generated";
+import {GetMeDocument} from "../generated/graphql.ts";
 
-const GET_CURRENT_USER = gql`
+graphql(`
     query GetMe {
         getMe {
             id
@@ -17,12 +17,12 @@ const GET_CURRENT_USER = gql`
             lastName
         }
     }
-`;
+`);
 
 const Navbar: React.FC = () => {
   const { t } = useTranslation();
   const isLoggedIn = !!localStorage.getItem('token');
-  const { data } = useQuery<GetMeResult>(GET_CURRENT_USER, {
+  const { data } = useQuery(GetMeDocument, {
     skip: !isLoggedIn
   });
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

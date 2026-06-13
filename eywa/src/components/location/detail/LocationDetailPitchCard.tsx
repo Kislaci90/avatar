@@ -1,13 +1,13 @@
 import {Box, Card, CardContent, CardMedia, Chip, Stack, Tooltip, Typography} from "@mui/material";
 import {getVenueTypeColor, getSurfaceTypeColor} from "../../../services/venues.ts";
 import {pitchPropertyIconMap} from "../../PropertyMap.tsx";
-import type {VenueView} from "../../../services/location.ts";
+import type {VenueView} from "../../../generated/graphql-schema.ts";
 
 interface LocationDetailPitchCardProps {
-    pitch: VenueView
+    venue: VenueView
 }
 
-export function LocationDetailPitchCard({pitch: venue}: Readonly<LocationDetailPitchCardProps>) {
+export function LocationDetailPitchCard({venue}: Readonly<LocationDetailPitchCardProps>) {
     return (
         <Card sx={{display: "flex"}}>
             <CardMedia
