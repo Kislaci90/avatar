@@ -6,11 +6,15 @@ import {VenueCard} from "../components/venue/card/VenueCard.tsx";
 import {LoadMoreButton} from "../components/location/LoadMoreButton.tsx";
 import theme from "../theme/theme.ts";
 import type {UserLocation} from "../services/distance.ts";
-import {SearchHeader} from "../components/SearchHeader.tsx";
+import {SearchHeader} from "../components/search/SearchHeader.tsx";
 import {type Filter, handleFilterChange} from "../services/filters";
 import {graphql} from "../generated";
 import type {VenueView} from "../generated/graphql-schema.ts";
 import {SearchVenuesDocument} from "../generated/graphql.ts";
+import {LocationPermission} from "../components/LocationPermission.tsx";
+import {AdvancedFilter} from "../components/search/AdvancedFilter.tsx";
+import {SortSelect} from "../components/search/SortSelect.tsx";
+import {SearchHeroSection} from "../components/search/SearchHeroSection.tsx";
 
 graphql(`
     query searchVenues(
@@ -72,7 +76,8 @@ const VenueList: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [pitches, setPitches] = useState<VenueView[]>([]);
-    const [userLocation] = useState<UserLocation | null>(null);
+    const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
+    const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
     const itemsPerPage = 6;
 
     const {loading, error, data, refetch} = useQuery(SearchVenuesDocument, {
@@ -123,66 +128,99 @@ const VenueList: React.FC = () => {
     return (
         <Box sx={{minHeight: '100vh'}}>
             <Box sx={{
-                pyb: 1,
-                borderBottom: `1px solid ${theme.palette.divider}`,
-                background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.primary.main}15 100%)`
+                background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 50%, ${theme.palette.secondary.main}20 100%)`,
+                position: 'relative',
+                overflow: 'hidden',
+                '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)',
+                    pointerEvents: 'none',
+                }
             }}>
-                <Container maxWidth="lg">
-                    <SearchHeader filters={filters} handleSearch={handleSearch}
-                                  setSort={setSort} handleFilterChange={onFilterChange}/>
+                <Container maxWidth="lg" sx={{position: 'relative', zIndex: 1}}>
+                    {locationPermission === 'denied' && (
+                        <LocationPermission setLocationPermission={setLocationPermission}
+                                            setUserLocation={setUserLocation}/>
+                    )}
+
+                    <SearchHeroSection/>
+
+                    <Box sx={{pb: 5}}>
+                        <SearchHeader filters={filters}
+                                      handleSearch={handleSearch}
+                                      handleFilterChange={onFilterChange}/>
+                    </Box>
                 </Container>
             </Box>
 
-            <Container maxWidth="lg" sx={{py: 4}}>
-
-                {/* Results Section */}
-                {loading && (
-                    <Box>
-                        <CircularProgress/>
-                    </Box>
-                )}
-                {error && (
-                    <Alert severity="error" sx={{mb: 4}}>
-                        {error.message}
-                    </Alert>
-                )}
-                {pitches.length === 0 && !loading && (
-                    <Alert severity="info" sx={{mb: 4}}>
-                        {t('pitches.noResults')}
-                    </Alert>
-                )}
-
-                {/* Pitch Cards Grid */}
-                {pitches.length > 0 && (
-                    <Box sx={{mb: 6}}>
-                        <Grid container spacing={3}>
-                            {pitches.map((pitch: VenueView, index: number) => (
-                                <Grid size={{xs: 12, sm: 6, lg: 4}} key={index}>
-                                    <VenueCard pitch={pitch} userLocation={userLocation}/>
-                                </Grid>
-                            ))}
+            <Container maxWidth="xl" sx={{py: 4}}>
+                <Grid container spacing={4}>
+                    <Grid size={{xs: 12, md: 3}}>
+                        <AdvancedFilter filters={filters}
+                                        handleFilterChange={onFilterChange}/>
+                    </Grid>
+                    <Grid size={{xs: 12, md: 9}}>
+                        <Grid size={{xs: 12, md: 12}}
+                              sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                <SortSelect sort={sort} setSort={setSort}></SortSelect>
+                            </Box>
                         </Grid>
-                    </Box>
-                )}
 
-                {/* Load More Button */}
-                {hasMore && pitches.length > 0 && (
-                    <Box sx={{display: 'flex', justifyContent: 'center', mt: 6}}>
-                        <LoadMoreButton loading={loading} onClick={handleLoadMore}/>
-                    </Box>
-                )}
+                        {loading && (
+                            <Box>
+                                <CircularProgress/>
+                            </Box>
+                        )}
+                        {error && (
+                            <Alert severity="error" sx={{mb: 4}}>
+                                {error.message}
+                            </Alert>
+                        )}
+                        {pitches.length === 0 && !loading && (
+                            <Alert severity="info" sx={{mb: 4}}>
+                                {t('pitches.noResults')}
+                            </Alert>
+                        )}
 
-                {/* No More Results */}
-                {!hasMore && pitches.length > 0 && (
-                    <Box sx={{textAlign: 'center', mt: 6, py: 4}}>
-                        <Typography variant="h6" color="text.secondary" sx={{mb: 2}}>
-                            {t('pitches.allPitches')}
-                        </Typography>
-                        <Typography variant="body1" color="text.secondary">
-                            {t('pitches.tryAdjusting')}
-                        </Typography>
-                    </Box>
-                )}
+                        {/* Pitch Cards Grid */}
+                        {pitches.length > 0 && (
+                            <Box sx={{mb: 6}}>
+                                <Grid container spacing={3}>
+                                    {pitches.map((pitch: VenueView, index: number) => (
+                                        <Grid size={{xs: 12, sm: 6, lg: 4}} key={index}>
+                                            <VenueCard pitch={pitch} userLocation={userLocation}/>
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                            </Box>
+                        )}
+
+                        {/* Load More Button */}
+                        {hasMore && pitches.length > 0 && (
+                            <Box sx={{display: 'flex', justifyContent: 'center', mt: 6}}>
+                                <LoadMoreButton loading={loading} onClick={handleLoadMore}/>
+                            </Box>
+                        )}
+
+                        {/* No More Results */}
+                        {!hasMore && pitches.length > 0 && (
+                            <Box sx={{textAlign: 'center', mt: 6, py: 4}}>
+                                <Typography variant="h6" color="text.secondary" sx={{mb: 2}}>
+                                    {t('pitches.allPitches')}
+                                </Typography>
+                                <Typography variant="body1" color="text.secondary">
+                                    {t('pitches.tryAdjusting')}
+                                </Typography>
+                            </Box>
+                        )}
+                    </Grid>
+                </Grid>
             </Container>
         </Box>
     );

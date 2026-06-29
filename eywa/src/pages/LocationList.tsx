@@ -1,14 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {useQuery} from "@apollo/client/react";
-import {Alert, Box, Container, Grid, Typography, Chip, Badge} from '@mui/material';
-import {LocationOn} from '@mui/icons-material';
+import {Alert, Box, Container, Grid, Typography} from '@mui/material';
 import {useTranslation} from 'react-i18next';
 import {LoadMoreButton} from "../components/location/LoadMoreButton";
 import {LocationCard} from "../components/location/card/LocationCard.tsx";
 import type {UserLocation} from "../services/distance";
-import {SearchHeader} from "../components/SearchHeader.tsx";
+import {SearchHeader} from "../components/search/SearchHeader.tsx";
 import {LocationPermission} from "../components/LocationPermission.tsx";
-import ViewToggle from "../components/location/ViewToggle";
 import LocationsMap from "../components/location/map/LocationsMap";
 import theme from "../theme/theme.ts";
 import {type Filter, handleFilterChange} from "../services/filters";
@@ -16,6 +14,10 @@ import {useSearchParams} from "react-router-dom";
 import {SearchLocationsDocument} from "../generated/graphql.ts";
 import {graphql} from "../generated";
 import type {LocationView} from "../generated/graphql-schema.ts";
+import ViewToggle from "../components/location/ViewToggle.tsx";
+import {AdvancedFilter} from "../components/search/AdvancedFilter.tsx";
+import {SortSelect} from "../components/search/SortSelect.tsx";
+import {SearchHeroSection} from "../components/search/SearchHeroSection.tsx";
 
 graphql(`
     query SearchLocations(
@@ -186,106 +188,100 @@ const LocationList: React.FC = () => {
     return (
         <Box sx={{minHeight: '100vh'}}>
             <Box sx={{
-                pyb: 1,
-                borderBottom: `1px solid ${theme.palette.divider}`,
-                background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.primary.main}15 100%)`
+                background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 50%, ${theme.palette.secondary.main}20 100%)`,
+                position: 'relative',
+                overflow: 'hidden',
+                '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)',
+                    pointerEvents: 'none',
+                }
             }}>
-                <Container maxWidth="lg">
+                <Container maxWidth="lg" sx={{position: 'relative', zIndex: 1}}>
                     {locationPermission === 'denied' && (
                         <LocationPermission setLocationPermission={setLocationPermission}
                                             setUserLocation={setUserLocation}/>
                     )}
 
-                    <SearchHeader filters={filters}
-                                  handleSearch={handleSearch} setSort={setSort}
-                                  handleFilterChange={onFilterChange}/>
+                    <SearchHeroSection/>
+
+                    <Box sx={{pb: 5}}>
+                        <SearchHeader filters={filters}
+                                      handleSearch={handleSearch}
+                                      handleFilterChange={onFilterChange}/>
+                    </Box>
                 </Container>
             </Box>
-            <Container maxWidth="lg" sx={{py: 4}}>
-                {/* View Toggle */}
-                <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, gap: 2, flexWrap: 'wrap'}}>
-                    <Badge
-                        badgeContent={data?.searchLocations?.total || 0}
-                        color="primary"
-                        max={999999}
-                        sx={{
-                            '& .MuiBadge-badge': {
-                                fontSize: '1rem',
-                                fontWeight: 700,
-                                padding: '4px 8px',
-                                borderRadius: '8px',
-                                backgroundColor: theme.palette.secondary.main,
-                                color: 'white'
-                            }
-                        }}
-                    >
-                        <Chip
-                            icon={<LocationOn />}
-                            label={t('locations.total')}
-                            variant="outlined"
-                            sx={{
-                                fontWeight: 600,
-                                fontSize: '1rem',
-                                padding: '4px 8px',
-                                borderColor: theme.palette.primary.main,
-                                color: theme.palette.primary.main,
-                                '& .MuiChip-icon': {
-                                    color: theme.palette.secondary.main,
-                                    marginRight: '4px'
-                                }
-                            }}
-                        />
-                    </Badge>
-                    <ViewToggle currentView={view} onViewChange={handleViewChange}/>
-                </Box>
 
-                {(error) && (
-                    <Alert severity="error" sx={{mb: 4}}>
-                        {error?.message}
-                    </Alert>
-                )}
-                {locations.length === 0 && !loading && (
-                    <Alert severity="info" sx={{mb: 4}}>
-                        {t('locations.noResults')}
-                    </Alert>
-                )}
-
-                {/* Map View */}
-                {view === 'map' && locations.length > 0 && (
-                    <Box sx={{mb: 4}}>
-                        <LocationsMap locations={locations}/>
-                    </Box>
-                )}
-
-                {/* Grid View */}
-                {view === 'grid' && locations.length > 0 && (
-                    <Box sx={{mb: 6}}>
-                        <Grid container spacing={3}>
-                            {locations.map((location: LocationView) => (
-                                <Grid size={{xs: 12, sm: 6, lg: 4}} key={location.id}>
-                                    <LocationCard location={location} userLocation={userLocation} useImage={true}/>
-                                </Grid>
-                            ))}
+            <Container maxWidth="xl" sx={{py: 4}}>
+                <Grid container spacing={4}>
+                    <Grid size={{xs: 12, md: 3}}>
+                        <AdvancedFilter filters={filters}
+                                        handleFilterChange={onFilterChange}/>
+                    </Grid>
+                    <Grid size={{xs: 12, md: 9}}>
+                        <Grid size={{xs: 12, md: 12}}
+                              sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                            <ViewToggle currentView={view} onViewChange={handleViewChange}/>
+                            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                <SortSelect sort={sort} setSort={setSort}></SortSelect>
+                            </Box>
                         </Grid>
-                    </Box>
-                )}
+                        {(error) && (
+                            <Alert severity="error" sx={{mb: 4}}>
+                                {error?.message}
+                            </Alert>
+                        )}
+                        {locations.length === 0 && !loading && (
+                            <Alert severity="info" sx={{mb: 4}}>
+                                {t('locations.noResults')}
+                            </Alert>
+                        )}
 
-                {hasMore && locations.length > 0 && view === 'grid' && (
-                    <Box sx={{display: 'flex', justifyContent: 'center', mt: 6}}>
-                        <LoadMoreButton loading={loading} onClick={handleLoadMore}/>
-                    </Box>
-                )}
+                        {/* Map View */}
+                        {view === 'map' && locations.length > 0 && (
+                            <Box sx={{mb: 4}}>
+                                <LocationsMap locations={locations}/>
+                            </Box>
+                        )}
 
-                {!hasMore && locations.length > 0 && view === 'grid' && (
-                    <Box sx={{textAlign: 'center', mt: 6, py: 4}}>
-                        <Typography variant="h6" color="text.secondary" sx={{mb: 2}}>
-                            {t('locations.allLocations')}
-                        </Typography>
-                        <Typography variant="body1" color="text.secondary">
-                            {t('locations.tryAdjusting')}
-                        </Typography>
-                    </Box>
-                )}
+                        {/* Grid View */}
+                        {view === 'grid' && locations.length > 0 && (
+                            <Box sx={{mb: 6}}>
+                                <Grid container spacing={3}>
+                                    {locations.map((location: LocationView) => (
+                                        <Grid size={{xs: 12, sm: 6, lg: 4}} key={location.id}>
+                                            <LocationCard location={location} userLocation={userLocation}
+                                                          useImage={true}/>
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                            </Box>
+                        )}
+
+                        {hasMore && locations.length > 0 && view === 'grid' && (
+                            <Box sx={{display: 'flex', justifyContent: 'center', mt: 6}}>
+                                <LoadMoreButton loading={loading} onClick={handleLoadMore}/>
+                            </Box>
+                        )}
+
+                        {!hasMore && locations.length > 0 && view === 'grid' && (
+                            <Box sx={{textAlign: 'center', mt: 6, py: 4}}>
+                                <Typography variant="h6" color="text.secondary" sx={{mb: 2}}>
+                                    {t('locations.allLocations')}
+                                </Typography>
+                                <Typography variant="body1" color="text.secondary">
+                                    {t('locations.tryAdjusting')}
+                                </Typography>
+                            </Box>
+                        )}
+                    </Grid>
+                </Grid>
             </Container>
         </Box>
     );

@@ -1,7 +1,7 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
 import {useQuery} from "@apollo/client/react";
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import {
     Alert,
     Box,
@@ -16,8 +16,8 @@ import {
 } from '@mui/material';
 import theme from "../theme/theme.ts";
 import {Email, Favorite, Home, LocationOn, Person, Phone, SportsSoccer} from "@mui/icons-material";
-import {locationPropertyIconMap} from "../components/PropertyMap.tsx";
-import {LocationDetailPitchCard} from "../components/location/detail/LocationDetailPitchCard.tsx";
+import {getLocationAmenityIcon} from "../components/PropertyMap.tsx";
+import {LocationDetailVenueCard} from "../components/location/detail/LocationDetailVenueCard.tsx";
 import {LocationDetailSendMessage} from "../components/location/detail/LocationDetailSendMessage.tsx";
 import {graphql} from "../generated";
 import {GetLocationDocument} from "../generated/graphql.ts";
@@ -79,7 +79,7 @@ graphql(`
 `);
 
 const LocationDetail: React.FC = () => {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const {id} = useParams<{ id: string }>();
 
     const numericId = id ? Number.parseInt(id, 10) : 0;
@@ -120,7 +120,7 @@ const LocationDetail: React.FC = () => {
     const location = data.getLocation;
 
     return (
-        <Box sx={{minHeight: '100vh'}}>
+        <Container maxWidth="lg">
             <Box sx={{
                 pb: 1,
                 borderBottom: `1px solid ${theme.palette.divider}`,
@@ -133,154 +133,152 @@ const LocationDetail: React.FC = () => {
                 backgroundRepeat: "no-repeat",
             }}>
             </Box>
-            <Container maxWidth="lg">
-                <Grid container spacing={2}>
-                    <Grid size={{xs: 6, md: 8}}>
-                        <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 6}}>
-                            <Typography variant="h4" component="h1">
-                                {location.name}
-                            </Typography>
-                            <Favorite color="secondary"></Favorite>
-                        </Box>
-                        <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'left',
-                            mt: 6,
-                            borderTop: `1px solid ${theme.palette.divider}`,
-                            pt: 2
-                        }}>
-                            <Typography variant="h5" component="h1">
-                                Overview
-                            </Typography>
-                        </Box>
-                        <Box>
-                            <Grid container spacing={2}>
-                                <Grid size={{xs: 6, md: 4}}>
-                                    <List>
-                                        <ListItem>
-                                            <ListItemIcon>
-                                                <Person color="primary"/>
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary={location.contact.contactName}
-                                                secondary={t('locations.contactName')}
-                                            />
-                                        </ListItem>
-                                        <ListItem>
-                                            <ListItemIcon>
-                                                <Email color="primary"/>
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary={location.contact.email}
-                                                secondary={t('locations.email')}
-                                            />
-                                        </ListItem>
-                                        <ListItem>
-                                            <ListItemIcon>
-                                                <Phone color="primary"/>
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary={location.contact.phoneNumber}
-                                                secondary={t('locations.phoneNumber')}
-                                            />
-                                        </ListItem>
-                                    </List>
-                                </Grid>
-                                <Grid size={{xs: 6, md: 4}}>
-                                    <List>
-                                        <ListItem>
-                                            <ListItemIcon>
-                                                <LocationOn color="primary"/>
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary={location.address.addressLine}
-                                                secondary="Address"
-                                            />
-                                        </ListItem>
-                                        <ListItem>
-                                            <ListItemIcon>
-                                                <Home color="primary"/>
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary={location.website}
-                                                secondary="Website"
-                                            />
-                                        </ListItem>
-                                        <ListItem>
-                                            <ListItemIcon>
-                                                <SportsSoccer color="primary"/>
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary={location.venues.length}
-                                                secondary={t('locations.pitches')}
-                                            />
-                                        </ListItem>
-                                    </List>
-                                </Grid>
-                            </Grid>
-                        </Box>
-
-                        <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'left',
-                            mt: 6,
-                            borderTop: `1px solid ${theme.palette.divider}`,
-                            pt: 2
-                        }}>
-                            <Typography variant="h5" component="h1">
-                                {t('locations.description')}
-                            </Typography>
-                        </Box>
-
-                        <Box sx={{display: 'flex', justifyContent: 'left', mt: 2}}>
-                            <Typography variant="body1" component="p">
-                                {location.description}
-                            </Typography>
-                        </Box>
-                        <Box sx={{
-                            display: 'flex',
-                            justifyContent: 'left',
-                            mt: 6,
-                            borderTop: `1px solid ${theme.palette.divider}`,
-                            pt: 2
-                        }}>
-                            <Typography variant="h5" component="h1">
-                                {t('locations.properties')}
-                            </Typography>
-                        </Box>
-                        <Box>
-                            <List dense>
-                                {location.amenities.map((amenity) => (
-                                    <ListItem key={amenity}>
+            <Grid container spacing={2}>
+                <Grid size={{xs: 6, md: 8}}>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 6}}>
+                        <Typography variant="h4" component="h1">
+                            {location.name}
+                        </Typography>
+                        <Favorite color="secondary"></Favorite>
+                    </Box>
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'left',
+                        mt: 6,
+                        borderTop: `1px solid ${theme.palette.divider}`,
+                        pt: 2
+                    }}>
+                        <Typography variant="h5" component="h1">
+                            Overview
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Grid container spacing={2}>
+                            <Grid size={{xs: 6, md: 4}}>
+                                <List>
+                                    <ListItem>
                                         <ListItemIcon>
-                                            {locationPropertyIconMap[amenity]}
+                                            <Person color="primary"/>
                                         </ListItemIcon>
                                         <ListItemText
-                                            primary={amenity}
-                                            secondary="Description for property"
+                                            primary={location.contact.contactName}
+                                            secondary={t('locations.contactName')}
                                         />
                                     </ListItem>
-                                ))}
-                            </List>
-                        </Box>
-                    </Grid>
-                    <Grid size={{xs: 6, md: 4}}>
-                        <LocationDetailSendMessage />
-                    </Grid>
-                </Grid>
-                {location.venues.length > 0 && (
-                    <Typography variant="h5" component="h1" sx={{pt: 5}}>
-                        Venues
-                    </Typography>
-                )}
-                {location.venues.map((venue: VenueView) => (
-                    <Box sx={{my: 3}} key={venue.id}>
-                        <LocationDetailPitchCard venue={venue} />
-                    </Box>))}
+                                    <ListItem>
+                                        <ListItemIcon>
+                                            <Email color="primary"/>
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={location.contact.email}
+                                            secondary={t('locations.email')}
+                                        />
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemIcon>
+                                            <Phone color="primary"/>
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={location.contact.phoneNumber}
+                                            secondary={t('locations.phoneNumber')}
+                                        />
+                                    </ListItem>
+                                </List>
+                            </Grid>
+                            <Grid size={{xs: 6, md: 4}}>
+                                <List>
+                                    <ListItem>
+                                        <ListItemIcon>
+                                            <LocationOn color="primary"/>
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={location.address.addressLine}
+                                            secondary="Address"
+                                        />
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemIcon>
+                                            <Home color="primary"/>
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={location.website}
+                                            secondary="Website"
+                                        />
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemIcon>
+                                            <SportsSoccer color="primary"/>
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={location.venues.length}
+                                            secondary={t('locations.pitches')}
+                                        />
+                                    </ListItem>
+                                </List>
+                            </Grid>
+                        </Grid>
+                    </Box>
 
-            </Container>
-        </Box>
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'left',
+                        mt: 6,
+                        borderTop: `1px solid ${theme.palette.divider}`,
+                        pt: 2
+                    }}>
+                        <Typography variant="h5" component="h1">
+                            {t('locations.description')}
+                        </Typography>
+                    </Box>
+
+                    <Box sx={{display: 'flex', justifyContent: 'left', mt: 2}}>
+                        <Typography variant="body1" component="p">
+                            {location.description}
+                        </Typography>
+                    </Box>
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'left',
+                        mt: 6,
+                        borderTop: `1px solid ${theme.palette.divider}`,
+                        pt: 2
+                    }}>
+                        <Typography variant="h5" component="h1">
+                            {t('locations.properties')}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <List dense>
+                            {location.amenities.map((amenity) => (
+                                <ListItem key={amenity}>
+                                    <ListItemIcon>
+                                        {getLocationAmenityIcon(amenity)}
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={amenity}
+                                        secondary="Description for property"
+                                    />
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Box>
+                </Grid>
+                <Grid size={{xs: 6, md: 4}}>
+                    <LocationDetailSendMessage/>
+                </Grid>
+            </Grid>
+            {location.venues.length > 0 && (
+                <Typography variant="h5" component="h1" sx={{pt: 5, display: 'flex', justifyContent: 'left'}}>
+                    Venues
+                </Typography>
+            )}
+            {location.venues.map((venue: VenueView) => (
+                <Box sx={{my: 3}} key={venue.id}>
+                    <LocationDetailVenueCard venue={venue}/>
+                </Box>))}
+
+        </Container>
     );
 };
 
-export default LocationDetail; 
+export default LocationDetail;

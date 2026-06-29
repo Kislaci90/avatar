@@ -1,8 +1,7 @@
 import {Box, CardContent, Checkbox, Chip, Divider, Stack, Tooltip, Typography} from "@mui/material";
 import {type LocationView} from "../../../services/location.ts";
-import {locationPropertyIconMap} from "../../PropertyMap.tsx";
+import {locationAmenityIconMap} from "../../PropertyMap.tsx";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
-import {useTranslation} from "react-i18next";
 import {CityLink} from "../../CityLink.tsx";
 
 interface LocationCardContentProps {
@@ -10,10 +9,13 @@ interface LocationCardContentProps {
 }
 
 export function LocationCardContent({location}: Readonly<LocationCardContentProps>) {
-    const {t} = useTranslation()
 
     return (
         <CardContent sx={{flexGrow: 1, p: 3}}>
+            <Box sx={{justifyContent: "space-between", alignItems: "center", display: "flex"}}>
+                <CityLink city={location.address.city}/>
+            </Box>
+
             <Box sx={{justifyContent: "space-between", alignItems: "center", display: "flex"}}>
                 <Typography
                     variant="h6"
@@ -25,34 +27,13 @@ export function LocationCardContent({location}: Readonly<LocationCardContentProp
                     {location.name}
                 </Typography>
                 <Box>
-                    <Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} color="secondary"/>
-                </Box>
-            </Box>
-
-            <Box sx={{justifyContent: "space-between", alignItems: "center", display: "flex"}}>
-                <CityLink city={location.address.city}/>
-
-                <Box>
-                    <Chip sx={{border: "none"}} size="small" color="primary" variant="outlined"
-                          label={`${location.venues?.length || 0} Pitches`}/>
+                    <Checkbox icon={<FavoriteBorder/>} checkedIcon={<Favorite/>} color="secondary"/>
                 </Box>
             </Box>
 
             <Divider sx={{mb: 3}}/>
 
-            {/* Description */}
-            <Box sx={{mb: 3, justifyContent: "left", alignItems: "center", display: "flex"}}>
-                <Typography
-                    variant="body2"
-                    sx={{
-                        color: 'text.secondary'
-                    }}
-                >
-                    {location.description || 'A fantastic football location with multiple pitches and excellent facilities.'}
-                </Typography>
-            </Box>
-
-            <Box>
+            <Box sx={{mb: 2}}>
                 <Stack direction="row" spacing={1}
                        useFlexGap
                        sx={{flexWrap: 'wrap', justifyContent: "flex-start"}}>
@@ -61,14 +42,13 @@ export function LocationCardContent({location}: Readonly<LocationCardContentProp
                             <Chip size="small"
                                   variant="outlined"
                                   color="primary"
-                                  label={t('locations.property.'+property)}
                                   sx={{
                                       '& .MuiChip-label': {
                                           px: 0.7,
                                       },
                                       border: "none"
                                   }}
-                                  icon={locationPropertyIconMap[property]}
+                                  icon={locationAmenityIconMap[property]}
                             />
                         </Tooltip>
                     ))}

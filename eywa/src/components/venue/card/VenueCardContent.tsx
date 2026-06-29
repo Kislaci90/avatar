@@ -1,5 +1,5 @@
 import {Box, CardContent, Checkbox, Chip, Divider, Stack, Tooltip, Typography} from "@mui/material";
-import {pitchPropertyIconMap} from "../../PropertyMap.tsx";
+import {venuePropertyIconMap} from "../../PropertyMap.tsx";
 import {Favorite, FavoriteBorder} from "@mui/icons-material";
 import {CityLink} from "../../CityLink.tsx";
 import type {VenueView} from "../../../generated/graphql-schema.ts";
@@ -59,7 +59,7 @@ export function VenueCardContent({pitch}: Readonly<PitchCardContentProps>) {
                                       },
                                       border: "none"
                                   }}
-                                  icon={pitchPropertyIconMap[property]}
+                                  icon={venuePropertyIconMap[property]}
                             />
                         </Tooltip>
                     ))}

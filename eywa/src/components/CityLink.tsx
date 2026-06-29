@@ -22,13 +22,12 @@ export function CityLink({city}: Readonly<CityLinkProps>) {
                 underline="none"
                 onClick={() => handleCityClick()}
                 sx={{
-                    fontWeight: 700,
-                    color: 'primary.main',
+                    color: 'text.secondary',
                     fontSize: '1rem',
                     transition: 'all 0.2s ease',
                     '&:hover': {
                         color: 'primary.dark',
-                        textDecoration: 'underline',
+                        textDecoration: 'none',
                     }
                 }}
             >
