@@ -2,16 +2,18 @@ import {Email, EventAvailable, Language, LocationOn, Phone, SportsSoccer} from "
 import {Box, Button, Container, Grid, List, ListItem, ListItemIcon, ListItemText, Typography} from "@mui/material";
 import theme from "../theme/theme.ts";
 import {Link as RouterLink} from 'react-router-dom';
+import {useTranslation} from "react-i18next";
 
 
 export function Footer() {
+    const {t} = useTranslation();
     return (
         <Box sx={{background: `linear-gradient(135deg, ${theme.palette.primary.main}15 0%, ${theme.palette.primary.main}15 100%)`, py: 4, borderTop: `1px solid ${theme.palette.divider}`}}>
             <Container maxWidth="lg">
                 <Grid container spacing={4}>
                     <Grid size={{xs: 6}}>
                         <Typography variant="h6" gutterBottom>
-                            Quick Links
+                            {t('navigation.quickLinks')}
                         </Typography>
                         <List dense>
                             <ListItem sx={{px: 0}}>
@@ -25,7 +27,7 @@ export function Footer() {
                                             to="/pitches"
                                             sx={{p: 0, textTransform: 'none', color: 'inherit'}}
                                         >
-                                            Find Pitches
+                                            {t('navigation.findPitches')}
                                         </Button>
                                     }
                                 />
@@ -41,7 +43,7 @@ export function Footer() {
                                             to="/locations"
                                             sx={{p: 0, textTransform: 'none', color: 'inherit'}}
                                         >
-                                            Browse Locations
+                                            {t('navigation.findLocations')}
                                         </Button>
                                     }
                                 />
@@ -57,7 +59,7 @@ export function Footer() {
                                             to="/register"
                                             sx={{p: 0, textTransform: 'none', color: 'inherit'}}
                                         >
-                                            Join Now
+                                            {t('navigation.joinNow')}
                                         </Button>
                                     }
                                 />
@@ -66,7 +68,7 @@ export function Footer() {
                     </Grid>
                     <Grid size={{xs: 6}}>
                         <Typography variant="h6" gutterBottom>
-                            Contact & Support
+                            {t('navigation.contactSupport')}
                         </Typography>
                         <Box sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
                             <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>

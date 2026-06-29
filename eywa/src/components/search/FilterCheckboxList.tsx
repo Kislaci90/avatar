@@ -80,11 +80,12 @@ export function FilterCheckboxList({
             </Box>
             {shouldShowLoadMore && (
                 <Button
+                    variant="outlined"
                     onClick={() => setShowAll(!showAll)}
                     sx={{
                         mt: 1,
                         textTransform: 'none',
-                        fontSize: '0.9rem'
+                        fontSize: '0.7rem'
                     }}
                 >
                     {showAll ? t('common.showLess') : t('common.showMore')}

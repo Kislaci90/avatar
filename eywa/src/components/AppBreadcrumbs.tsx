@@ -16,7 +16,7 @@ export function AppBreadcrumbs() {
 
   const routeLabels: Record<string, string> = {
     "": t("navigation.home"),
-    pitches: t("navigation.pitches"),
+    pitches: t("navigation.venues"),
     locations: t("navigation.locations"),
     login: t("auth.login"),
     register: t("auth.register"),

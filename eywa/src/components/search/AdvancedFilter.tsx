@@ -71,24 +71,24 @@ export function AdvancedFilter({filters, handleFilterChange}: Readonly<AdvancedF
                 <FilterCheckboxList itemList={searchFilters?.getSearchFilters.venueProperties}
                                 selectedItems={filters.properties}
                                 onFilterChange={(newValue) => handleFilterChange('properties', newValue)}
-                                label={t('pitches.properties')}
-                                translationKey="pitches.pitchPropertyOptions"
+                                label={t('venues.properties')}
+                                translationKey="venues.venuePropertyOptions"
                                 getIconFunction={getVenuePropertyIcon}/>
             </Grid>
             <Grid size={{xs: 12}}>
                 <FilterCheckboxList itemList={searchFilters?.getSearchFilters.surfaceTypes}
                                 selectedItems={filters.surfaceTypes}
                                 onFilterChange={(newValue) => handleFilterChange('surfaceTypes', newValue)}
-                                label={t('pitches.surfaceType')}
-                                translationKey="pitches.surfaceTypeOptions"
+                                label={t('venues.surfaceType')}
+                                translationKey="venues.surfaceTypeOptions"
                                 getIconFunction={getSurfaceTypeIcon}/>
             </Grid>
             <Grid size={{xs: 12}}>
                 <FilterCheckboxList itemList={searchFilters?.getSearchFilters.venueTypes}
                                 selectedItems={filters.venueTypes}
                                 onFilterChange={(newValue) => handleFilterChange('venueTypes', newValue)}
-                                label={t('pitches.pitchType')}
-                                translationKey="pitches.pitchTypeOptions"
+                                label={t('venues.venueType')}
+                                translationKey="venues.venueTypeOptions"
                                 getIconFunction={getVenueTypeIcon}/>
             </Grid>
         </Grid>

@@ -1,5 +1,6 @@
 import {Box, Button, CircularProgress} from "@mui/material";
 import theme from "../../theme/theme.ts";
+import {useTranslation} from "react-i18next";
 
 interface LoadMoreButtonProps {
     loading: boolean,
@@ -7,6 +8,7 @@ interface LoadMoreButtonProps {
 }
 
 export function LoadMoreButton({loading, onClick}: Readonly<LoadMoreButtonProps>) {
+    const {t} = useTranslation();
     return (
         <Button
             variant="outlined"
@@ -25,10 +27,10 @@ export function LoadMoreButton({loading, onClick}: Readonly<LoadMoreButtonProps>
             {loading ? (
                 <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
                     <CircularProgress size={20}/>
-                    Loading...
+                    {t('common.loading')}
                 </Box>
             ) : (
-                'Load More Locations'
+                t('common.showMore')
             )}
         </Button>
     );

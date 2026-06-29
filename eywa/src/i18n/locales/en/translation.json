@@ -24,7 +24,9 @@
     "noReviewsForPitch": "No reviews for this pitch",
     "noReviewsForLocation": "No reviews for this location",
     "noReviewsForPitchAndLocation": "No reviews for this pitch and location",
-    "noReviewsForPitchAndLocationDesc": "Be the first to review this pitch and location"
+    "noReviewsForPitchAndLocationDesc": "Be the first to review this pitch and location",
+    "overview": "Overview",
+    "description": "Description"
   },
   "home": {
     "findYourPerfect": "Find Your Perfect",
@@ -66,7 +68,7 @@
   },
   "navigation": {
     "home": "Home",
-    "pitches": "Pitches",
+    "venues": "Pitches",
     "locations": "Locations",
     "login": "Login",
     "register": "Register",
@@ -75,8 +77,11 @@
     "brand": "Eva - Football Pitches",
     "findPitches": "Find Pitches",
     "findLocations": "Find Locations",
-    "welcome": "Welcome"
-  },
+    "welcome": "Welcome",
+    "quickLinks": "Quick Links",
+    "joinNow": "Join Now",
+    "contactSupport": "Contact & Support"
+   },
   "locations": {
     "title": "Locations",
     "search": "Search Locations",
@@ -117,7 +122,7 @@
     "email": "Email",
     "website": "Website",
     "properties": "Facilities",
-    "pitches": "Available Pitches",
+    "venues": "Available Pitches",
     "reviews": "Reviews",
     "gallery": "Gallery",
     "total": "Total",
@@ -134,7 +139,7 @@
       "EQUIPMENT_RENTAL": "Equipment Rental"
     }
   },
-  "pitches": {
+  "venues": {
     "title": "Pitches",
     "search": "Search Pitches",
     "filter": "Filter",
@@ -149,7 +154,7 @@
     "filterButton": "Filter",
     "allTypes": "All Types",
     "allSurfaces": "All Surfaces",
-    "pitchType": "Pitch Type",
+    "venueType": "Pitch Type",
     "surfaceType": "Surface Type",
     "fullSize": "Full Size (11-a-side)",
     "halfSize": "Half Size",
@@ -161,7 +166,7 @@
     "asphalt": "Asphalt",
     "turf": "Turf",
     "hardCourt": "Hard Court",
-    "pitchTypeOptions": {
+    "venueTypeOptions": {
       "FULL_SIZE": "Full Size (11-a-side)",
       "HALF_SIZE": "Half Size",
       "FIVE_A_SIDE": "5-a-Side",
@@ -177,11 +182,15 @@
       "TURF": "Turf",
       "HARDCOURT": "Hard Court"
     },
-    "pitchPropertyOptions": {
+    "venuePropertyOptions": {
       "LIGHTING": "Lighting",
       "COVERED": "Covered"
     },
-    "details": "Pitch Details",
+    "allPitches": "🎯 You've seen all available pitches!",
+    "tryAdjusting": "Try adjusting your filters to find more matches.",
+    "loading": "Loading pitches...",
+    "error": "Error loading pitches",
+    "details": "Venue Details",
     "type": "Type",
     "surface": "Surface",
     "location": "Location",
@@ -190,6 +199,7 @@
     "gallery": "Gallery",
     "bookNow": "Book Now",
     "contact": "Contact Location",
+    "viewLocation": "View Location",
     "address": "Address",
     "phoneNumber": "Phone",
     "email": "Email",

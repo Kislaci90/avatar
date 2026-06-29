@@ -184,7 +184,7 @@ const VenueList: React.FC = () => {
                         )}
                         {pitches.length === 0 && !loading && (
                             <Alert severity="info" sx={{mb: 4}}>
-                                {t('pitches.noResults')}
+                                {t('venues.noResults')}
                             </Alert>
                         )}
 
@@ -209,16 +209,16 @@ const VenueList: React.FC = () => {
                         )}
 
                         {/* No More Results */}
-                        {!hasMore && pitches.length > 0 && (
-                            <Box sx={{textAlign: 'center', mt: 6, py: 4}}>
-                                <Typography variant="h6" color="text.secondary" sx={{mb: 2}}>
-                                    {t('pitches.allPitches')}
-                                </Typography>
-                                <Typography variant="body1" color="text.secondary">
-                                    {t('pitches.tryAdjusting')}
-                                </Typography>
-                            </Box>
-                        )}
+                         {!hasMore && pitches.length > 0 && (
+                             <Box sx={{textAlign: 'center', mt: 6, py: 4}}>
+                                 <Typography variant="h6" color="text.secondary" sx={{mb: 2}}>
+                                     {t('venues.allPitches')}
+                                 </Typography>
+                                 <Typography variant="body1" color="text.secondary">
+                                     {t('venues.tryAdjusting')}
+                                 </Typography>
+                             </Box>
+                         )}
                     </Grid>
                 </Grid>
             </Container>

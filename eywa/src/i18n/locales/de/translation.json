@@ -24,7 +24,9 @@
     "noReviewsForPitch": "Keine Bewertungen für diesen Platz",
     "noReviewsForLocation": "Keine Bewertungen für diesen Ort",
     "noReviewsForPitchAndLocation": "Keine Bewertungen für diesen Platz und Ort",
-    "noReviewsForPitchAndLocationDesc": "Sei der Erste, der diesen Platz und Ort bewertet"
+    "noReviewsForPitchAndLocationDesc": "Sei der Erste, der diesen Platz und Ort bewertet",
+    "overview": "Übersicht",
+    "description": "Beschreibung"
   },
   "home": {
     "findYourPerfect": "Finde Deinen Perfekten",
@@ -66,7 +68,7 @@
   },
   "navigation": {
     "home": "Startseite",
-    "pitches": "Plätze",
+    "venues": "Plätze",
     "locations": "Orte",
     "login": "Anmelden",
     "register": "Registrieren",
@@ -75,7 +77,10 @@
     "brand": "Eva - Fußballplätze",
     "findPitches": "Plätze Suchen",
     "findLocations": "Orte Suchen",
-    "welcome": "Willkommen"
+    "welcome": "Willkommen",
+    "quickLinks": "Schnelllinks",
+    "joinNow": "Jetzt Beitreten",
+    "contactSupport": "Support & Kontakt"
   },
   "locations": {
     "title": "Orte",
@@ -96,6 +101,10 @@
     "locationSort": "Standortsortierung",
     "nearestLocation": "Nächster Standort",
     "farthestLocation": "Entferntester Standort",
+     "loading": "Orte werden geladen...",
+     "error": "Fehler beim Laden von Orte",
+     "allLocations": "🎯 Du hast alle verfügbaren Orte gesehen!",
+     "tryAdjusting": "Versuchen Sie, Ihre Filter anzupassen, um mehr Übereinstimmungen zu finden.",
     "details": "Ortdetails",
     "name": "Name",
     "description": "Beschreibung",
@@ -108,7 +117,7 @@
     "email": "Email",
     "website": "Webseite",
     "properties": "Ausstattung",
-    "pitches": "Verfügbare Plätze",
+    "venues": "Verfügbare Plätze",
     "reviews": "Bewertungen",
     "gallery": "Galerie",
     "total": "Gesamt",
@@ -125,7 +134,7 @@
       "EQUIPMENT_RENTAL": "Ausrüstungsvermietung"
     }
   },
-  "pitches": {
+  "venues": {
     "title": "Plätze",
     "search": "Plätze Durchsuchen",
     "filter": "Filter",
@@ -140,7 +149,7 @@
     "filterButton": "Filter",
     "allTypes": "Alle Typen",
     "allSurfaces": "Alle Beläge",
-    "pitchType": "Platztyp",
+    "venueType": "Platztyp",
     "surfaceType": "Belagtyp",
     "fullSize": "Vollfeld (11er-Platz)",
     "halfSize": "Halber Platz",
@@ -152,7 +161,7 @@
     "asphalt": "Asphalt",
     "turf": "Rasen",
     "hardCourt": "Hartplatz",
-    "pitchTypeOptions": {
+     "venueTypeOptions": {
       "FULL_SIZE": "Vollfeld (11er-Platz)",
       "HALF_SIZE": "Halber Platz",
       "FIVE_A_SIDE": "5er-Platz",
@@ -168,7 +177,7 @@
       "TURF": "Rasen",
       "HARDCOURT": "Hartplatz"
     },
-    "pitchPropertyOptions": {
+    "venuePropertyOptions": {
       "LIGHTING": "Beleuchtung",
       "COVERED": "Überdacht"
     },
@@ -185,6 +194,7 @@
     "gallery": "Galerie",
     "bookNow": "Jetzt Buchen",
     "contact": "Ort Kontaktieren",
+     "viewLocation": "Ort Anschauen",
     "address": "Adresse",
     "phoneNumber": "Telefon",
     "email": "Email",

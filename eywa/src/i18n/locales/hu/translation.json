@@ -24,7 +24,9 @@
     "noReviewsForPitch": "Nincs értékelés ehhez a pályához",
     "noReviewsForLocation": "Nincs értékelés ehhez a helyszínhez",
     "noReviewsForPitchAndLocation": "Nincs értékelés ehhez a pályához és helyszínhez",
-    "noReviewsForPitchAndLocationDesc": "Legyél te az első, aki értékeli ezt a pályát és helyszínt"
+    "noReviewsForPitchAndLocationDesc": "Legyél te az első, aki értékeli ezt a pályát és helyszínt",
+    "overview": "Áttekintés",
+    "description": "Leírás"
   },
   "home": {
     "findYourPerfect": "Keress a Tökéletes",
@@ -66,7 +68,7 @@
   },
   "navigation": {
     "home": "Kezdőlap",
-    "pitches": "Pályák",
+    "venues": "Pályák",
     "locations": "Helyszínek",
     "login": "Bejelentkezés",
     "register": "Regisztráció",
@@ -75,8 +77,11 @@
     "brand": "Eva - Focipályák",
     "findPitches": "Pályák Keresése",
     "findLocations": "Helyszínek Keresése",
-    "welcome": "Üdvözöllek"
-  },
+    "welcome": "Üdvözöllek",
+    "quickLinks": "Gyors Linkek",
+    "joinNow": "Csatlakozz Most",
+    "contactSupport": "Támogatás & Kapcsolat"
+   },
   "locations": {
     "title": "Helyszínek",
     "search": "Helyszínek Keresése",
@@ -112,7 +117,7 @@
     "email": "Email",
     "website": "Weboldal",
     "properties": "Felszereltség",
-    "pitches": "Elérhető Pályák",
+    "venues": "Elérhető Pályák",
     "reviews": "Értékelések",
     "gallery": "Galéria",
     "total": "Összes találat",
@@ -129,7 +134,7 @@
       "EQUIPMENT_RENTAL": "Felszerelés Kölcsönzés"
     }
   },
-  "pitches": {
+  "venues": {
     "title": "Pályák",
     "search": "Pályák Keresése",
     "filter": "Szűrés",
@@ -144,7 +149,7 @@
     "filterButton": "Szűrés",
     "allTypes": "Összes Típus",
     "allSurfaces": "Összes Felület",
-    "pitchType": "Pálya Típus",
+    "venueType": "Pálya Típus",
     "fullSize": "Teljes Méret (11-es pálya)",
     "halfSize": "Fél Méret",
     "fiveASide": "5 Fős",
@@ -155,7 +160,7 @@
     "asphalt": "Aszfalt",
     "turf": "Gyep",
     "hardCourt": "Kemény Pálya",
-    "pitchTypeOptions": {
+    "venueTypeOptions": {
       "FULL_SIZE": "Teljes Méret (11-es pálya)",
       "HALF_SIZE": "Fél Méret",
       "FIVE_A_SIDE": "5 Fős",
@@ -172,11 +177,11 @@
       "TURF": "Gyep",
       "HARDCOURT": "Kemény Pálya"
     },
-    "pitchPropertyOptions": {
+    "venuePropertyOptions": {
       "LIGHTING": "Világítás",
       "COVERED": "Fedett"
     },
-    "allPitches": "🎯 Az összes rendelkezésre álló pályát láttad!",
+    "allVenues": "🎯 Az összes rendelkezésre álló pályát láttad!",
     "tryAdjusting": "Próbáld meg módosítani a szűrőket további egyezések megtalálásához.",
     "loading": "Pályák betöltése...",
     "error": "Hiba a pályák betöltésekor",
@@ -189,6 +194,7 @@
     "gallery": "Galéria",
     "bookNow": "Foglalj Most",
     "contact": "Helyszín Kapcsolatfelvétel",
+    "viewLocation": "Helyszín Megtekintése",
     "address": "Cím",
     "phoneNumber": "Telefon",
     "email": "Email",
