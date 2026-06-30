@@ -125,9 +125,9 @@ resource "kubectl_manifest" "argocd_avatar_pandora" {
             pandora = {
               image = {
                 registry   = var.image_registry
-                tag        = var.frontend_image_tag
+                tag        = var.backend_image_tag
               }
-              replicas = var.replicas_frontend
+              replicas = var.replicas_backend
             }
             database = {
               password = var.postgres_password
