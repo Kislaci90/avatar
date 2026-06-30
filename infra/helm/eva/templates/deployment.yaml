@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "eva.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "eva.selectorLabels" . | nindent 6 }}
