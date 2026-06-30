@@ -94,7 +94,7 @@ resource "kubectl_manifest" "argocd_avatar_eva" {
           releaseName = "avatar-eva"
           valuesFiles = [
             "values.yaml",
-            "values-test.yaml"
+            "values-staging.yaml"
           ]
         }
       }
@@ -133,7 +133,7 @@ resource "kubectl_manifest" "argocd_avatar_pandora" {
           releaseName = "avatar-pandora"
           valuesFiles = [
             "values.yaml",
-            "values-test.yaml"
+            "values-staging.yaml"
           ]
           values = yamlencode({
             database = {

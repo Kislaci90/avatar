@@ -25,7 +25,7 @@ readinessProbe:
 
 env:
   - name: SPRING_PROFILES_ACTIVE
-    value: "test"
+    value: "staging"
   - name: SPRING_DEVTOOLS_ADD_PROPERTIES
     value: "false"
   - name: SPRING_JPA_HIBERNATE_DDL_AUTO
