@@ -60,7 +60,7 @@ readinessProbe:
 # Environment variables
 env:
   - name: SPRING_PROFILES_ACTIVE
-    value: "prod"
+    value: "test"
   - name: SPRING_JPA_HIBERNATE_DDL_AUTO
     value: "validate"
   - name: SPRING_DATASOURCE_URL

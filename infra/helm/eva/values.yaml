@@ -58,7 +58,22 @@ readinessProbe:
   timeoutSeconds: 3
   failureThreshold: 3
 
-# Environment variables
 env:
   - name: NODE_ENV
     value: "production"
+
+volumes:
+  - name: cache
+    emptyDir: {}
+  - name: run
+    emptyDir: {}
+  - name: tmp
+    emptyDir: {}
+
+volumeMounts:
+  - name: cache
+    mountPath: /var/cache/nginx
+  - name: run
+    mountPath: /var/run
+  - name: tmp
+    mountPath: /tmp
