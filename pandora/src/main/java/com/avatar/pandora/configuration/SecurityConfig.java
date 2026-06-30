@@ -31,6 +31,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+        http.csrf(AbstractHttpConfigurer::disable);
         http.cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth ->
                         auth.anyRequest().permitAll())

@@ -1,0 +1,46 @@
+# Local development overrides
+replicaCount: 1
+
+image:
+  registry: localhost:5000
+  repository: pandora
+  tag: local
+  pullPolicy: Always
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  initialDelaySeconds: 15
+  periodSeconds: 5
+
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: "dev"
+  - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+    value: "update"
+  - name: SPRING_DATASOURCE_URL
+    value: "jdbc:postgresql://postgres:5432/avatar"
+  - name: SPRING_DATASOURCE_USERNAME
+    value: "postgres"
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: postgres-secret
+        key: password
+  - name: GRAPHQL_SERVLET_MAPPING
+    value: "/graphql"
+  - name: LOGGING_LEVEL_ROOT
+    value: "INFO"
+  - name: LOGGING_LEVEL_COM_AVATAR
+    value: "DEBUG"
+

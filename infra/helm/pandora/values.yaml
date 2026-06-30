@@ -1,5 +1,4 @@
-# Eva Frontend Helm Chart Values
-# Default values for eva
+# Pandora Backend Helm Chart Values
 
 # Replica configuration
 replicaCount: 1
@@ -7,11 +6,11 @@ replicaCount: 1
 # Image configuration
 image:
   registry: localhost:5000
-  repository: eva
+  repository: pandora
   tag: latest
   pullPolicy: IfNotPresent
 
-# Image pull secrets (if using private registry)
+# Image pull secrets
 imagePullSecrets: []
 
 # Service Account
@@ -26,8 +25,8 @@ podAnnotations: {}
 # Pod security context
 podSecurityContext:
   runAsNonRoot: true
-  runAsUser: 101
-  fsGroup: 101
+  runAsUser: 1000
+  fsGroup: 1000
 
 # Container security context
 securityContext:
@@ -35,43 +34,23 @@ securityContext:
   capabilities:
     drop:
       - ALL
-  readOnlyRootFilesystem: true
+  readOnlyRootFilesystem: false
 
 # Service configuration
 service:
   type: ClusterIP
-  port: 80
-  targetPort: 3000
+  port: 8080
+  targetPort: 8080
   annotations: {}
-
-# Ingress configuration
-ingress:
-  enabled: false
-  className: "nginx"
-  annotations: {}
-  hosts:
-    - host: avatar.local
-      paths:
-        - path: /
-          pathType: Prefix
-  tls: []
 
 # Resource limits and requests
 resources:
   limits:
-    cpu: 500m
-    memory: 512Mi
+    cpu: 1000m
+    memory: 1Gi
   requests:
-    cpu: 100m
-    memory: 128Mi
-
-# Autoscaling configuration
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 3
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: 80
+    cpu: 250m
+    memory: 512Mi
 
 # Node selector
 nodeSelector: {}
@@ -85,29 +64,43 @@ affinity: {}
 # Liveness and readiness probes
 livenessProbe:
   httpGet:
-    path: /
+    path: /actuator/health
     port: http
-  initialDelaySeconds: 30
+  initialDelaySeconds: 60
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 3
 
 readinessProbe:
   httpGet:
-    path: /
+    path: /actuator/health/readiness
     port: http
-  initialDelaySeconds: 10
+  initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 3
   failureThreshold: 3
 
 # Environment variables
 env:
-  - name: NODE_ENV
-    value: "production"
+  - name: SPRING_PROFILES_ACTIVE
+    value: "prod"
+  - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+    value: "validate"
+  - name: SPRING_DATASOURCE_URL
+    value: "jdbc:postgresql://postgres:5432/avatar"
+  - name: SPRING_DATASOURCE_USERNAME
+    value: "postgres"
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: postgres-secret
+        key: password
+  - name: GRAPHQL_SERVLET_MAPPING
+    value: "/graphql"
 
 # Volumes
 volumes: []
 
 # Volume mounts
 volumeMounts: []
+

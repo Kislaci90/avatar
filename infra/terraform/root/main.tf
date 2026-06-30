@@ -1,16 +1,16 @@
-module "kubernetes_cluster" {
-  source = "../modules/kubernetes-cluster"
-
-  cluster_name    = var.cluster_name
-  kubeconfig_path = var.kubeconfig_path
-}
+# module "kubernetes_cluster" {
+#   source = "../modules/kubernetes-cluster"
+#
+#   cluster_name    = var.cluster_name
+#   kubeconfig_path = var.kubeconfig_path
+# }
 
 resource "kubernetes_namespace" "avatar" {
   metadata {
     name = var.namespace
   }
 
-  depends_on = [module.kubernetes_cluster]
+  # depends_on = [module.kubernetes_cluster]
 }
 
 
@@ -39,6 +39,6 @@ module "argocd" {
   frontend_image_tag     = var.frontend_image_tag
   postgres_password      = var.postgres_password
 
-  depends_on = [kubernetes_namespace.avatar, module.kubernetes_cluster]
+  depends_on = [kubernetes_namespace.avatar]
 
 }

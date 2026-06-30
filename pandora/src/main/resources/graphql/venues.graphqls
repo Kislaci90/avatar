@@ -1,32 +1,32 @@
 extend type Query {
-    getVenue(id: Int!): VenueView
-    searchVenues(count:Int, offset:Int, filter: VenueFilter, sort: String): VenuePage
+    getVenue(id: Int!): VenueView!
+    searchVenues(count:Int!, offset:Int!, filter: VenueFilter!, sort: String!): VenuePage!
 }
 
 type VenuePage {
-    content: [VenueView]
+    content: [VenueView!]!
     pageable: Pageable!
     total: Int!
 }
 
 input VenueFilter {
-    searchTerm: String,
-    properties: [String],
-    locationAmenities: [String],
-    cities: [String],
-    surfaceTypes: [String],
-    venueTypes: [String]
+    searchTerm: String!,
+    properties: [String!]!,
+    locationAmenities: [String!]!,
+    cities: [String!]!,
+    surfaceTypes: [String!]!,
+    venueTypes: [String!]!
 }
 
 type LazyLocationView {
     id : ID!
     name: String!
     description: String!
-    website: String
+    website: String!
     geom: PointView!
     address: Address!
     contact: Contact!
-    amenities: [String]
+    amenities: [String!]!
 }
 
 type VenueView {
@@ -35,6 +35,6 @@ type VenueView {
     description: String!
     venueType: String!
     surfaceType: String!
-    properties: [String]
+    properties: [String!]!
     location: LazyLocationView!
 }
