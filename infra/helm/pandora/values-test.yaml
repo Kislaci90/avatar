@@ -25,7 +25,9 @@ readinessProbe:
 
 env:
   - name: SPRING_PROFILES_ACTIVE
-    value: "dev"
+    value: "test"
+  - name: SPRING_DEVTOOLS_ADD_PROPERTIES
+    value: "false"
   - name: SPRING_JPA_HIBERNATE_DDL_AUTO
     value: "update"
   - name: SPRING_DATASOURCE_URL

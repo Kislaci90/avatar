@@ -19,11 +19,11 @@ resource "helm_release" "argocd" {
   version          = var.argocd_version
 
   # Better error detection
-  wait            = true
-  wait_for_jobs   = true
-  timeout         = 600 # 10 minutes in seconds
-  atomic          = false # Set to true to rollback on failure
-  skip_crds       = false # Ensure CRDs are installed
+  wait          = true
+  wait_for_jobs = true
+  timeout       = 600   # 10 minutes in seconds
+  atomic        = false # Set to true to rollback on failure
+  skip_crds     = false # Ensure CRDs are installed
 
   values = [
     yamlencode({
@@ -92,18 +92,10 @@ resource "kubectl_manifest" "argocd_avatar_eva" {
         path           = "${var.helm_path}/eva"
         helm = {
           releaseName = "avatar-eva"
-          values = yamlencode({
-            frontend = {
-              image = {
-                registry   = var.image_registry
-                tag        = var.frontend_image_tag
-              }
-              replicas = var.replicas_frontend
-            }
-            database = {
-              password = var.postgres_password
-            }
-          })
+          valuesFiles = [
+            "values.yaml",
+            "values-test.yaml"
+          ]
         }
       }
       destination = {
@@ -112,7 +104,7 @@ resource "kubectl_manifest" "argocd_avatar_eva" {
       }
       syncPolicy = {
         automated = {
-          prune   = true
+          prune    = true
           selfHeal = true
         }
         syncOptions = ["CreateNamespace=true"]
@@ -139,14 +131,11 @@ resource "kubectl_manifest" "argocd_avatar_pandora" {
         path           = "${var.helm_path}/pandora"
         helm = {
           releaseName = "avatar-pandora"
+          valuesFiles = [
+            "values.yaml",
+            "values-test.yaml"
+          ]
           values = yamlencode({
-            pandora = {
-              image = {
-                registry   = var.image_registry
-                tag        = var.backend_image_tag
-              }
-              replicas = var.replicas_backend
-            }
             database = {
               password = var.postgres_password
             }
@@ -159,7 +148,7 @@ resource "kubectl_manifest" "argocd_avatar_pandora" {
       }
       syncPolicy = {
         automated = {
-          prune   = true
+          prune    = true
           selfHeal = true
         }
         syncOptions = ["CreateNamespace=true"]
