@@ -58,6 +58,24 @@ resource "helm_release" "argocd" {
   depends_on = [kubernetes_namespace.argocd]
 }
 
+resource "kubernetes_secret" "postgres_secret" {
+  metadata {
+    name      = "postgres-secret"
+    namespace = var.avatar_namespace
+  }
+
+  data = {
+    password = base64encode(var.postgres_password)
+    username = base64encode("postgres")
+    database = base64encode("avatar")
+    host     = base64encode("postgres")
+    port     = base64encode("5432")
+  }
+
+  depends_on = [helm_release.argocd]
+}
+
+
 resource "kubectl_manifest" "argocd_avatar_eva" {
   yaml_body = yamlencode({
     apiVersion = "argoproj.io/v1alpha1"
@@ -102,7 +120,7 @@ resource "kubectl_manifest" "argocd_avatar_eva" {
     }
   })
 
-  depends_on = [helm_release.argocd]
+  depends_on = [helm_release.argocd, kubernetes_secret.postgres_secret]
 }
 
 resource "kubectl_manifest" "argocd_avatar_pandora" {
@@ -149,5 +167,5 @@ resource "kubectl_manifest" "argocd_avatar_pandora" {
     }
   })
 
-  depends_on = [helm_release.argocd]
+  depends_on = [helm_release.argocd, kubernetes_secret.postgres_secret]
 }

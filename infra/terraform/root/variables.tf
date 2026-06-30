@@ -119,4 +119,3 @@ variable "helm_path" {
   description = "Path in Git repo containing Helm charts"
   default     = "infra/helm"
 }
-

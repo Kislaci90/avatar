@@ -32,10 +32,6 @@ resource "kubernetes_stateful_set" "postgres" {
             name  = "POSTGRES_DB"
             value = "avatar"
           }
-          env {
-            name  = "POSTGRES_PASSWORD"
-            value = var.postgres_password
-          }
           volume_mount {
             name       = "postgres-storage"
             mount_path = "/var/lib/postgresql/data"

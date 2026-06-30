@@ -22,20 +22,6 @@ serviceAccount:
 # Pod annotations
 podAnnotations: {}
 
-# Pod security context
-podSecurityContext:
-  runAsNonRoot: true
-  runAsUser: 1000
-  fsGroup: 1000
-
-# Container security context
-securityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop:
-      - ALL
-  readOnlyRootFilesystem: false
-
 # Service configuration
 service:
   type: ClusterIP
@@ -51,15 +37,6 @@ resources:
   requests:
     cpu: 250m
     memory: 512Mi
-
-# Node selector
-nodeSelector: {}
-
-# Tolerations
-tolerations: []
-
-# Affinity rules
-affinity: {}
 
 # Liveness and readiness probes
 livenessProbe:
@@ -97,10 +74,4 @@ env:
         key: password
   - name: GRAPHQL_SERVLET_MAPPING
     value: "/graphql"
-
-# Volumes
-volumes: []
-
-# Volume mounts
-volumeMounts: []
 
