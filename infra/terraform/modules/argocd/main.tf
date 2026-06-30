@@ -135,11 +135,6 @@ resource "kubectl_manifest" "argocd_avatar_pandora" {
             "values.yaml",
             "values-staging.yaml"
           ]
-          values = yamlencode({
-            database = {
-              password = var.postgres_password
-            }
-          })
         }
       }
       destination = {
