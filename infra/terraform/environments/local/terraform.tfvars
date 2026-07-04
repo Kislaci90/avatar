@@ -6,6 +6,6 @@ argocd_admin_password  = "admin123"
 argocd_version         = "9.4.16"
 git_repo_url           = "https://github.com/Kislaci90/avatar.git"
 git_token              = "" # Set via environment variable: TF_VAR_git_token
-git_branch             = "main"
+git_branch             = "master"
 helm_path              = "infra/helm"
 image_registry         = "localhost:5000"
