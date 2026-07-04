@@ -2,9 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "pandora.fullname" . }}
+  labels:
+    {{- include "pandora.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "pandora.selectorLabels" . | nindent 6 }}
   template:
+    metadata:
+      labels:
+        {{- include "pandora.labels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ include "pandora.serviceAccountName" . }}
       containers:
@@ -19,4 +27,3 @@ spec:
           env:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-
