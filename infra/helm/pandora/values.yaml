@@ -8,6 +8,9 @@ image:
 service:
   type: ClusterIP
   port: 8080
+serviceAccount:
+  create: true
+  name: pandora
 env:
   - name: SPRING_PROFILES_ACTIVE
     value: "prod"
