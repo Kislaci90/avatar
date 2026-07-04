@@ -1,6 +1,6 @@
 variable "namespace" {
   type        = string
-  description = "Kubernetes namespace for database"
+  description = "Kubernetes namespace for Avatar application"
 }
 
 variable "postgres_password" {
@@ -9,8 +9,8 @@ variable "postgres_password" {
   description = "PostgreSQL admin password"
 }
 
-variable "storage_size" {
+variable "postgres_storage_size" {
   type        = string
-  description = "Storage size for PostgreSQL PVC"
+  description = "PostgreSQL storage size"
 }
 

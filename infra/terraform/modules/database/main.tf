@@ -1,7 +1,25 @@
+resource "kubernetes_secret" "postgres" {
+  metadata {
+    name      = "postgres-secret"
+    namespace = var.namespace
+  }
+
+  data = {
+    password = base64encode(var.postgres_password)
+  }
+
+  depends_on = []
+}
+
 resource "kubernetes_stateful_set" "postgres" {
   metadata {
     name      = "postgres"
     namespace = var.namespace
+  }
+
+  timeouts {
+    create = "1m"
+    update = "1m"
   }
 
   spec {
@@ -32,6 +50,15 @@ resource "kubernetes_stateful_set" "postgres" {
             name  = "POSTGRES_DB"
             value = "avatar"
           }
+          env {
+            name = "POSTGRES_PASSWORD"
+            value_from {
+              secret_key_ref {
+                name = kubernetes_secret.postgres.metadata[0].name
+                key  = "password"
+              }
+            }
+          }
           volume_mount {
             name       = "postgres-storage"
             mount_path = "/var/lib/postgresql/data"
@@ -56,7 +83,7 @@ resource "kubernetes_stateful_set" "postgres" {
     }
   }
 
-  depends_on = []
+  depends_on = [kubernetes_secret.postgres]
 }
 
 resource "kubernetes_service" "postgres" {
@@ -78,4 +105,3 @@ resource "kubernetes_service" "postgres" {
     type = "ClusterIP"
   }
 }
-

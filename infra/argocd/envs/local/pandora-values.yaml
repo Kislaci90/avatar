@@ -1,18 +1,12 @@
-﻿# Pandora Backend - Simplified
-replicaCount: 1
+﻿replicaCount: 1
 image:
-  registry: localhost:5000
-  repository: pandora
-  tag: latest
-  pullPolicy: IfNotPresent
-service:
-  type: ClusterIP
-  port: 8080
+  tag: local
+  pullPolicy: Always
 env:
   - name: SPRING_PROFILES_ACTIVE
-    value: "prod"
+    value: "local"
   - name: SPRING_JPA_HIBERNATE_DDL_AUTO
-    value: "validate"
+    value: "update"
   - name: SPRING_DATASOURCE_URL
     value: "jdbc:postgresql://postgres:5432/avatar"
   - name: SPRING_DATASOURCE_USERNAME
@@ -24,3 +18,5 @@ env:
         key: password
   - name: GRAPHQL_SERVLET_MAPPING
     value: "/graphql"
+  - name: LOGGING_LEVEL_ROOT
+    value: "DEBUG"

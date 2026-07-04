@@ -1,0 +1,9 @@
+﻿replicaCount: 1
+image:
+  tag: local
+  pullPolicy: Always
+env:
+  - name: NODE_ENV
+    value: "development"
+  - name: VITE_API_URL
+    value: "http://localhost:8080"

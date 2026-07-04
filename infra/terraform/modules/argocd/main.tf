@@ -1,4 +1,4 @@
-resource "kubernetes_namespace" "argocd" {
+﻿resource "kubernetes_namespace" "argocd" {
   metadata {
     name = "argocd"
     labels = {
@@ -6,10 +6,6 @@ resource "kubernetes_namespace" "argocd" {
     }
   }
 }
-
-# Note: Admin password is managed separately via kubectl secret
-# The password is set to a bcrypt hash of the argocd_admin_password variable
-# See: kubectl create secret generic argocd-secret -n argocd --from-literal=admin.password='<bcrypt-hash>'
 resource "helm_release" "argocd" {
   name             = "argocd"
   repository       = "https://argoproj.github.io/argo-helm"
@@ -17,18 +13,15 @@ resource "helm_release" "argocd" {
   namespace        = kubernetes_namespace.argocd.metadata[0].name
   create_namespace = false
   version          = var.argocd_version
-
-  # Better error detection
   wait          = true
   wait_for_jobs = true
-  timeout       = 600   # 10 minutes in seconds
-  atomic        = false # Set to true to rollback on failure
-  skip_crds     = false # Ensure CRDs are installed
-
+  timeout       = 600
+  atomic        = false
+  skip_crds     = false
   values = [
     yamlencode({
       global = {
-        domain = var.argocd_domain
+        domain = "argocd.local"
       }
       server = {
         service = {
@@ -42,114 +35,122 @@ resource "helm_release" "argocd" {
         secret = {
           argocdServerAdminPassword = bcrypt(var.argocd_admin_password)
         }
-      }
-      repoServer = {
-        replicas = var.argocd_replicas
-      }
-      controller = {
-        replicas = var.argocd_replicas
-      }
-      applicationSet = {
-        replicas = var.argocd_replicas
+        repositories = {
+          "avatar-repo" = {
+            url      = var.git_repo_url
+            type     = "git"
+            password = var.git_token
+            username = "git"
+          }
+        }
       }
     })
   ]
-
   depends_on = [kubernetes_namespace.argocd]
 }
-
-resource "kubernetes_secret" "postgres_secret" {
-  metadata {
-    name      = "postgres-secret"
-    namespace = var.avatar_namespace
-  }
-
-  data = {
-    password = base64encode(var.postgres_password)
-    username = base64encode("postgres")
-    database = base64encode("avatar")
-    host     = base64encode("postgres")
-    port     = base64encode("5432")
-  }
-
-  depends_on = [helm_release.argocd]
-}
-
-
-resource "kubectl_manifest" "argocd_avatar_eva" {
+resource "kubectl_manifest" "eywa_appset" {
   yaml_body = yamlencode({
     apiVersion = "argoproj.io/v1alpha1"
-    kind       = "Application"
+    kind       = "ApplicationSet"
     metadata = {
-      name      = "avatar-eva"
+      name      = "avatar-eywa"
       namespace = kubernetes_namespace.argocd.metadata[0].name
     }
     spec = {
-      project = "default"
-      source = {
-        repoURL        = var.git_repo_url
-        targetRevision = var.git_branch
-        path           = "${var.helm_path}/eva"
-        helm = {
-          releaseName = "avatar-eva"
-          valuesFiles = [
-            "values.yaml",
-            "values-staging.yaml"
-          ]
+      generators = [
+        {
+          list = {
+            elements = [
+              { env = "local",      namespace = "avatar-local",      syncWave = "0" },
+              { env = "staging",    namespace = "avatar-staging",    syncWave = "1" },
+              { env = "production", namespace = "avatar-production", syncWave = "2" }
+            ]
+          }
         }
-      }
-      destination = {
-        server    = "https://kubernetes.default.svc"
-        namespace = var.avatar_namespace
-      }
-      syncPolicy = {
-        automated = {
-          prune    = true
-          selfHeal = true
+      ]
+      template = {
+        metadata = {
+          name      = "avatar-eywa-{{ env }}"
+          namespace = kubernetes_namespace.argocd.metadata[0].name
         }
-        syncOptions = ["CreateNamespace=true"]
+        spec = {
+          project = "default"
+          source = {
+            repoURL        = var.git_repo_url
+            targetRevision = var.git_branch
+            path           = "infra/helm/eywa"
+            helm = {
+              releaseName = "avatar-eywa"
+              valuesFiles = ["values.yaml", "../../../argocd/envs/{{ env }}/eywa-values.yaml"]
+            }
+          }
+          destination = {
+            server    = "https://kubernetes.default.svc"
+            namespace = "{{ namespace }}"
+          }
+          syncPolicy = {
+            automated = {
+              prune    = true
+              selfHeal = true
+            }
+            syncOptions = ["CreateNamespace=true"]
+          }
+        }
       }
     }
   })
-
-  depends_on = [helm_release.argocd, kubernetes_secret.postgres_secret]
+  depends_on = [helm_release.argocd]
 }
-
-resource "kubectl_manifest" "argocd_avatar_pandora" {
+resource "kubectl_manifest" "pandora_appset" {
   yaml_body = yamlencode({
     apiVersion = "argoproj.io/v1alpha1"
-    kind       = "Application"
+    kind       = "ApplicationSet"
     metadata = {
       name      = "avatar-pandora"
       namespace = kubernetes_namespace.argocd.metadata[0].name
     }
     spec = {
-      project = "default"
-      source = {
-        repoURL        = var.git_repo_url
-        targetRevision = var.git_branch
-        path           = "${var.helm_path}/pandora"
-        helm = {
-          releaseName = "avatar-pandora"
-          valuesFiles = [
-            "values.yaml",
-            "values-staging.yaml"
-          ]
+      generators = [
+        {
+          list = {
+            elements = [
+              { env = "local",      namespace = "avatar-local",      syncWave = "0" },
+              { env = "staging",    namespace = "avatar-staging",    syncWave = "1" },
+              { env = "production", namespace = "avatar-production", syncWave = "2" }
+            ]
+          }
         }
-      }
-      destination = {
-        server    = "https://kubernetes.default.svc"
-        namespace = var.avatar_namespace
-      }
-      syncPolicy = {
-        automated = {
-          prune    = true
-          selfHeal = true
+      ]
+      template = {
+        metadata = {
+          name      = "avatar-pandora-{{ env }}"
+          namespace = kubernetes_namespace.argocd.metadata[0].name
         }
-        syncOptions = ["CreateNamespace=true"]
+        spec = {
+          project = "default"
+          source = {
+            repoURL        = var.git_repo_url
+            targetRevision = var.git_branch
+            path           = "infra/helm/pandora"
+            helm = {
+              releaseName = "avatar-pandora"
+              valuesFiles = ["values.yaml", "../../../argocd/envs/{{ env }}/pandora-values.yaml"]
+            }
+          }
+          destination = {
+            server    = "https://kubernetes.default.svc"
+            namespace = "{{ namespace }}"
+          }
+          syncPolicy = {
+            automated = {
+              prune    = true
+              selfHeal = true
+            }
+            syncOptions = ["CreateNamespace=true"]
+          }
+        }
       }
     }
   })
-
-  depends_on = [helm_release.argocd, kubernetes_secret.postgres_secret]
+  depends_on = [helm_release.argocd]
 }

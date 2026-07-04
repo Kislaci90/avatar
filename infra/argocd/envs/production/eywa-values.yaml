@@ -1,0 +1,8 @@
+﻿replicaCount: 3
+image:
+  tag: v1.0.0
+env:
+  - name: NODE_ENV
+    value: "production"
+  - name: VITE_API_URL
+    value: "https://api.avatar.com"

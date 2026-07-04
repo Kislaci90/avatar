@@ -1,0 +1,13 @@
+﻿# Eywa Frontend - Simplified
+replicaCount: 1
+image:
+  registry: localhost:5000
+  repository: eywa
+  tag: latest
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 80
+env:
+  - name: NODE_ENV
+    value: "production"

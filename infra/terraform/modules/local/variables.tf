@@ -1,6 +1,17 @@
-variable "argocd_version" {
+variable "namespace" {
   type        = string
-  description = "ArgoCD Helm chart version"
+  description = "Kubernetes namespace for Avatar application"
+}
+
+variable "postgres_password" {
+  type        = string
+  sensitive   = true
+  description = "PostgreSQL admin password"
+}
+
+variable "postgres_storage_size" {
+  type        = string
+  description = "PostgreSQL storage size"
 }
 
 variable "argocd_domain" {
@@ -12,6 +23,11 @@ variable "argocd_admin_password" {
   type        = string
   sensitive   = true
   description = "ArgoCD admin password"
+}
+
+variable "argocd_version" {
+  type        = string
+  description = "ArgoCD Helm chart version"
 }
 
 variable "git_repo_url" {
@@ -33,11 +49,6 @@ variable "git_branch" {
 variable "helm_path" {
   type        = string
   description = "Path in Git repo containing Helm charts"
-}
-
-variable "avatar_namespace" {
-  type        = string
-  description = "Kubernetes namespace for Avatar application"
 }
 
 variable "image_registry" {

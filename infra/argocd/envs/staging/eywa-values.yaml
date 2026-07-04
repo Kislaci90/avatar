@@ -1,0 +1,8 @@
+﻿replicaCount: 1
+image:
+  tag: staging
+env:
+  - name: NODE_ENV
+    value: "production"
+  - name: VITE_API_URL
+    value: "https://api-staging.avatar.com"

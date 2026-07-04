@@ -77,6 +77,10 @@ build-push-all: build-all push-all
 
 # ==================== TERRAFORM COMMANDS ====================
 
+# Load environment secrets from .env.local file
+_load-secrets:
+    @$envFile = ".env.local"; if (Test-Path $envFile) { Write-Host "Loading secrets from $envFile..."; Get-Content $envFile | ForEach-Object { if ($_ -and -not $_.StartsWith("#")) { $name, $value = $_ -split '=', 2; if ($name -and $value) { [Environment]::SetEnvironmentVariable($name, $value.Trim()); Write-Host "  ✓ Set $name" } } } } else { Write-Host "No .env.local file found - using existing environment variables" }
+
 # Initialize Terraform
 tf-init environment: setup-helm
     @echo "Initializing Terraform..."
@@ -87,8 +91,8 @@ tf-plan environment: (tf-init environment)
     @echo "Planning Terraform deployment..."
     cd infra/terraform/environments/{{environment}}; terraform plan -out=tfplan
 
-# Apply Terraform
-tf-apply environment: (tf-plan environment)
+# Apply Terraform with secrets loaded
+tf-apply environment: (tf-plan environment) _load-secrets
     @echo "Applying Terraform configuration..."
     cd infra/terraform/environments/{{environment}}; terraform apply tfplan
     @echo "✓ Terraform apply completed"

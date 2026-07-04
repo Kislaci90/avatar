@@ -1,4 +1,4 @@
-﻿namespace              = "avatar-local"
+namespace              = "avatar-local"
 postgres_password      = "local-dev-password"
 postgres_storage_size  = "5Gi"
 argocd_domain          = "localhost"
@@ -9,3 +9,4 @@ git_token              = "" # Set via environment variable: TF_VAR_git_token
 git_branch             = "main"
 helm_path              = "infra/helm"
 image_registry         = "localhost:5000"
+
